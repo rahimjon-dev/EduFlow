@@ -15,6 +15,8 @@ import {
 } from 'lucide-react';
 import type { User, UserRole } from '../../types';
 import { getInitials } from '../../utils/formatters';
+import { useTranslation } from '../../i18n';
+import { LanguageSwitcher } from '../common/LanguageSwitcher';
 
 interface NavbarProps {
   currentUser: User;
@@ -29,6 +31,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenMobileMenu,
   onLogout,
 }) => {
+  const { t } = useTranslation();
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -56,10 +59,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   }, []);
 
   const roles: { role: UserRole; label: string; desc: string; icon: React.ReactNode; path: string }[] = [
-    { role: 'ADMIN', label: 'Administrator', desc: 'Full system management', icon: <Shield className="w-4 h-4 text-indigo-600" />, path: '/admin/dashboard' },
-    { role: 'TEACHER', label: 'Teacher', desc: 'Classes, attendance, grades', icon: <BookOpen className="w-4 h-4 text-emerald-600" />, path: '/teacher/dashboard' },
-    { role: 'STUDENT', label: 'Student', desc: 'Schedule, homework, grades', icon: <GraduationCap className="w-4 h-4 text-sky-600" />, path: '/student/dashboard' },
-    { role: 'PARENT', label: 'Parent', desc: 'Child monitoring & payments', icon: <HeartHandshake className="w-4 h-4 text-purple-600" />, path: '/parent/dashboard' },
+    { role: 'ADMIN', label: t('roles.admin'), desc: t('roles.adminDesc'), icon: <Shield className="w-4 h-4 text-indigo-600" />, path: '/admin/dashboard' },
+    { role: 'TEACHER', label: t('roles.teacher'), desc: t('roles.teacherDesc'), icon: <BookOpen className="w-4 h-4 text-emerald-600" />, path: '/teacher/dashboard' },
+    { role: 'STUDENT', label: t('roles.student'), desc: t('roles.studentDesc'), icon: <GraduationCap className="w-4 h-4 text-sky-600" />, path: '/student/dashboard' },
+    { role: 'PARENT', label: t('roles.parent'), desc: t('roles.parentDesc'), icon: <HeartHandshake className="w-4 h-4 text-purple-600" />, path: '/parent/dashboard' },
   ];
 
   const handleSelectRole = (r: UserRole, path: string) => {
@@ -97,14 +100,17 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
           <input
             type="text"
-            placeholder="Quick search (Ctrl + K)..."
+            placeholder={t('common.quickSearch')}
             className="w-full bg-slate-100/70 hover:bg-slate-100 border border-slate-200 rounded-lg pl-9 pr-4 py-1.5 text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
           />
         </div>
       </div>
 
-      {/* Right section: Role switcher, notifications, profile */}
+      {/* Right section: Language switcher, Role switcher, notifications, profile */}
       <div className="flex items-center gap-2 sm:gap-3">
+        {/* Multi-language Selector (UZ, RU, EN) */}
+        <LanguageSwitcher variant="navbar" />
+
         {/* Role Switcher Menu */}
         <div className="relative" ref={roleRef}>
           <button
@@ -112,7 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-xs font-semibold text-slate-700 transition-colors shadow-2xs"
           >
             <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
-            <span className="hidden md:inline text-slate-500">View as:</span>
+            <span className="hidden md:inline text-slate-500">{t('roles.viewAs')}</span>
             <span className="text-indigo-700">{currentUser.role}</span>
             <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
           </button>
@@ -120,8 +126,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           {roleDropdownOpen && (
             <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-soft-lg border border-slate-200 py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
               <div className="px-3 py-1.5 border-b border-slate-100">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Switch User Role</p>
-                <p className="text-xs text-slate-500">Preview simulated portal permissions</p>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">{t('roles.switchRole')}</p>
+                <p className="text-xs text-slate-500">{t('roles.previewRole')}</p>
               </div>
               <div className="p-1">
                 {roles.map((item) => (
@@ -229,7 +235,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 rounded-lg transition-colors"
                 >
                   <UserIcon className="w-4 h-4 text-slate-400" />
-                  Account Settings
+                  {t('nav.settings')}
                 </button>
                 <button
                   onClick={() => {
@@ -240,7 +246,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
                 >
                   <LogOut className="w-4 h-4 text-rose-500" />
-                  Sign Out
+                  {t('auth.signOut')}
                 </button>
               </div>
             </div>

@@ -6,8 +6,11 @@ import { Select } from '../../components/ui/Select';
 import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../app/providers';
 import type { UserRole } from '../../types';
+import { useTranslation } from '../../i18n';
+import { LanguageSwitcher } from '../../components/common/LanguageSwitcher';
 
 export const RegisterPage: React.FC = () => {
+  const { t } = useTranslation();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -49,7 +52,12 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans relative">
+      {/* Top right language switcher */}
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+        <LanguageSwitcher variant="navbar" />
+      </div>
+
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
         <Link to="/" className="inline-flex items-center gap-2.5 mb-4">
           <div className="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-200">
@@ -57,7 +65,7 @@ export const RegisterPage: React.FC = () => {
           </div>
           <span className="text-2xl font-bold tracking-tight text-slate-900">EduFlow</span>
         </Link>
-        <h2 className="text-xl font-bold tracking-tight text-slate-900">Create your account</h2>
+        <h2 className="text-xl font-bold tracking-tight text-slate-900">{t('auth.createAccount')}</h2>
         <p className="text-xs text-slate-500 mt-1">
           Join the unified educational SaaS ecosystem.
         </p>
@@ -67,7 +75,7 @@ export const RegisterPage: React.FC = () => {
         <div className="bg-white py-8 px-6 shadow-soft-lg rounded-2xl border border-slate-200 sm:px-8">
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
-              label="Full Name"
+              label={t('auth.fullName')}
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               error={errors.fullName}
@@ -76,7 +84,7 @@ export const RegisterPage: React.FC = () => {
             />
 
             <Input
-              label="Email Address"
+              label={t('auth.email')}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -86,19 +94,19 @@ export const RegisterPage: React.FC = () => {
             />
 
             <Select
-              label="Select Primary Role"
+              label={t('auth.primaryRole')}
               value={role}
               onChange={(e) => setRole(e.target.value as UserRole)}
               options={[
-                { value: 'STUDENT', label: 'Student' },
-                { value: 'TEACHER', label: 'Teacher / Instructor' },
-                { value: 'PARENT', label: 'Parent / Guardian' },
-                { value: 'ADMIN', label: 'Administrator' },
+                { value: 'STUDENT', label: t('roles.student') },
+                { value: 'TEACHER', label: t('roles.teacher') },
+                { value: 'PARENT', label: t('roles.parent') },
+                { value: 'ADMIN', label: t('roles.admin') },
               ]}
             />
 
             <Input
-              label="Password"
+              label={t('auth.password')}
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -108,7 +116,7 @@ export const RegisterPage: React.FC = () => {
             />
 
             <Input
-              label="Confirm Password"
+              label={t('auth.confirmPassword')}
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -124,15 +132,15 @@ export const RegisterPage: React.FC = () => {
               isLoading={loading}
               rightIcon={<ArrowRight className="w-4 h-4" />}
             >
-              Create Account
+              {t('auth.registerButton')}
             </Button>
           </form>
 
           <div className="mt-6 pt-4 border-t border-slate-100 text-center">
             <p className="text-xs text-slate-500">
-              Already have an account?{' '}
+              {t('auth.alreadyHaveAccount')}{' '}
               <Link to="/login" className="text-indigo-600 font-semibold hover:underline">
-                Sign In
+                {t('auth.signInHere')}
               </Link>
             </p>
           </div>

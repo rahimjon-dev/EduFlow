@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import type { UserRole } from '../../types';
+import { useTranslation } from '../../i18n';
 
 interface SidebarProps {
   role: UserRole;
@@ -46,6 +47,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onCloseMobile,
 }) => {
   const location = useLocation();
+  const { t } = useTranslation();
 
   const getNavSections = (): NavSection[] => {
     switch (role) {
@@ -53,17 +55,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
         return [
           {
             items: [
-              { label: 'Dashboard', href: '/teacher/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
+              { label: t('nav.dashboard'), href: '/teacher/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
             ],
           },
           {
-            title: 'Teaching',
+            title: t('nav.teaching'),
             items: [
-              { label: 'My Groups', href: '/teacher/groups', icon: <Layers className="w-5 h-5" /> },
-              { label: 'Attendance', href: '/teacher/attendance', icon: <CalendarCheck className="w-5 h-5" /> },
-              { label: 'Schedule', href: '/teacher/schedule', icon: <Calendar className="w-5 h-5" /> },
-              { label: 'Grades', href: '/teacher/grades', icon: <Award className="w-5 h-5" /> },
-              { label: 'Homework', href: '/teacher/homework', icon: <BookMarked className="w-5 h-5" /> },
+              { label: t('nav.myGroups'), href: '/teacher/groups', icon: <Layers className="w-5 h-5" /> },
+              { label: t('nav.attendance'), href: '/teacher/attendance', icon: <CalendarCheck className="w-5 h-5" /> },
+              { label: t('nav.schedule'), href: '/teacher/schedule', icon: <Calendar className="w-5 h-5" /> },
+              { label: t('nav.grades'), href: '/teacher/grades', icon: <Award className="w-5 h-5" /> },
+              { label: t('nav.homework'), href: '/teacher/homework', icon: <BookMarked className="w-5 h-5" /> },
             ],
           },
         ];
@@ -72,17 +74,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
         return [
           {
             items: [
-              { label: 'Dashboard', href: '/student/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
+              { label: t('nav.dashboard'), href: '/student/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
             ],
           },
           {
-            title: 'Academics',
+            title: t('nav.academics'),
             items: [
-              { label: 'My Schedule', href: '/student/schedule', icon: <Calendar className="w-5 h-5" /> },
-              { label: 'Attendance', href: '/student/attendance', icon: <CalendarCheck className="w-5 h-5" /> },
-              { label: 'Grades & Exams', href: '/student/grades', icon: <Award className="w-5 h-5" /> },
-              { label: 'Homework', href: '/student/homework', icon: <BookMarked className="w-5 h-5" /> },
-              { label: 'Tuition & Fees', href: '/student/payments', icon: <CreditCard className="w-5 h-5" /> },
+              { label: t('nav.mySchedule'), href: '/student/schedule', icon: <Calendar className="w-5 h-5" /> },
+              { label: t('nav.attendance'), href: '/student/attendance', icon: <CalendarCheck className="w-5 h-5" /> },
+              { label: t('nav.gradesAndExams'), href: '/student/grades', icon: <Award className="w-5 h-5" /> },
+              { label: t('nav.homework'), href: '/student/homework', icon: <BookMarked className="w-5 h-5" /> },
+              { label: t('nav.tuitionAndFees'), href: '/student/payments', icon: <CreditCard className="w-5 h-5" /> },
             ],
           },
         ];
@@ -91,16 +93,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
         return [
           {
             items: [
-              { label: 'Dashboard', href: '/parent/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
+              { label: t('nav.dashboard'), href: '/parent/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
             ],
           },
           {
-            title: 'Family Portal',
+            title: t('nav.familyPortal'),
             items: [
-              { label: 'Children Overview', href: '/parent/children', icon: <Users className="w-5 h-5" /> },
-              { label: 'Attendance Records', href: '/parent/attendance', icon: <CalendarCheck className="w-5 h-5" /> },
-              { label: 'Report Cards', href: '/parent/grades', icon: <Award className="w-5 h-5" /> },
-              { label: 'Tuition Payments', href: '/parent/payments', icon: <CreditCard className="w-5 h-5" /> },
+              { label: t('nav.childrenOverview'), href: '/parent/children', icon: <Users className="w-5 h-5" /> },
+              { label: t('nav.attendanceRecords'), href: '/parent/attendance', icon: <CalendarCheck className="w-5 h-5" /> },
+              { label: t('nav.reportCards'), href: '/parent/grades', icon: <Award className="w-5 h-5" /> },
+              { label: t('nav.tuitionPayments'), href: '/parent/payments', icon: <CreditCard className="w-5 h-5" /> },
             ],
           },
         ];
@@ -110,44 +112,44 @@ export const Sidebar: React.FC<SidebarProps> = ({
         return [
           {
             items: [
-              { label: 'Dashboard', href: '/admin/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
+              { label: t('nav.dashboard'), href: '/admin/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
             ],
           },
           {
-            title: 'Management',
+            title: t('nav.management'),
             items: [
-              { label: 'Students', href: '/admin/students', icon: <Users className="w-5 h-5" /> },
-              { label: 'Teachers', href: '/admin/teachers', icon: <UserCheck className="w-5 h-5" /> },
-              { label: 'Courses', href: '/admin/courses', icon: <BookOpen className="w-5 h-5" /> },
-              { label: 'Groups', href: '/admin/groups', icon: <Layers className="w-5 h-5" /> },
+              { label: t('nav.students'), href: '/admin/students', icon: <Users className="w-5 h-5" /> },
+              { label: t('nav.teachers'), href: '/admin/teachers', icon: <UserCheck className="w-5 h-5" /> },
+              { label: t('nav.courses'), href: '/admin/courses', icon: <BookOpen className="w-5 h-5" /> },
+              { label: t('nav.groups'), href: '/admin/groups', icon: <Layers className="w-5 h-5" /> },
             ],
           },
           {
-            title: 'Academic',
+            title: t('nav.academic'),
             items: [
-              { label: 'Attendance', href: '/admin/attendance', icon: <CalendarCheck className="w-5 h-5" /> },
-              { label: 'Schedule', href: '/admin/schedule', icon: <Calendar className="w-5 h-5" /> },
-              { label: 'Exams', href: '/admin/exams', icon: <FileCheck2 className="w-5 h-5" /> },
-              { label: 'Grades', href: '/admin/grades', icon: <Award className="w-5 h-5" /> },
-              { label: 'Homework', href: '/admin/homework', icon: <BookMarked className="w-5 h-5" /> },
+              { label: t('nav.attendance'), href: '/admin/attendance', icon: <CalendarCheck className="w-5 h-5" /> },
+              { label: t('nav.schedule'), href: '/admin/schedule', icon: <Calendar className="w-5 h-5" /> },
+              { label: t('nav.exams'), href: '/admin/exams', icon: <FileCheck2 className="w-5 h-5" /> },
+              { label: t('nav.grades'), href: '/admin/grades', icon: <Award className="w-5 h-5" /> },
+              { label: t('nav.homework'), href: '/admin/homework', icon: <BookMarked className="w-5 h-5" /> },
             ],
           },
           {
-            title: 'Finance',
+            title: t('nav.finance'),
             items: [
-              { label: 'Payments', href: '/admin/payments', icon: <CreditCard className="w-5 h-5" /> },
+              { label: t('nav.payments'), href: '/admin/payments', icon: <CreditCard className="w-5 h-5" /> },
             ],
           },
           {
-            title: 'Analytics',
+            title: t('nav.analytics'),
             items: [
-              { label: 'Reports', href: '/admin/reports', icon: <BarChart3 className="w-5 h-5" /> },
+              { label: t('nav.reports'), href: '/admin/reports', icon: <BarChart3 className="w-5 h-5" /> },
             ],
           },
           {
-            title: 'System',
+            title: t('nav.system'),
             items: [
-              { label: 'Settings', href: '/admin/settings', icon: <Settings className="w-5 h-5" /> },
+              { label: t('nav.settings'), href: '/admin/settings', icon: <Settings className="w-5 h-5" /> },
             ],
           },
         ];
@@ -172,7 +174,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {!collapsed && (
             <div className="flex flex-col">
               <span className="text-lg font-bold tracking-tight text-slate-900 leading-none">EduFlow</span>
-              <span className="text-[11px] font-medium text-indigo-600 uppercase tracking-widest mt-1">Platform</span>
+              <span className="text-[11px] font-medium text-indigo-600 uppercase tracking-widest mt-1">{t('common.platform')}</span>
             </div>
           )}
         </NavLink>

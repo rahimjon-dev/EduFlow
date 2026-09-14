@@ -6,8 +6,11 @@ import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../app/providers';
 import type { UserRole } from '../../types';
+import { useTranslation } from '../../i18n';
+import { LanguageSwitcher } from '../../components/common/LanguageSwitcher';
 
 export const LoginPage: React.FC = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('admin@eduflow.edu');
   const [password, setPassword] = useState('••••••••');
   const [rememberMe, setRememberMe] = useState(true);
@@ -50,7 +53,12 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans relative">
+      {/* Top right language switcher */}
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+        <LanguageSwitcher variant="navbar" />
+      </div>
+
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
         <Link to="/" className="inline-flex items-center gap-2.5 mb-4">
           <div className="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-200">
@@ -58,9 +66,9 @@ export const LoginPage: React.FC = () => {
           </div>
           <span className="text-2xl font-bold tracking-tight text-slate-900">EduFlow</span>
         </Link>
-        <h2 className="text-xl font-bold tracking-tight text-slate-900">Sign in to your account</h2>
+        <h2 className="text-xl font-bold tracking-tight text-slate-900">{t('auth.signInTitle')}</h2>
         <p className="text-xs text-slate-500 mt-1">
-          Select a role below for instant frontend authentication simulation.
+          {t('auth.signInSubtitle')}
         </p>
       </div>
 
@@ -69,7 +77,7 @@ export const LoginPage: React.FC = () => {
           {/* Quick Demo Role Switcher */}
           <div className="mb-6">
             <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
-              Select Demo Persona
+              {t('auth.selectPersona')}
             </label>
             <div className="grid grid-cols-2 gap-2">
               <button
@@ -146,7 +154,7 @@ export const LoginPage: React.FC = () => {
             )}
 
             <Input
-              label="Email Address"
+              label={t('auth.email')}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -155,7 +163,7 @@ export const LoginPage: React.FC = () => {
             />
 
             <Input
-              label="Password"
+              label={t('auth.password')}
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -171,10 +179,10 @@ export const LoginPage: React.FC = () => {
                   onChange={(e) => setRememberMe(e.target.checked)}
                   className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                 />
-                Remember me
+                {t('auth.rememberMe')}
               </label>
               <a href="#forgot" onClick={(e) => { e.preventDefault(); toast('In mock mode: simply click Sign In!', { icon: '👋' }); }} className="text-indigo-600 hover:underline">
-                Forgot password?
+                {t('auth.forgotPassword')}
               </a>
             </div>
 
@@ -185,15 +193,15 @@ export const LoginPage: React.FC = () => {
               isLoading={loading}
               rightIcon={<ArrowRight className="w-4 h-4" />}
             >
-              Sign In as {selectedRole}
+              {t('auth.signInButton')} {selectedRole}
             </Button>
           </form>
 
           <div className="mt-6 pt-4 border-t border-slate-100 text-center">
             <p className="text-xs text-slate-500">
-              Don't have an account yet?{' '}
+              {t('auth.dontHaveAccount')}{' '}
               <Link to="/register" className="text-indigo-600 font-semibold hover:underline">
-                Register here
+                {t('auth.registerHere')}
               </Link>
             </p>
           </div>

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import type { User, UserRole, LoginCredentials } from '../types';
+import { LanguageProvider } from '../i18n';
 
 interface AuthContextType {
   currentUser: User | null;
@@ -91,17 +92,19 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        currentUser,
-        isAuthenticated: !!currentUser,
-        login,
-        logout,
-        setRole,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <LanguageProvider>
+      <AuthContext.Provider
+        value={{
+          currentUser,
+          isAuthenticated: !!currentUser,
+          login,
+          logout,
+          setRole,
+        }}
+      >
+        {children}
+      </AuthContext.Provider>
+    </LanguageProvider>
   );
 };
 

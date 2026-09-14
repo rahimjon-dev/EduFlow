@@ -16,8 +16,11 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
+import { useTranslation } from '../../i18n';
+import { LanguageSwitcher } from '../../components/common/LanguageSwitcher';
 
 export const LandingPage: React.FC = () => {
+  const { t } = useTranslation();
   const features = [
     {
       icon: <Users className="w-6 h-6 text-indigo-600" />,
@@ -95,14 +98,15 @@ export const LandingPage: React.FC = () => {
           </Link>
 
           <div className="flex items-center gap-3">
+            <LanguageSwitcher variant="navbar" />
             <Link to="/login">
               <Button variant="ghost" size="sm">
-                Sign In
+                {t('auth.signInHere')}
               </Button>
             </Link>
             <Link to="/admin/dashboard">
               <Button variant="primary" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                Live Platform Demo
+                {t('landing.getStarted')}
               </Button>
             </Link>
           </div>
@@ -118,26 +122,22 @@ export const LandingPage: React.FC = () => {
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15] mb-6">
-            Manage Education. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-indigo-700 to-sky-600">
-              Simplify Everything.
-            </span>
+            {t('landing.heroTitle')}
           </h1>
 
           <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed">
-            EduFlow helps educational centers manage students, teachers, courses, attendance, schedules,
-            and academic progress from one cohesive, high-performance platform.
+            {t('landing.heroSubtitle')}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
             <Link to="/admin/dashboard">
               <Button size="lg" className="w-full sm:w-auto" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                Explore Admin Dashboard
+                {t('landing.exploreAdmin')}
               </Button>
             </Link>
             <Link to="/login">
               <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                Role-Based Portals
+                {t('landing.signInRole')}
               </Button>
             </Link>
           </div>
@@ -208,9 +208,9 @@ export const LandingPage: React.FC = () => {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-2">Comprehensive Capabilities</h2>
+            <h2 className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-2">{t('landing.featuresTitle')}</h2>
             <p className="text-3xl font-extrabold text-slate-900 tracking-tight">
-              Everything Your Academy Needs in One Seamless Platform
+              {t('landing.featuresSubtitle')}
             </p>
             <p className="text-sm text-slate-500 mt-3">
               Built with an API-ready modular service layer for straightforward backend synchronization.
@@ -238,9 +238,9 @@ export const LandingPage: React.FC = () => {
       <section className="py-20 bg-slate-50 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-2">Multi-Tenant Portals</h2>
+            <h2 className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-2">{t('landing.rolesTitle')}</h2>
             <p className="text-3xl font-extrabold text-slate-900 tracking-tight">
-              Designed for Every Stakeholder in Education
+              {t('landing.rolesSubtitle')}
             </p>
             <p className="text-sm text-slate-500 mt-3">
               Role-specific views provide focused experiences for administrators, faculty, learners, and families.
@@ -271,21 +271,20 @@ export const LandingPage: React.FC = () => {
       <section className="py-20 bg-indigo-600 text-white relative overflow-hidden">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-10">
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
-            Ready to Experience Modern Education Management?
+            {t('landing.ctaTitle')}
           </h2>
           <p className="text-sm sm:text-base text-indigo-100 max-w-xl mx-auto mb-8 leading-relaxed">
-            Jump directly into the fully functioning frontend demo. Explore student management, attendance rolls,
-            gradebooks, and reports right now.
+            {t('landing.ctaSubtitle')}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/admin/dashboard">
               <Button size="lg" className="bg-white text-indigo-700 hover:bg-indigo-50 border-white shadow-sm">
-                Open Admin Dashboard
+                {t('landing.openAdmin')}
               </Button>
             </Link>
             <Link to="/login">
               <Button size="lg" variant="outline" className="border-indigo-300 text-white hover:bg-indigo-700">
-                Log In as Teacher or Student
+                {t('landing.signInRole')}
               </Button>
             </Link>
           </div>
@@ -299,9 +298,10 @@ export const LandingPage: React.FC = () => {
             <GraduationCap className="w-5 h-5 text-indigo-400" />
             <span>EduFlow SaaS Foundation</span>
           </div>
-          <p>© 2024–2026 EduFlow Systems Inc. Modern Education Management Platform. Frontend Architecture Foundation.</p>
+          <p>© 2024–2026 EduFlow Systems Inc. {t('landing.footer')}</p>
           <div className="flex items-center gap-4">
-            <Link to="/login" className="hover:text-white transition-colors">Portal Login</Link>
+            <LanguageSwitcher variant="footer" />
+            <Link to="/login" className="hover:text-white transition-colors">{t('auth.signInHere')}</Link>
             <Link to="/admin/dashboard" className="hover:text-white transition-colors">Admin Console</Link>
           </div>
         </div>
