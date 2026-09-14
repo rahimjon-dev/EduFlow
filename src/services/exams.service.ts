@@ -1,9 +1,14 @@
-import { mockExams } from '../mocks/academic.mock';
+import { mockExams } from '../data/academic';
 import type { Exam } from '../types';
+import { loadFromStorage, saveToStorage } from '../utils/storage';
 import { simulateLatency } from './api/apiClient';
 
 class ExamsService {
-  private exams: Exam[] = [...mockExams];
+  private exams: Exam[] = loadFromStorage('exams', mockExams);
+
+  private save() {
+    saveToStorage('exams', this.exams);
+  }
 
   async getAll(courseId?: string, groupId?: string): Promise<Exam[]> {
     await simulateLatency(180);
@@ -28,6 +33,7 @@ class ExamsService {
     await simulateLatency(250);
     const newExam: Exam = { ...data, id: `ex-${Date.now()}` };
     this.exams.unshift(newExam);
+    this.save();
     return newExam;
   }
 

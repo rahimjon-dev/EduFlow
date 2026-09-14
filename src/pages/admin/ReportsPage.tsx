@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Users, CalendarCheck, CreditCard, BookOpen, Download } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatCard } from '../../components/common/StatCard';
 import { Button } from '../../components/ui/Button';
@@ -43,7 +44,7 @@ export const ReportsPage: React.FC = () => {
             variant="outline"
             size="sm"
             leftIcon={<Download className="w-4 h-4" />}
-            onClick={() => alert('Exporting PDF/CSV report generated from service data...')}
+            onClick={() => toast.success('Report generation started. The download will begin shortly.')}
           >
             Export Comprehensive Report
           </Button>

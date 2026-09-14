@@ -1,9 +1,14 @@
-import { mockTeachers } from '../mocks/teachers.mock';
+import { mockTeachers } from '../data/teachers';
 import type { Teacher, TeacherFilters } from '../types';
+import { loadFromStorage, saveToStorage } from '../utils/storage';
 import { simulateLatency } from './api/apiClient';
 
 class TeachersService {
-  private teachers: Teacher[] = [...mockTeachers];
+  private teachers: Teacher[] = loadFromStorage('teachers', mockTeachers);
+
+  private save() {
+    saveToStorage('teachers', this.teachers);
+  }
 
   async getAll(filters?: TeacherFilters): Promise<Teacher[]> {
     await simulateLatency(200);
@@ -48,6 +53,7 @@ class TeachersService {
       id: `tch-${Date.now()}`,
     };
     this.teachers.unshift(newTeacher);
+    this.save();
     return newTeacher;
   }
 
@@ -58,6 +64,7 @@ class TeachersService {
       throw new Error(`Teacher with ID ${id} not found`);
     }
     this.teachers[index] = { ...this.teachers[index], ...updates };
+    this.save();
     return { ...this.teachers[index] };
   }
 

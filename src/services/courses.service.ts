@@ -1,9 +1,14 @@
-import { mockCourses } from '../mocks/courses.mock';
+import { mockCourses } from '../data/courses';
 import type { Course, CourseFilters } from '../types';
+import { loadFromStorage, saveToStorage } from '../utils/storage';
 import { simulateLatency } from './api/apiClient';
 
 class CoursesService {
-  private courses: Course[] = [...mockCourses];
+  private courses: Course[] = loadFromStorage('courses', mockCourses);
+
+  private save() {
+    saveToStorage('courses', this.courses);
+  }
 
   async getAll(filters?: CourseFilters): Promise<Course[]> {
     await simulateLatency(200);
@@ -53,6 +58,7 @@ class CoursesService {
       enrolledStudentsCount: 0,
     };
     this.courses.unshift(newCourse);
+    this.save();
     return newCourse;
   }
 
@@ -63,6 +69,7 @@ class CoursesService {
       throw new Error(`Course with ID ${id} not found`);
     }
     this.courses[index] = { ...this.courses[index], ...updates };
+    this.save();
     return { ...this.courses[index] };
   }
 

@@ -1,4 +1,4 @@
-import { mockDashboardOverview, mockMonthlyMetrics, mockRecentActivities } from '../mocks/dashboard.mock';
+import { mockDashboardOverview, mockMonthlyMetrics, mockRecentActivities } from '../data/dashboard';
 import type { ActivityItem, DashboardOverview, MonthlyMetric } from '../types';
 import { simulateLatency } from './api/apiClient';
 

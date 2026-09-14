@@ -1,9 +1,14 @@
-import { mockGroups } from '../mocks/groups.mock';
+import { mockGroups } from '../data/groups';
 import type { Group, GroupFilters } from '../types';
+import { loadFromStorage, saveToStorage } from '../utils/storage';
 import { simulateLatency } from './api/apiClient';
 
 class GroupsService {
-  private groups: Group[] = [...mockGroups];
+  private groups: Group[] = loadFromStorage('groups', mockGroups);
+
+  private save() {
+    saveToStorage('groups', this.groups);
+  }
 
   async getAll(filters?: GroupFilters): Promise<Group[]> {
     await simulateLatency(200);
@@ -53,6 +58,7 @@ class GroupsService {
       studentIds: [],
     };
     this.groups.unshift(newGroup);
+    this.save();
     return newGroup;
   }
 
@@ -63,6 +69,7 @@ class GroupsService {
       throw new Error(`Group with ID ${id} not found`);
     }
     this.groups[index] = { ...this.groups[index], ...updates };
+    this.save();
     return { ...this.groups[index] };
   }
 

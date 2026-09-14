@@ -13,6 +13,7 @@ import {
   PlusCircle,
   Activity,
 } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatCard } from '../../components/common/StatCard';
 import { StatusBadge } from '../../components/common/StatusBadge';
@@ -141,29 +142,20 @@ export const AdminDashboardPage: React.FC = () => {
             </span>
           </CardHeader>
           <CardContent>
-            {/* Visual Custom Responsive Bar Representation */}
-            <div className="pt-4 pb-2">
-              <div className="h-48 flex items-end justify-between gap-2 sm:gap-6 px-2">
-                {monthlyMetrics.map((item) => {
-                  const heightPercent = Math.round((item.students / 160) * 100);
-                  return (
-                    <div key={item.month} className="flex-1 flex flex-col items-center gap-2 group">
-                      <div className="relative w-full flex justify-center items-end h-36">
-                        <div
-                          className="w-full max-w-[36px] bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t-md transition-all duration-300 group-hover:from-indigo-700 group-hover:to-indigo-500 shadow-xs"
-                          style={{ height: `${heightPercent}%` }}
-                        >
-                          {/* Tooltip on hover */}
-                          <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] font-semibold py-0.5 px-2 rounded whitespace-nowrap pointer-events-none shadow-md">
-                            {item.students} Students
-                          </div>
-                        </div>
-                      </div>
-                      <span className="text-xs font-semibold text-slate-600">{item.month}</span>
-                    </div>
-                  );
-                })}
-              </div>
+            {/* Recharts Bar Representation */}
+            <div className="pt-4 pb-2 h-56 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={monthlyMetrics} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                  <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} dy={10} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} />
+                  <Tooltip
+                    cursor={{ fill: '#f1f5f9' }}
+                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px' }}
+                  />
+                  <Bar dataKey="students" name="Students" fill="#4f46e5" radius={[6, 6, 0, 0]} maxBarSize={40} />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
 
             <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-3 text-center text-xs">

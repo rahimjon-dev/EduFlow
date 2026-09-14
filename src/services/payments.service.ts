@@ -1,9 +1,14 @@
-import { mockPayments } from '../mocks/payments.mock';
+import { mockPayments } from '../data/payments';
 import type { Payment, PaymentFilters, PaymentStats } from '../types';
+import { loadFromStorage, saveToStorage } from '../utils/storage';
 import { simulateLatency } from './api/apiClient';
 
 class PaymentsService {
-  private payments: Payment[] = [...mockPayments];
+  private payments: Payment[] = loadFromStorage('payments', mockPayments);
+
+  private save() {
+    saveToStorage('payments', this.payments);
+  }
 
   async getAll(filters?: PaymentFilters): Promise<Payment[]> {
     await simulateLatency(200);
@@ -58,6 +63,7 @@ class PaymentsService {
       invoiceNumber: `INV-2024-${String(this.payments.length + 1).padStart(3, '0')}`,
     };
     this.payments.unshift(newPayment);
+    this.save();
     return newPayment;
   }
 

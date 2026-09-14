@@ -1,10 +1,15 @@
-import { mockAttendanceRecords } from '../mocks/attendance.mock';
-import { mockStudents } from '../mocks/students.mock';
+import { mockAttendanceRecords } from '../data/attendance';
+import { mockStudents } from '../data/students';
 import type { AttendanceRecord, AttendanceStatus, AttendanceSummary } from '../types';
+import { loadFromStorage, saveToStorage } from '../utils/storage';
 import { simulateLatency } from './api/apiClient';
 
 class AttendanceService {
-  private records: AttendanceRecord[] = [...mockAttendanceRecords];
+  private records: AttendanceRecord[] = loadFromStorage('attendance', mockAttendanceRecords);
+
+  private save() {
+    saveToStorage('attendance', this.records);
+  }
 
   async getByGroupAndDate(groupId: string, date: string): Promise<AttendanceRecord[]> {
     await simulateLatency(200);
@@ -27,6 +32,7 @@ class AttendanceService {
     }));
 
     this.records.push(...initialRecords);
+    this.save();
     return initialRecords;
   }
 
@@ -51,6 +57,7 @@ class AttendanceService {
         this.records[idx] = { ...this.records[idx], ...updated };
       } else {
         this.records.push(updated);
+    this.save();
       }
     });
     return recordsToUpdate;
