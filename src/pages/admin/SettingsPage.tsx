@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Settings, Save, Shield, Bell, Building, Lock } from 'lucide-react';
+import { Save, Shield, Bell, Building, Lock } from 'lucide-react';
 import { PageHeader } from '../../components/common/PageHeader';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';

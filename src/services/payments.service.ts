@@ -1,4 +1,4 @@
-import { mockPayments, mockPaymentStats } from '../mocks/payments.mock';
+import { mockPayments } from '../mocks/payments.mock';
 import type { Payment, PaymentFilters, PaymentStats } from '../types';
 import { simulateLatency } from './api/apiClient';
 

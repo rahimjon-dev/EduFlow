@@ -27,7 +27,7 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
     if (saved) {
       try {
         return JSON.parse(saved);
-      } catch (e) {
+      } catch {
         return defaultUser;
       }
     }

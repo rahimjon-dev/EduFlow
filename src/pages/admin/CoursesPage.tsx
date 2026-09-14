@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { BookOpen, PlusCircle, Edit2, Trash2, Clock, Users, DollarSign, LayoutGrid, List } from 'lucide-react';
+import { PlusCircle, Edit2, Trash2, Clock, Users, LayoutGrid, List } from 'lucide-react';
 import { PageHeader } from '../../components/common/PageHeader';
 import { SearchInput } from '../../components/common/SearchInput';
 import { StatusBadge } from '../../components/common/StatusBadge';

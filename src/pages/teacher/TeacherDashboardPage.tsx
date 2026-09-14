@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Layers, CalendarCheck, Calendar, BookMarked, ArrowRight, Clock, Users } from 'lucide-react';
+import { Layers, CalendarCheck, Calendar, BookMarked, Clock, Users } from 'lucide-react';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatCard } from '../../components/common/StatCard';
 import { Button } from '../../components/ui/Button';

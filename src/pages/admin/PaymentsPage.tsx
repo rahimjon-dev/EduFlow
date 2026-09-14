@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { CreditCard, PlusCircle, CheckCircle2, Clock, AlertTriangle, Download, DollarSign } from 'lucide-react';
+import { PlusCircle, CheckCircle2, Clock, AlertTriangle } from 'lucide-react';
 import { PageHeader } from '../../components/common/PageHeader';
 import { SearchInput } from '../../components/common/SearchInput';
 import { StatusBadge } from '../../components/common/StatusBadge';

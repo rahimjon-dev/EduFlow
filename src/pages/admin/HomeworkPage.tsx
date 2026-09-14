@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { BookMarked, PlusCircle, Calendar, Users, Edit2, Trash2 } from 'lucide-react';
+import { PlusCircle, Calendar, Users, Trash2 } from 'lucide-react';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { Button } from '../../components/ui/Button';

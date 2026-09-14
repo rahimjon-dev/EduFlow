@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { CalendarCheck, Save, CheckCircle2, XCircle, Clock, AlertCircle } from 'lucide-react';
+import { Save, CheckCircle2, XCircle, Clock, AlertCircle } from 'lucide-react';
 import { PageHeader } from '../../components/common/PageHeader';
 import { Button } from '../../components/ui/Button';
 import { Select } from '../../components/ui/Select';

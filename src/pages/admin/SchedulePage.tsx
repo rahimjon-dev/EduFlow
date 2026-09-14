@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Calendar, Clock, MapPin, User, BookOpen, Layers } from 'lucide-react';
+import { Calendar, Clock, MapPin, User, Layers } from 'lucide-react';
 import { PageHeader } from '../../components/common/PageHeader';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
 import { LoadingState } from '../../components/ui/LoadingState';

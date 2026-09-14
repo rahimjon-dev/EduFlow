@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FileCheck2, PlusCircle, Calendar, Clock, MapPin } from 'lucide-react';
+import { PlusCircle, Calendar, MapPin } from 'lucide-react';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { Button } from '../../components/ui/Button';

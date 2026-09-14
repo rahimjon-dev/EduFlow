@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Calendar, Award, BookMarked, CreditCard, Clock, CheckCircle2 } from 'lucide-react';
+import { Calendar, Award, BookMarked, CreditCard, CheckCircle2 } from 'lucide-react';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatCard } from '../../components/common/StatCard';
 import { StatusBadge } from '../../components/common/StatusBadge';

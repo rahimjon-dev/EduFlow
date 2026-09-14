@@ -1,33 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart3, TrendingUp, Users, CalendarCheck, CreditCard, BookOpen, Download } from 'lucide-react';
+import { Users, CalendarCheck, CreditCard, BookOpen, Download } from 'lucide-react';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatCard } from '../../components/common/StatCard';
 import { Button } from '../../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
 import { LoadingState } from '../../components/ui/LoadingState';
 import { reportsService } from '../../services/reports.service';
-import { paymentsService } from '../../services/payments.service';
-import type { DashboardOverview, MonthlyMetric, PaymentStats } from '../../types';
+import type { DashboardOverview, MonthlyMetric } from '../../types';
 import { formatCurrency } from '../../utils/formatters';
 
 export const ReportsPage: React.FC = () => {
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
   const [metrics, setMetrics] = useState<MonthlyMetric[]>([]);
-  const [paymentStats, setPaymentStats] = useState<PaymentStats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       try {
         setLoading(true);
-        const [ov, met, pay] = await Promise.all([
+        const [ov, met] = await Promise.all([
           reportsService.getOverview(),
           reportsService.getMonthlyMetrics(),
-          paymentsService.getStats(),
         ]);
         setOverview(ov);
         setMetrics(met);
-        setPaymentStats(pay);
       } finally {
         setLoading(false);
       }
