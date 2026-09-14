@@ -1,9 +1,14 @@
-import { mockGrades } from '../mocks/academic.mock';
+import { mockGrades } from '../data/academic';
 import type { Grade } from '../types';
+import { loadFromStorage, saveToStorage } from '../utils/storage';
 import { simulateLatency } from './api/apiClient';
 
 class GradesService {
-  private grades: Grade[] = [...mockGrades];
+  private grades: Grade[] = loadFromStorage('grades', mockGrades);
+
+  private save() {
+    saveToStorage('grades', this.grades);
+  }
 
   async getAll(studentId?: string, courseId?: string): Promise<Grade[]> {
     await simulateLatency(180);
@@ -35,6 +40,7 @@ class GradesService {
       letterGrade,
     };
     this.grades.unshift(newGrade);
+    this.save();
     return newGrade;
   }
 }

@@ -1,9 +1,14 @@
-import { mockScheduleSessions } from '../mocks/schedule.mock';
+import { mockScheduleSessions } from '../data/schedule';
 import type { ClassSession, DayOfWeek, ScheduleFilters } from '../types';
+import { loadFromStorage, saveToStorage } from '../utils/storage';
 import { simulateLatency } from './api/apiClient';
 
 class ScheduleService {
-  private sessions: ClassSession[] = [...mockScheduleSessions];
+  private sessions: ClassSession[] = loadFromStorage('schedule', mockScheduleSessions);
+
+  private save() {
+    saveToStorage('schedule', this.sessions);
+  }
 
   async getAll(filters?: ScheduleFilters): Promise<ClassSession[]> {
     await simulateLatency(180);
@@ -35,6 +40,7 @@ class ScheduleService {
       id: `sch-${Date.now()}`,
     };
     this.sessions.push(newSession);
+    this.save();
     return newSession;
   }
 }

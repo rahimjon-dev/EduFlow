@@ -1,9 +1,14 @@
-import { mockStudents } from '../mocks/students.mock';
+import { mockStudents } from '../data/students';
 import type { PaginatedResponse, Student, StudentFilters } from '../types';
+import { loadFromStorage, saveToStorage } from '../utils/storage';
 import { simulateLatency } from './api/apiClient';
 
 class StudentsService {
-  private students: Student[] = [...mockStudents];
+  private students: Student[] = loadFromStorage('students', mockStudents);
+
+  private save() {
+    saveToStorage('students', this.students);
+  }
 
   /**
    * Fetch all students with optional filtering and pagination
@@ -75,6 +80,7 @@ class StudentsService {
       createdAt: new Date().toISOString().split('T')[0],
     };
     this.students.unshift(newStudent);
+    this.save();
     return newStudent;
   }
 
@@ -88,6 +94,7 @@ class StudentsService {
       throw new Error(`Student with ID ${id} not found`);
     }
     this.students[index] = { ...this.students[index], ...updates };
+    this.save();
     return { ...this.students[index] };
   }
 

@@ -68,11 +68,15 @@ export const Navbar: React.FC<NavbarProps> = ({
     navigate(path);
   };
 
-  const sampleNotifications = [
+  const [notifications, setNotifications] = useState([
     { id: 1, title: 'Exam Scheduled', text: 'Midterm: React & State Architecture is on Mar 20', time: '10m ago' },
     { id: 2, title: 'Payment Confirmed', text: 'Sophia Martinez paid tuition invoice $1,200', time: '1h ago' },
     { id: 3, title: 'Attendance Notice', text: 'FSW-Cohort-24A attendance marked for today', time: '2h ago' },
-  ];
+  ]);
+
+  const handleMarkAllRead = () => {
+    setNotifications([]);
+  };
 
   return (
     <header className="sticky top-0 z-20 h-16 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 flex items-center justify-between">
@@ -151,23 +155,34 @@ export const Navbar: React.FC<NavbarProps> = ({
             title="Notifications"
           >
             <Bell className="w-5 h-5" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white" />
+            {notifications.length > 0 && (
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white" />
+            )}
           </button>
 
           {notificationsOpen && (
             <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-soft-lg border border-slate-200 py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
               <div className="px-4 py-2 border-b border-slate-100 flex items-center justify-between">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">Notifications</h4>
-                <span className="text-[11px] text-indigo-600 hover:underline cursor-pointer font-medium">Mark all read</span>
+                {notifications.length > 0 && (
+                  <span onClick={handleMarkAllRead} className="text-[11px] text-indigo-600 hover:underline cursor-pointer font-medium">Mark all read</span>
+                )}
               </div>
               <div className="divide-y divide-slate-100 max-h-72 overflow-y-auto">
-                {sampleNotifications.map((n) => (
-                  <div key={n.id} className="p-3 hover:bg-slate-50 transition-colors">
-                    <p className="text-xs font-semibold text-slate-800">{n.title}</p>
-                    <p className="text-xs text-slate-500 mt-0.5 leading-tight">{n.text}</p>
-                    <p className="text-[10px] text-slate-400 mt-1">{n.time}</p>
+                {notifications.length === 0 ? (
+                  <div className="p-6 text-center text-xs text-slate-500 flex flex-col items-center justify-center gap-2">
+                    <Bell className="w-6 h-6 text-slate-300" />
+                    <p>No new notifications</p>
                   </div>
-                ))}
+                ) : (
+                  notifications.map((n) => (
+                    <div key={n.id} className="p-3 hover:bg-slate-50 transition-colors">
+                      <p className="text-xs font-semibold text-slate-800">{n.title}</p>
+                      <p className="text-xs text-slate-500 mt-0.5 leading-tight">{n.text}</p>
+                      <p className="text-[10px] text-slate-400 mt-1">{n.time}</p>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           )}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { GraduationCap, Shield, BookOpen, HeartHandshake, ArrowRight } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../app/providers';
@@ -172,7 +173,7 @@ export const LoginPage: React.FC = () => {
                 />
                 Remember me
               </label>
-              <a href="#forgot" onClick={(e) => { e.preventDefault(); alert('In mock mode: simply click Sign In!'); }} className="text-indigo-600 hover:underline">
+              <a href="#forgot" onClick={(e) => { e.preventDefault(); toast('In mock mode: simply click Sign In!', { icon: '👋' }); }} className="text-indigo-600 hover:underline">
                 Forgot password?
               </a>
             </div>

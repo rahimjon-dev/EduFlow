@@ -1,9 +1,14 @@
-import { mockHomeworks } from '../mocks/academic.mock';
+import { mockHomeworks } from '../data/academic';
 import type { Homework } from '../types';
+import { loadFromStorage, saveToStorage } from '../utils/storage';
 import { simulateLatency } from './api/apiClient';
 
 class HomeworkService {
-  private homeworks: Homework[] = [...mockHomeworks];
+  private homeworks: Homework[] = loadFromStorage('homework', mockHomeworks);
+
+  private save() {
+    saveToStorage('homework', this.homeworks);
+  }
 
   async getAll(groupId?: string, courseId?: string): Promise<Homework[]> {
     await simulateLatency(180);
@@ -32,6 +37,7 @@ class HomeworkService {
       submissionsCount: 0,
     };
     this.homeworks.unshift(newHw);
+    this.save();
     return newHw;
   }
 
