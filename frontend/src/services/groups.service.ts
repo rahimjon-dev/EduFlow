@@ -76,6 +76,7 @@ class GroupsService {
   async delete(id: string): Promise<boolean> {
     await simulateLatency(200);
     this.groups = this.groups.filter((g) => g.id !== id);
+    this.save();
     return true;
   }
 }

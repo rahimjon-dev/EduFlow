@@ -230,12 +230,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={() => {
                     setProfileDropdownOpen(false);
-                    navigate('/admin/settings');
+                    if (currentUser.role === 'ADMIN') {
+                      navigate('/admin/settings');
+                    } else {
+                      navigate(`/${currentUser.role.toLowerCase()}/dashboard`);
+                    }
                   }}
                   className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 rounded-lg transition-colors"
                 >
                   <UserIcon className="w-4 h-4 text-slate-400" />
-                  {t('nav.settings')}
+                  {currentUser.role === 'ADMIN' ? t('nav.settings') : t('nav.dashboard')}
                 </button>
                 <button
                   onClick={() => {

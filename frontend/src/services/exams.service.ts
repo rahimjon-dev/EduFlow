@@ -42,12 +42,14 @@ class ExamsService {
     const idx = this.exams.findIndex((e) => e.id === id);
     if (idx === -1) throw new Error('Exam not found');
     this.exams[idx] = { ...this.exams[idx], ...updates };
+    this.save();
     return { ...this.exams[idx] };
   }
 
   async delete(id: string): Promise<boolean> {
     await simulateLatency(200);
     this.exams = this.exams.filter((e) => e.id !== id);
+    this.save();
     return true;
   }
 }

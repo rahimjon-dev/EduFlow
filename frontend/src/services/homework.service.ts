@@ -46,12 +46,14 @@ class HomeworkService {
     const idx = this.homeworks.findIndex((h) => h.id === id);
     if (idx === -1) throw new Error('Homework not found');
     this.homeworks[idx] = { ...this.homeworks[idx], ...updates };
+    this.save();
     return { ...this.homeworks[idx] };
   }
 
   async delete(id: string): Promise<boolean> {
     await simulateLatency(200);
     this.homeworks = this.homeworks.filter((h) => h.id !== id);
+    this.save();
     return true;
   }
 }

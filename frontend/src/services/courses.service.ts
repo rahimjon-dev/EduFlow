@@ -76,6 +76,7 @@ class CoursesService {
   async delete(id: string): Promise<boolean> {
     await simulateLatency(200);
     this.courses = this.courses.filter((c) => c.id !== id);
+    this.save();
     return true;
   }
 }

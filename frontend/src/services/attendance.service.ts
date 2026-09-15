@@ -44,6 +44,7 @@ class AttendanceService {
       if (remarks !== undefined) {
         this.records[idx].remarks = remarks;
       }
+      this.save();
       return { ...this.records[idx] };
     }
     throw new Error('Attendance record not found');
@@ -57,9 +58,9 @@ class AttendanceService {
         this.records[idx] = { ...this.records[idx], ...updated };
       } else {
         this.records.push(updated);
-    this.save();
       }
     });
+    this.save();
     return recordsToUpdate;
   }
 

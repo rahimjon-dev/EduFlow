@@ -74,6 +74,7 @@ class PaymentsService {
       throw new Error(`Payment with ID ${id} not found`);
     }
     this.payments[idx].status = status;
+    this.save();
     return { ...this.payments[idx] };
   }
 }

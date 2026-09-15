@@ -105,6 +105,7 @@ class StudentsService {
     await simulateLatency(200);
     const initialLen = this.students.length;
     this.students = this.students.filter((s) => s.id !== id);
+    this.save();
     return this.students.length < initialLen;
   }
 }
