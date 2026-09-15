@@ -83,7 +83,7 @@ export const router = createBrowserRouter([
   {
     path: '/teacher',
     element: (
-      <ProtectedRoute allowedRoles={['TEACHER', 'ADMIN']}>
+      <ProtectedRoute allowedRoles={['TEACHER']}>
         <DashboardLayout />
       </ProtectedRoute>
     ),
@@ -102,7 +102,7 @@ export const router = createBrowserRouter([
   {
     path: '/student',
     element: (
-      <ProtectedRoute allowedRoles={['STUDENT', 'ADMIN']}>
+      <ProtectedRoute allowedRoles={['STUDENT']}>
         <DashboardLayout />
       </ProtectedRoute>
     ),
@@ -121,7 +121,7 @@ export const router = createBrowserRouter([
   {
     path: '/parent',
     element: (
-      <ProtectedRoute allowedRoles={['PARENT', 'ADMIN']}>
+      <ProtectedRoute allowedRoles={['PARENT']}>
         <DashboardLayout />
       </ProtectedRoute>
     ),

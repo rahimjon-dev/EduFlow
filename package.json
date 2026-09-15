@@ -5,6 +5,9 @@
   "description": "EduFlow - Modern Education Management Platform",
   "scripts": {
     "dev": "npm run dev --prefix frontend",
+    "backend:dev": "npm run dev --prefix eduflow-backend",
+    "backend:start": "npm run start --prefix eduflow-backend",
+    "prisma:studio": "npm run prisma:studio --prefix eduflow-backend",
     "build": "npm run build --prefix frontend",
     "preview": "npm run preview --prefix frontend"
   }

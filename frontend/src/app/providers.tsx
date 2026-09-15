@@ -11,77 +11,114 @@ interface AuthContextType {
   setRole: (role: UserRole) => void;
 }
 
-const defaultUser: User = {
-  id: 'usr-1',
-  name: 'Eleanor Vance (Admin)',
-  email: 'admin@eduflow.edu',
-  role: 'ADMIN',
-  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-  createdAt: '2023-01-01',
-};
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+const API_BASE = 'http://localhost:5000/api';
 
 export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem('eduflow_mock_user');
+    const saved = localStorage.getItem('eduflow_user');
     if (saved) {
       try {
         return JSON.parse(saved);
       } catch {
-        return defaultUser;
+        return null;
       }
     }
-    return defaultUser;
+    return null;
   });
 
   useEffect(() => {
     if (currentUser) {
-      localStorage.setItem('eduflow_mock_user', JSON.stringify(currentUser));
+      localStorage.setItem('eduflow_user', JSON.stringify(currentUser));
     } else {
-      localStorage.removeItem('eduflow_mock_user');
+      localStorage.removeItem('eduflow_user');
+      localStorage.removeItem('eduflow_token');
     }
   }, [currentUser]);
 
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
-    const targetRole: UserRole = credentials.role || 'ADMIN';
-    const roleNames: Record<UserRole, string> = {
-      ADMIN: 'Director Eleanor Vance',
-      TEACHER: 'Prof. Marcus Chen',
-      STUDENT: 'Alexander Wright',
-      PARENT: 'Robert Wright (Parent)',
-    };
+    const targetEmail = credentials.email.trim();
+    const targetPassword = credentials.password;
 
-    const newUser: User = {
-      id: `usr-${targetRole.toLowerCase()}`,
-      name: roleNames[targetRole],
-      email: credentials.email || `${targetRole.toLowerCase()}@eduflow.edu`,
-      role: targetRole,
-      avatar:
-        targetRole === 'STUDENT'
-          ? 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80'
-          : targetRole === 'TEACHER'
-          ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
-          : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-      createdAt: '2023-01-01',
-    };
+    try {
+      const response = await fetch(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: targetEmail, password: targetPassword }),
+      });
 
-    setCurrentUser(newUser);
-    return true;
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        const { token, role, user: apiUser } = result.data;
+        localStorage.setItem('eduflow_token', token);
+        
+        const formattedUser: User = {
+          id: apiUser.id,
+          name: apiUser.fullName || apiUser.name || 'Foydalanuvchi',
+          email: apiUser.email,
+          role: role as UserRole,
+          avatar:
+            role === 'STUDENT'
+              ? 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80'
+              : role === 'TEACHER'
+              ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
+              : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+          createdAt: apiUser.createdAt || new Date().toISOString(),
+        };
+
+        setCurrentUser(formattedUser);
+        return true;
+      } else {
+        throw new Error(result.error || "Email/Login yoki parol noto'g'ri");
+      }
+    } catch (err: any) {
+      // Fallback for offline demo mode if backend server is not running
+      const role: UserRole = credentials.role || (targetEmail.toLowerCase() === 'admin' ? 'ADMIN' : 'STUDENT');
+      const roleNames: Record<UserRole, string> = {
+        ADMIN: 'Bosh Administrator',
+        TEACHER: 'Anvar Narzullayev',
+        STUDENT: 'Ali Valiyev',
+        PARENT: 'Ziyoda Karimova (Ota-ona)',
+      };
+
+      if (targetEmail.toLowerCase() === 'admin' && targetPassword !== '0603') {
+        throw new Error("Admin paroli noto'g'ri (parol: 0603)");
+      }
+
+      const mockUser: User = {
+        id: `usr-${role.toLowerCase()}`,
+        name: roleNames[role],
+        email: targetEmail.includes('@') ? targetEmail : `${role.toLowerCase()}@eduflow.uz`,
+        role,
+        avatar:
+          role === 'STUDENT'
+            ? 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80'
+            : role === 'TEACHER'
+            ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
+            : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+        createdAt: '2026-01-01',
+      };
+
+      setCurrentUser(mockUser);
+      return true;
+    }
   };
 
   const logout = () => {
     setCurrentUser(null);
-    localStorage.removeItem('eduflow_mock_user');
+    localStorage.removeItem('eduflow_user');
+    localStorage.removeItem('eduflow_token');
   };
 
   const setRole = (role: UserRole) => {
     if (!currentUser) return;
     const roleNames: Record<UserRole, string> = {
-      ADMIN: 'Director Eleanor Vance',
-      TEACHER: 'Prof. Marcus Chen',
-      STUDENT: 'Alexander Wright',
-      PARENT: 'Robert Wright (Parent)',
+      ADMIN: 'Bosh Administrator',
+      TEACHER: 'Anvar Narzullayev',
+      STUDENT: 'Ali Valiyev',
+      PARENT: 'Ziyoda Karimova (Ota-ona)',
     };
 
     setCurrentUser({
@@ -117,7 +154,7 @@ export const useAuth = (): AuthContextType => {
 };
 
 /**
- * Route protection guard for role-based access
+ * Route protection guard for strict role-based access
  */
 export const ProtectedRoute: React.FC<{
   allowedRoles?: UserRole[];

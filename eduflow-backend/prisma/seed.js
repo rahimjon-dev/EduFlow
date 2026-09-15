@@ -6,16 +6,19 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Seeding EduFlow database...');
 
-  // Hash passwords
-  const adminPassword = await bcrypt.hash('admin123', 10);
+  // Hash passwords (admin default: login: admin, password: 0603)
+  const adminPassword = await bcrypt.hash('0603', 10);
   const teacherPassword = await bcrypt.hash('teacher123', 10);
   const studentPassword = await bcrypt.hash('student123', 10);
   const parentPassword = await bcrypt.hash('parent123', 10);
 
-  // 1. Create Admin
+  // 1. Create Admin (Login: admin / admin@eduflow.uz, Parol: 0603)
   const admin = await prisma.user.upsert({
     where: { email: 'admin@eduflow.uz' },
-    update: {},
+    update: {
+      password: adminPassword,
+      role: 'ADMIN'
+    },
     create: {
       fullName: 'Bosh Administrator',
       email: 'admin@eduflow.uz',
