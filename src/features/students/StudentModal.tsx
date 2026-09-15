@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from '../../i18n';
 import { Modal } from '../../components/ui/Modal';
 import { Input } from '../../components/ui/Input';
 import { Select } from '../../components/ui/Select';
@@ -22,6 +23,7 @@ export const StudentModal: React.FC<StudentModalProps> = ({
   courses,
   groups,
 }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -85,10 +87,10 @@ export const StudentModal: React.FC<StudentModalProps> = ({
     e.preventDefault();
     const newErrors: Record<string, string> = {};
 
-    if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
-    if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
-    if (!formData.email.trim()) newErrors.email = 'Email address is required';
-    if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
+    if (!formData.firstName.trim()) newErrors.firstName = t('students.firstNameRequired');
+    if (!formData.lastName.trim()) newErrors.lastName = t('students.lastNameRequired');
+    if (!formData.email.trim()) newErrors.email = t('students.emailRequired');
+    if (!formData.phone.trim()) newErrors.phone = t('students.phoneRequired');
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -108,16 +110,16 @@ export const StudentModal: React.FC<StudentModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={initialData ? 'Edit Student Profile' : 'Add New Student'}
-      description="Enter personal details, academic placement, and guardian contact details."
+      title={initialData ? t('students.editStudent') : t('students.newStudent')}
+      description={t('students.modalDesc')}
       maxWidth="lg"
       footer={
         <>
           <Button variant="outline" size="sm" onClick={onClose} disabled={loading}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button variant="primary" size="sm" onClick={handleSubmit} isLoading={loading}>
-            {initialData ? 'Save Changes' : 'Create Student'}
+            {initialData ? t('common.save') : t('students.addStudent')}
           </Button>
         </>
       }
@@ -125,26 +127,26 @@ export const StudentModal: React.FC<StudentModalProps> = ({
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
-            label="First Name"
+            label={t('students.firstName')}
             value={formData.firstName}
             onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
             error={errors.firstName}
-            placeholder="e.g. Liam"
+            placeholder="Liam"
             required
           />
           <Input
-            label="Last Name"
+            label={t('students.lastName')}
             value={formData.lastName}
             onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
             error={errors.lastName}
-            placeholder="e.g. Johnson"
+            placeholder="Johnson"
             required
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
-            label="Email Address"
+            label={t('students.email')}
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -153,7 +155,7 @@ export const StudentModal: React.FC<StudentModalProps> = ({
             required
           />
           <Input
-            label="Phone Number"
+            label={t('students.phone')}
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             error={errors.phone}
@@ -164,41 +166,41 @@ export const StudentModal: React.FC<StudentModalProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Select
-            label="Enrolled Course"
+            label={t('students.enrolledCourse')}
             value={formData.courseId}
             onChange={(e) => setFormData({ ...formData, courseId: e.target.value })}
             options={courses.map((c) => ({ value: c.id, label: c.title }))}
           />
           <Select
-            label="Assigned Group"
+            label={t('students.assignedGroup')}
             value={formData.groupId}
             onChange={(e) => setFormData({ ...formData, groupId: e.target.value })}
             options={groups.map((g) => ({ value: g.id, label: g.name }))}
           />
           <Select
-            label="Status"
+            label={t('common.status')}
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value as StudentStatus })}
             options={[
-              { value: 'ACTIVE', label: 'Active' },
-              { value: 'INACTIVE', label: 'Inactive' },
-              { value: 'GRADUATED', label: 'Graduated' },
-              { value: 'SUSPENDED', label: 'Suspended' },
+              { value: 'ACTIVE', label: t('common.active') },
+              { value: 'INACTIVE', label: t('common.inactive') },
+              { value: 'GRADUATED', label: t('common.graduated') },
+              { value: 'SUSPENDED', label: t('common.suspended') },
             ]}
           />
         </div>
 
         <div className="pt-2 border-t border-slate-100">
-          <p className="text-xs font-semibold text-slate-700 uppercase tracking-wider mb-3">Guardian Information</p>
+          <p className="text-xs font-semibold text-slate-700 uppercase tracking-wider mb-3">{t('students.guardianRecord')}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
-              label="Parent / Guardian Name"
+              label={t('students.parentName')}
               value={formData.parentName}
               onChange={(e) => setFormData({ ...formData, parentName: e.target.value })}
-              placeholder="e.g. David Johnson"
+              placeholder="David Johnson"
             />
             <Input
-              label="Parent Phone"
+              label={t('students.parentPhone')}
               value={formData.parentPhone}
               onChange={(e) => setFormData({ ...formData, parentPhone: e.target.value })}
               placeholder="+1 (555) 911-0000"
@@ -208,13 +210,13 @@ export const StudentModal: React.FC<StudentModalProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
-            label="Residential Address"
+            label={t('students.address')}
             value={formData.address}
             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-            placeholder="Street address, City, State"
+            placeholder={t('students.addressPlaceholder')}
           />
           <Input
-            label="Date of Birth"
+            label={t('students.dateOfBirth')}
             type="date"
             value={formData.dateOfBirth}
             onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}

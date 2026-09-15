@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { PlusCircle, Calendar, Users, Trash2 } from 'lucide-react';
+import { useTranslation } from '../../i18n';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { Button } from '../../components/ui/Button';
@@ -13,6 +14,7 @@ import { groupsService } from '../../services/groups.service';
 import type { Homework, Course, Group } from '../../types';
 
 export const HomeworkPage: React.FC = () => {
+  const { t } = useTranslation();
   const [homeworks, setHomeworks] = useState<Homework[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
@@ -59,26 +61,26 @@ export const HomeworkPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Homework & Coursework Assignments"
-        description="Publish project assignments, set due deadlines, and monitor cohort submission compliance."
+        title={t('homework.title')}
+        description={t('homework.desc')}
         actions={
           <Button
             variant="primary"
             leftIcon={<PlusCircle className="w-4 h-4" />}
             onClick={() => setModalOpen(true)}
           >
-            Assign Homework
+            {t('homework.assignHomework')}
           </Button>
         }
       />
 
       {loading ? (
-        <LoadingState message="Loading homework assignments..." />
+        <LoadingState message={t('homework.loadingHomework')} />
       ) : homeworks.length === 0 ? (
         <EmptyState
-          title="No assignments posted"
-          description="Create your first homework assignment for a cohort."
-          actionText="Create Assignment"
+          title={t('homework.noHomework')}
+          description={t('homework.noHomeworkDesc')}
+          actionText={t('homework.assignFirstHomework')}
           onAction={() => setModalOpen(true)}
         />
       ) : (
@@ -103,16 +105,16 @@ export const HomeworkPage: React.FC = () => {
                 <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
                   <div className="flex items-center gap-1.5 text-slate-700">
                     <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Due: <strong>{hw.dueDate}</strong></span>
+                    <span>{t('homework.due')}: <strong>{hw.dueDate}</strong></span>
                   </div>
-                  <span className="text-slate-500 font-medium">Max Points: <strong>{hw.maxPoints} pts</strong></span>
+                  <span className="text-slate-500 font-medium">{t('homework.maxPoints')}: <strong>{hw.maxPoints} {t('homework.points')}</strong></span>
                 </div>
 
                 <div className="flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-100">
-                  <span>Instructor: <strong className="text-slate-700">{hw.teacherName}</strong></span>
+                  <span>{t('courses.instructor')}: <strong className="text-slate-700">{hw.teacherName}</strong></span>
                   <span className="flex items-center gap-1 font-semibold text-emerald-700">
                     <Users className="w-3.5 h-3.5" />
-                    {hw.submissionsCount || 0} / {hw.totalStudents || 15} Submitted
+                    {hw.submissionsCount || 0} / {hw.totalStudents || 15} {t('homework.submitted')}
                   </span>
                 </div>
               </CardContent>
@@ -125,7 +127,7 @@ export const HomeworkPage: React.FC = () => {
                   leftIcon={<Trash2 className="w-3.5 h-3.5" />}
                   onClick={() => handleDelete(hw.id)}
                 >
-                  Remove
+                  {t('common.delete')}
                 </Button>
               </div>
             </Card>

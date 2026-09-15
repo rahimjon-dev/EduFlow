@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from '../../i18n';
 import { Modal } from '../../components/ui/Modal';
 import { Input } from '../../components/ui/Input';
 import { Select } from '../../components/ui/Select';
@@ -18,6 +19,7 @@ export const TeacherModal: React.FC<TeacherModalProps> = ({
   onSubmit,
   initialData,
 }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -72,10 +74,10 @@ export const TeacherModal: React.FC<TeacherModalProps> = ({
     e.preventDefault();
     const newErrors: Record<string, string> = {};
 
-    if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
-    if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
-    if (!formData.email.trim()) newErrors.email = 'Email address is required';
-    if (!formData.specialization.trim()) newErrors.specialization = 'Specialization is required';
+    if (!formData.firstName.trim()) newErrors.firstName = t('teachers.firstNameRequired');
+    if (!formData.lastName.trim()) newErrors.lastName = t('teachers.lastNameRequired');
+    if (!formData.email.trim()) newErrors.email = t('teachers.emailRequired');
+    if (!formData.specialization.trim()) newErrors.specialization = t('teachers.specializationRequired');
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -98,16 +100,16 @@ export const TeacherModal: React.FC<TeacherModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={initialData ? 'Edit Faculty Profile' : 'Add New Teacher'}
-      description="Register an instructor with academic credentials and specialization."
+      title={initialData ? t('teachers.editTeacher') : t('teachers.newTeacher')}
+      description={t('teachers.modalDesc')}
       maxWidth="lg"
       footer={
         <>
           <Button variant="outline" size="sm" onClick={onClose} disabled={loading}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button variant="primary" size="sm" onClick={handleSubmit} isLoading={loading}>
-            {initialData ? 'Save Changes' : 'Create Teacher'}
+            {initialData ? t('common.save') : t('teachers.addTeacher')}
           </Button>
         </>
       }
@@ -115,26 +117,26 @@ export const TeacherModal: React.FC<TeacherModalProps> = ({
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
-            label="First Name"
+            label={t('teachers.firstName')}
             value={formData.firstName}
             onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
             error={errors.firstName}
-            placeholder="e.g. Marcus"
+            placeholder="Marcus"
             required
           />
           <Input
-            label="Last Name"
+            label={t('teachers.lastName')}
             value={formData.lastName}
             onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
             error={errors.lastName}
-            placeholder="e.g. Chen"
+            placeholder="Chen"
             required
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
-            label="Email Address"
+            label={t('teachers.email')}
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -143,7 +145,7 @@ export const TeacherModal: React.FC<TeacherModalProps> = ({
             required
           />
           <Input
-            label="Phone Number"
+            label={t('teachers.phone')}
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             placeholder="+1 (555) 000-0000"
@@ -152,24 +154,24 @@ export const TeacherModal: React.FC<TeacherModalProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
-            label="Specialization Domain"
+            label={t('teachers.specialization')}
             value={formData.specialization}
             onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
             error={errors.specialization}
-            placeholder="e.g. Applied Machine Learning"
+            placeholder="Applied Machine Learning"
             required
           />
           <Input
-            label="Highest Qualification"
+            label={t('teachers.qualification')}
             value={formData.qualification}
             onChange={(e) => setFormData({ ...formData, qualification: e.target.value })}
-            placeholder="e.g. Ph.D. in Computer Science"
+            placeholder="Ph.D. in Computer Science"
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
-            label="Years of Experience"
+            label={t('teachers.experienceYears')}
             type="number"
             min="0"
             max="40"
@@ -177,24 +179,24 @@ export const TeacherModal: React.FC<TeacherModalProps> = ({
             onChange={(e) => setFormData({ ...formData, experienceYears: Number(e.target.value) })}
           />
           <Select
-            label="Faculty Status"
+            label={t('common.status')}
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value as TeacherStatus })}
             options={[
-              { value: 'ACTIVE', label: 'Active' },
-              { value: 'ON_LEAVE', label: 'On Leave' },
-              { value: 'INACTIVE', label: 'Inactive' },
+              { value: 'ACTIVE', label: t('common.active') },
+              { value: 'ON_LEAVE', label: t('common.onLeave') },
+              { value: 'INACTIVE', label: t('common.inactive') },
             ]}
           />
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">Biography / Overview</label>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">{t('teachers.bio')}</label>
           <textarea
             rows={3}
             value={formData.bio}
             onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-            placeholder="Background summary, technical highlights, and industry experience..."
+            placeholder={t('teachers.bioPlaceholder')}
             className="block w-full rounded-lg border border-slate-300 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
           />
         </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Save, CheckCircle2, XCircle, Clock, AlertCircle } from 'lucide-react';
+import { useTranslation } from '../../i18n';
 import { PageHeader } from '../../components/common/PageHeader';
 import { Button } from '../../components/ui/Button';
 import { Select } from '../../components/ui/Select';
@@ -12,6 +13,7 @@ import { coursesService } from '../../services/courses.service';
 import type { AttendanceRecord, AttendanceStatus, AttendanceSummary, Group, Course } from '../../types';
 
 export const AttendancePage: React.FC = () => {
+  const { t } = useTranslation();
   const [courses, setCourses] = useState<Course[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
   const [selectedCourseId, setSelectedCourseId] = useState('');
@@ -104,8 +106,8 @@ export const AttendancePage: React.FC = () => {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Class Attendance Roll-Call"
-        description="Daily roster attendance tracking with instantaneous status toggles and compliance metrics."
+        title={t('attendance.title')}
+        description={t('attendance.desc')}
         actions={
           <div className="flex items-center gap-2">
             <Button
@@ -113,7 +115,7 @@ export const AttendancePage: React.FC = () => {
               size="sm"
               onClick={() => handleMarkAll('PRESENT')}
             >
-              Mark All Present
+              {t('attendance.markAllPresent')}
             </Button>
             <Button
               variant="primary"
@@ -122,7 +124,7 @@ export const AttendancePage: React.FC = () => {
               isLoading={saving}
               onClick={handleSaveAll}
             >
-              {saveSuccess ? 'Saved Successfully!' : 'Save Attendance'}
+              {saveSuccess ? t('attendance.savedSuccessfully') : t('attendance.saveAttendance')}
             </Button>
           </div>
         }
@@ -131,7 +133,7 @@ export const AttendancePage: React.FC = () => {
       {/* Selectors Bar */}
       <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-soft grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Select
-          label="1. Select Course"
+          label={t('attendance.selectCourse')}
           value={selectedCourseId}
           onChange={(e) => {
             setSelectedCourseId(e.target.value);
@@ -142,14 +144,14 @@ export const AttendancePage: React.FC = () => {
         />
 
         <Select
-          label="2. Select Cohort Group"
+          label={t('attendance.selectGroup')}
           value={selectedGroupId}
           onChange={(e) => setSelectedGroupId(e.target.value)}
           options={filteredGroups.map((g) => ({ value: g.id, label: `${g.name} (${g.room})` }))}
         />
 
         <Input
-          label="3. Session Date"
+          label={t('attendance.sessionDate')}
           type="date"
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
@@ -159,60 +161,60 @@ export const AttendancePage: React.FC = () => {
       {/* Summary KPI Counters */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
         <div className="p-4 bg-white rounded-xl border border-slate-200 shadow-2xs">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Present</span>
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">{t('common.present')}</span>
           <div className="flex items-baseline gap-2 mt-1">
             <span className="text-2xl font-bold text-emerald-600">{summary.present}</span>
-            <span className="text-xs text-slate-400">students</span>
+            <span className="text-xs text-slate-400">{t('common.students')}</span>
           </div>
         </div>
 
         <div className="p-4 bg-white rounded-xl border border-slate-200 shadow-2xs">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Late</span>
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">{t('common.late')}</span>
           <div className="flex items-baseline gap-2 mt-1">
             <span className="text-2xl font-bold text-amber-600">{summary.late}</span>
-            <span className="text-xs text-slate-400">students</span>
+            <span className="text-xs text-slate-400">{t('common.students')}</span>
           </div>
         </div>
 
         <div className="p-4 bg-white rounded-xl border border-slate-200 shadow-2xs">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Absent</span>
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">{t('common.absent')}</span>
           <div className="flex items-baseline gap-2 mt-1">
             <span className="text-2xl font-bold text-rose-600">{summary.absent}</span>
-            <span className="text-xs text-slate-400">students</span>
+            <span className="text-xs text-slate-400">{t('common.students')}</span>
           </div>
         </div>
 
         <div className="p-4 bg-white rounded-xl border border-slate-200 shadow-2xs">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Sick / Excused</span>
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">{t('attendance.sickExcused')}</span>
           <div className="flex items-baseline gap-2 mt-1">
             <span className="text-2xl font-bold text-sky-600">{summary.sick}</span>
-            <span className="text-xs text-slate-400">students</span>
+            <span className="text-xs text-slate-400">{t('common.students')}</span>
           </div>
         </div>
 
         <div className="p-4 bg-white rounded-xl border border-slate-200 shadow-2xs col-span-2 sm:col-span-1">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Session Rate</span>
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">{t('attendance.sessionRate')}</span>
           <div className="flex items-baseline gap-2 mt-1">
             <span className="text-2xl font-bold text-indigo-600">{summary.percentage}%</span>
-            <span className="text-xs text-emerald-600 font-semibold">attendance</span>
+            <span className="text-xs text-emerald-600 font-semibold">{t('attendance.sessionRateLabel')}</span>
           </div>
         </div>
       </div>
 
       {/* Attendance Sheet Table */}
       {loading ? (
-        <LoadingState message="Loading cohort roster and attendance status..." />
+        <LoadingState message={t('attendance.loadingCohort')} />
       ) : records.length === 0 ? (
         <div className="p-8 text-center bg-white rounded-xl border border-slate-200 text-slate-500 text-sm">
-          No students currently enrolled in this cohort group.
+          {t('attendance.noStudentsInCohort')}
         </div>
       ) : (
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Student Name</TableHead>
-              <TableHead>Attendance Status</TableHead>
-              <TableHead>Remarks & Notes</TableHead>
+              <TableHead>{t('students.studentName')}</TableHead>
+              <TableHead>{t('attendance.attendanceStatus')}</TableHead>
+              <TableHead>{t('attendance.remarks')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -235,7 +237,7 @@ export const AttendancePage: React.FC = () => {
                             : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-50'
                         }`}
                       >
-                        <CheckCircle2 className="w-3.5 h-3.5" /> Present
+                        <CheckCircle2 className="w-3.5 h-3.5" /> {t('common.present')}
                       </button>
 
                       <button
@@ -247,7 +249,7 @@ export const AttendancePage: React.FC = () => {
                             : 'text-slate-600 hover:text-amber-700 hover:bg-amber-50'
                         }`}
                       >
-                        <Clock className="w-3.5 h-3.5" /> Late
+                        <Clock className="w-3.5 h-3.5" /> {t('common.late')}
                       </button>
 
                       <button
@@ -259,7 +261,7 @@ export const AttendancePage: React.FC = () => {
                             : 'text-slate-600 hover:text-rose-700 hover:bg-rose-50'
                         }`}
                       >
-                        <XCircle className="w-3.5 h-3.5" /> Absent
+                        <XCircle className="w-3.5 h-3.5" /> {t('common.absent')}
                       </button>
 
                       <button
@@ -271,14 +273,14 @@ export const AttendancePage: React.FC = () => {
                             : 'text-slate-600 hover:text-sky-700 hover:bg-sky-50'
                         }`}
                       >
-                        <AlertCircle className="w-3.5 h-3.5" /> Sick
+                        <AlertCircle className="w-3.5 h-3.5" /> {t('common.sick')}
                       </button>
                     </div>
                   </TableCell>
                   <TableCell>
                     <input
                       type="text"
-                      placeholder="Add absence notice or tardiness note..."
+                      placeholder={t('attendance.remarksPlaceholder')}
                       value={record.remarks || ''}
                       onChange={(e) => handleRemarksChange(record.id, e.target.value)}
                       className="w-full text-xs rounded-lg border border-slate-200 px-3 py-1.5 placeholder:text-slate-400 focus:outline-none focus:border-indigo-500"

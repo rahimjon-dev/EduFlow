@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Layers, CalendarCheck, Calendar, BookMarked, Clock, Users } from 'lucide-react';
+import { useTranslation } from '../../i18n';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatCard } from '../../components/common/StatCard';
 import { Button } from '../../components/ui/Button';
@@ -12,6 +13,7 @@ import { homeworkService } from '../../services/homework.service';
 import type { Group, ClassSession, Homework } from '../../types';
 
 export const TeacherDashboardPage: React.FC = () => {
+  const { t } = useTranslation();
   const [groups, setGroups] = useState<Group[]>([]);
   const [todayClasses, setTodayClasses] = useState<ClassSession[]>([]);
   const [homeworks, setHomeworks] = useState<Homework[]>([]);
@@ -23,7 +25,6 @@ export const TeacherDashboardPage: React.FC = () => {
     const load = async () => {
       try {
         setLoading(true);
-        // Marcus Chen (tch-2) or Eleanor Vance (tch-1)
         const [gList, schList, hwList] = await Promise.all([
           groupsService.getAll(),
           scheduleService.getAll({ dayOfWeek: 'Monday' }),
@@ -39,13 +40,13 @@ export const TeacherDashboardPage: React.FC = () => {
     load();
   }, []);
 
-  if (loading) return <LoadingState message="Loading teacher workspace..." />;
+  if (loading) return <LoadingState message={t('common.loading')} />;
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Teacher Portal & Classroom Command"
-        description="Welcome back, Prof. Marcus Chen. Monitor your student cohorts, record roll-call, and review assignments."
+        title={t('portal.teacherTitle')}
+        description={t('portal.teacherDesc')}
         actions={
           <Button
             variant="primary"
@@ -53,7 +54,7 @@ export const TeacherDashboardPage: React.FC = () => {
             leftIcon={<CalendarCheck className="w-4 h-4" />}
             onClick={() => navigate('/teacher/attendance')}
           >
-            Take Roll-Call Attendance
+            {t('portal.takeAttendance')}
           </Button>
         }
       />
@@ -61,23 +62,23 @@ export const TeacherDashboardPage: React.FC = () => {
       {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <StatCard
-          title="Assigned Cohorts"
+          title={t('portal.assignedCohorts')}
           value={groups.length}
-          description="Active learning groups"
+          description={t('portal.activeLearningGroups')}
           icon={<Layers className="w-5 h-5" />}
           iconColor="emerald"
         />
         <StatCard
-          title="Today's Classes"
+          title={t('portal.todayClasses')}
           value={todayClasses.length}
-          description="Scheduled lectures & labs"
+          description={t('portal.scheduledClasses')}
           icon={<Calendar className="w-5 h-5" />}
           iconColor="indigo"
         />
         <StatCard
-          title="Active Homework"
+          title={t('portal.activeHomework')}
           value={homeworks.length}
-          description="Awaiting student submission"
+          description={t('portal.awaitingSubmissions')}
           icon={<BookMarked className="w-5 h-5" />}
           iconColor="amber"
         />
@@ -90,10 +91,10 @@ export const TeacherDashboardPage: React.FC = () => {
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <CardTitle className="text-base flex items-center gap-2">
               <Clock className="w-5 h-5 text-indigo-600" />
-              Today's Teaching Schedule
+              {t('portal.todaySchedule')}
             </CardTitle>
             <Button variant="ghost" size="sm" onClick={() => navigate('/teacher/schedule')}>
-              Full Timetable
+              {t('portal.fullTimetable')}
             </Button>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -101,7 +102,7 @@ export const TeacherDashboardPage: React.FC = () => {
               <div key={item.id} className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center justify-between">
                 <div>
                   <p className="text-xs font-bold text-slate-900">{item.courseTitle}</p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Cohort: {item.groupName} • Room: {item.room}</p>
+                  <p className="text-[11px] text-slate-500 mt-0.5">{t('schedule.cohort')}: {item.groupName} • {t('exams.room')}: {item.room}</p>
                 </div>
                 <span className="text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-lg">
                   {item.startTime} - {item.endTime}
@@ -116,10 +117,10 @@ export const TeacherDashboardPage: React.FC = () => {
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <CardTitle className="text-base flex items-center gap-2">
               <Users className="w-5 h-5 text-emerald-600" />
-              My Active Cohort Classes
+              {t('portal.myCohortClasses')}
             </CardTitle>
             <Button variant="ghost" size="sm" onClick={() => navigate('/teacher/groups')}>
-              View All
+              {t('common.viewAll')}
             </Button>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -134,7 +135,7 @@ export const TeacherDashboardPage: React.FC = () => {
                   size="sm"
                   onClick={() => navigate('/teacher/attendance')}
                 >
-                  Roll-Call
+                  {t('nav.attendance')}
                 </Button>
               </div>
             ))}
@@ -145,9 +146,9 @@ export const TeacherDashboardPage: React.FC = () => {
       {/* Homework reviews */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-base">Pending Homework & Student Submissions</CardTitle>
+          <CardTitle className="text-base">{t('portal.pendingHomework')}</CardTitle>
           <Button variant="ghost" size="sm" onClick={() => navigate('/teacher/homework')}>
-            Manage All Coursework
+            {t('portal.manageCoursework')}
           </Button>
         </CardHeader>
         <CardContent>
@@ -157,8 +158,8 @@ export const TeacherDashboardPage: React.FC = () => {
                 <p className="text-xs font-bold text-slate-900">{hw.title}</p>
                 <p className="text-xs text-slate-500 mt-1 line-clamp-2">{hw.description}</p>
                 <div className="flex items-center justify-between text-[11px] text-slate-400 mt-3 pt-2 border-t border-slate-100">
-                  <span>Due: {hw.dueDate}</span>
-                  <span className="text-emerald-600 font-semibold">{hw.submissionsCount} / {hw.totalStudents} Submitted</span>
+                  <span>{t('homework.due')}: {hw.dueDate}</span>
+                  <span className="text-emerald-600 font-semibold">{hw.submissionsCount} / {hw.totalStudents} {t('homework.submitted')}</span>
                 </div>
               </div>
             ))}

@@ -1,16 +1,20 @@
 import React from 'react';
 import { Loader2 } from 'lucide-react';
+import { useTranslation } from '../../i18n';
 
 export interface LoadingStateProps {
   message?: string;
   rows?: number;
 }
 
-export const LoadingState: React.FC<LoadingStateProps> = ({ message = 'Loading data...', rows = 4 }) => {
+export const LoadingState: React.FC<LoadingStateProps> = ({ message, rows = 4 }) => {
+  const { t } = useTranslation();
+  const msg = message || t('common.loading');
+
   return (
     <div className="w-full p-8 flex flex-col items-center justify-center space-y-4">
       <Loader2 className="w-8 h-8 text-indigo-600 animate-spin" />
-      <p className="text-xs font-medium text-slate-500">{message}</p>
+      <p className="text-xs font-medium text-slate-500">{msg}</p>
       
       {/* Subtle pulse placeholder rows */}
       <div className="w-full max-w-md space-y-2 pt-2">

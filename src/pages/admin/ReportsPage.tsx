@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Users, CalendarCheck, CreditCard, BookOpen, Download } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useTranslation } from '../../i18n';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatCard } from '../../components/common/StatCard';
 import { Button } from '../../components/ui/Button';
@@ -11,6 +12,7 @@ import type { DashboardOverview, MonthlyMetric } from '../../types';
 import { formatCurrency } from '../../utils/formatters';
 
 export const ReportsPage: React.FC = () => {
+  const { t } = useTranslation();
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
   const [metrics, setMetrics] = useState<MonthlyMetric[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,21 +34,21 @@ export const ReportsPage: React.FC = () => {
     load();
   }, []);
 
-  if (loading || !overview) return <LoadingState message="Generating institutional intelligence report..." />;
+  if (loading || !overview) return <LoadingState message={t('reports.loadingReports')} />;
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Institutional Analytics & Reports"
-        description="Comprehensive quarterly reporting across enrollment velocity, attendance ratios, and fiscal health."
+        title={t('reports.title')}
+        description={t('reports.desc')}
         actions={
           <Button
             variant="outline"
             size="sm"
             leftIcon={<Download className="w-4 h-4" />}
-            onClick={() => toast.success('Report generation started. The download will begin shortly.')}
+            onClick={() => toast.success(t('reports.exportStarted'))}
           >
-            Export Comprehensive Report
+            {t('reports.exportReport')}
           </Button>
         }
       />
@@ -54,30 +56,30 @@ export const ReportsPage: React.FC = () => {
       {/* Top 4 KPI Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
-          title="Student Growth Rate"
+          title={t('reports.studentGrowthRate')}
           value={`+${overview.recentStudentsGrowth}%`}
-          description="Consistent term-over-term intake"
+          description={t('reports.studentGrowthDesc')}
           icon={<Users className="w-5 h-5" />}
           iconColor="indigo"
         />
         <StatCard
-          title="Institution Attendance"
+          title={t('reports.attendanceCompliance')}
           value={`${overview.avgAttendanceRate}%`}
-          description="High engagement benchmark"
+          description={t('reports.attendanceDesc')}
           icon={<CalendarCheck className="w-5 h-5" />}
           iconColor="emerald"
         />
         <StatCard
-          title="Monthly Recurring Gross"
+          title={t('reports.monthlyRevenueGross')}
           value={formatCurrency(overview.monthlyRevenue)}
-          description="Tuition & lab fees"
+          description={t('reports.monthlyRevenueDesc')}
           icon={<CreditCard className="w-5 h-5" />}
           iconColor="amber"
         />
         <StatCard
-          title="Active Syllabi"
+          title={t('reports.activeSyllabi')}
           value={overview.activeCourses}
-          description="Accredited degree tracks"
+          description={t('reports.activeSyllabiDesc')}
           icon={<BookOpen className="w-5 h-5" />}
           iconColor="sky"
         />
@@ -87,14 +89,14 @@ export const ReportsPage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Attendance Compliance Trends (Last 6 Months)</CardTitle>
+            <CardTitle>{t('reports.attendanceTrends')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {metrics.map((m) => (
               <div key={m.month} className="space-y-1">
                 <div className="flex items-center justify-between text-xs font-semibold">
                   <span className="text-slate-700">{m.month}</span>
-                  <span className="text-emerald-600">{m.attendance}% compliance</span>
+                  <span className="text-emerald-600">{m.attendance}% {t('reports.compliance')}</span>
                 </div>
                 <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
                   <div
@@ -109,7 +111,7 @@ export const ReportsPage: React.FC = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Monthly Revenue Growth</CardTitle>
+            <CardTitle>{t('reports.revenueGrowth')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {metrics.map((m) => (
@@ -133,24 +135,24 @@ export const ReportsPage: React.FC = () => {
       {/* Course Domain Breakdown */}
       <Card>
         <CardHeader>
-          <CardTitle>Curriculum Enrollment Distribution</CardTitle>
+          <CardTitle>{t('reports.distribution')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
-              <p className="text-xs text-slate-500 font-medium">Software Engineering & Web</p>
+              <p className="text-xs text-slate-500 font-medium">{t('reports.domainSoftware')}</p>
               <p className="text-2xl font-bold text-slate-900 mt-1">42%</p>
-              <p className="text-[11px] text-emerald-600 mt-0.5">Highest demand segment</p>
+              <p className="text-[11px] text-emerald-600 mt-0.5">{t('reports.domainSoftwareDesc')}</p>
             </div>
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
-              <p className="text-xs text-slate-500 font-medium">Data Science & AI</p>
+              <p className="text-xs text-slate-500 font-medium">{t('reports.domainData')}</p>
               <p className="text-2xl font-bold text-slate-900 mt-1">31%</p>
-              <p className="text-[11px] text-indigo-600 mt-0.5">Fastest growing</p>
+              <p className="text-[11px] text-indigo-600 mt-0.5">{t('reports.domainDataDesc')}</p>
             </div>
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
-              <p className="text-xs text-slate-500 font-medium">UI/UX & Mobile Tech</p>
+              <p className="text-xs text-slate-500 font-medium">{t('reports.domainDesign')}</p>
               <p className="text-2xl font-bold text-slate-900 mt-1">27%</p>
-              <p className="text-[11px] text-slate-500 mt-0.5">Consistent cohort fill</p>
+              <p className="text-[11px] text-slate-500 mt-0.5">{t('reports.domainDesignDesc')}</p>
             </div>
           </div>
         </CardContent>

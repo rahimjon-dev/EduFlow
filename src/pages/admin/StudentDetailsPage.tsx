@@ -9,6 +9,7 @@ import {
   Heart,
   Clock,
 } from 'lucide-react';
+import { useTranslation } from '../../i18n';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { Button } from '../../components/ui/Button';
@@ -37,6 +38,7 @@ import type {
 import { formatCurrency, getInitials } from '../../utils/formatters';
 
 export const StudentDetailsPage: React.FC = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -85,26 +87,26 @@ export const StudentDetailsPage: React.FC = () => {
     loadDetails();
   }, [id]);
 
-  if (loading) return <LoadingState message="Fetching student profile and academic transcripts..." />;
+  if (loading) return <LoadingState message={t('students.loadingDetails')} />;
   if (error || !student) {
-    return <ErrorState message={error || 'Student not found'} onRetry={() => navigate('/admin/students')} />;
+    return <ErrorState message={error || t('common.noData')} onRetry={() => navigate('/admin/students')} />;
   }
 
   const tabs = [
-    { id: 'overview', label: 'Overview & Profile' },
-    { id: 'attendance', label: 'Attendance History', count: attendance?.summary.total || 0 },
-    { id: 'grades', label: 'Gradebook & Exams', count: grades.length },
-    { id: 'homework', label: 'Assignments', count: homeworks.length },
-    { id: 'payments', label: 'Financial Ledger', count: payments.length },
+    { id: 'overview', label: t('students.tabOverview') },
+    { id: 'attendance', label: t('students.tabAttendance'), count: attendance?.summary.total || 0 },
+    { id: 'grades', label: t('students.tabGrades'), count: grades.length },
+    { id: 'homework', label: t('students.tabHomework'), count: homeworks.length },
+    { id: 'payments', label: t('students.tabPayments'), count: payments.length },
   ];
 
   return (
     <div className="space-y-6">
       <PageHeader
         title={`${student.firstName} ${student.lastName}`}
-        description={`Student ID: ${student.id} • Enrolled on ${student.enrollmentDate}`}
+        description={`${t('students.studentId')}: ${student.id} • ${t('students.enrolledOn')} ${student.enrollmentDate}`}
         breadcrumbs={[
-          { label: 'Students', href: '/admin/students' },
+          { label: t('common.students'), href: '/admin/students' },
           { label: `${student.firstName} ${student.lastName}` },
         ]}
         actions={
@@ -114,7 +116,7 @@ export const StudentDetailsPage: React.FC = () => {
             leftIcon={<ArrowLeft className="w-4 h-4" />}
             onClick={() => navigate('/admin/students')}
           >
-            Back to Directory
+            {t('students.backToDirectory')}
           </Button>
         }
       />
@@ -141,10 +143,10 @@ export const StudentDetailsPage: React.FC = () => {
             <p className="text-xs text-slate-500 mt-1">{student.email} • {student.phone}</p>
             <div className="flex flex-wrap items-center gap-2 mt-3 text-xs">
               <span className="bg-indigo-50 text-indigo-700 px-2.5 py-0.5 rounded-full font-medium">
-                {course ? course.title : 'No Course Assigned'}
+                {course ? course.title : t('students.noCourseAssigned')}
               </span>
               <span className="bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full font-medium">
-                Cohort: {group ? group.name : 'Unassigned'}
+                {t('schedule.cohort')}: {group ? group.name : t('students.unassigned')}
               </span>
             </div>
           </div>
@@ -153,15 +155,15 @@ export const StudentDetailsPage: React.FC = () => {
         {/* Quick stats badges */}
         <div className="grid grid-cols-3 gap-3 border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6 text-center">
           <div className="px-2">
-            <p className="text-[11px] text-slate-400 font-medium">Attendance</p>
+            <p className="text-[11px] text-slate-400 font-medium">{t('nav.attendance')}</p>
             <p className="text-lg font-bold text-emerald-600">{attendance?.summary.percentage ?? 95}%</p>
           </div>
           <div className="px-2">
-            <p className="text-[11px] text-slate-400 font-medium">Exams Taken</p>
+            <p className="text-[11px] text-slate-400 font-medium">{t('students.examsTaken')}</p>
             <p className="text-lg font-bold text-indigo-600">{grades.length}</p>
           </div>
           <div className="px-2">
-            <p className="text-[11px] text-slate-400 font-medium">Fees Balance</p>
+            <p className="text-[11px] text-slate-400 font-medium">{t('students.feesBalance')}</p>
             <p className="text-lg font-bold text-slate-900">$0.00</p>
           </div>
         </div>
@@ -175,32 +177,32 @@ export const StudentDetailsPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle>Personal & Contact Details</CardTitle>
+              <CardTitle>{t('students.personalDetails')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3.5 text-xs">
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-slate-400 shrink-0" />
-                <span className="text-slate-500 w-24">Email:</span>
+                <span className="text-slate-500 w-24">{t('teachers.email')}:</span>
                 <span className="text-slate-900 font-medium">{student.email}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-slate-400 shrink-0" />
-                <span className="text-slate-500 w-24">Phone:</span>
+                <span className="text-slate-500 w-24">{t('teachers.phone')}:</span>
                 <span className="text-slate-900 font-medium">{student.phone}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Calendar className="w-4 h-4 text-slate-400 shrink-0" />
-                <span className="text-slate-500 w-24">Date of Birth:</span>
+                <span className="text-slate-500 w-24">{t('students.dateOfBirth')}:</span>
                 <span className="text-slate-900 font-medium">{student.dateOfBirth || '2004-06-12'}</span>
               </div>
               <div className="flex items-center gap-3">
                 <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
-                <span className="text-slate-500 w-24">Address:</span>
+                <span className="text-slate-500 w-24">{t('students.address')}:</span>
                 <span className="text-slate-900 font-medium">{student.address || '742 Evergreen Terrace'}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Clock className="w-4 h-4 text-slate-400 shrink-0" />
-                <span className="text-slate-500 w-24">Enrolled:</span>
+                <span className="text-slate-500 w-24">{t('students.enrolledOn')}:</span>
                 <span className="text-slate-900 font-medium">{student.enrollmentDate}</span>
               </div>
             </CardContent>
@@ -208,27 +210,27 @@ export const StudentDetailsPage: React.FC = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>Family & Guardian Record</CardTitle>
+              <CardTitle>{t('students.guardianRecord')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3.5 text-xs">
               <div className="flex items-center gap-3">
                 <Heart className="w-4 h-4 text-slate-400 shrink-0" />
-                <span className="text-slate-500 w-28">Guardian Name:</span>
+                <span className="text-slate-500 w-28">{t('students.guardianName')}:</span>
                 <span className="text-slate-900 font-medium">{student.parentName || 'Robert Wright'}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-slate-400 shrink-0" />
-                <span className="text-slate-500 w-28">Guardian Phone:</span>
+                <span className="text-slate-500 w-28">{t('students.guardianPhone')}:</span>
                 <span className="text-slate-900 font-medium">{student.parentPhone || '+1 (555) 911-2201'}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-slate-400 shrink-0" />
-                <span className="text-slate-500 w-28">Guardian Email:</span>
+                <span className="text-slate-500 w-28">{t('students.guardianEmail')}:</span>
                 <span className="text-slate-900 font-medium">{student.parentEmail || 'guardian@example.com'}</span>
               </div>
               {student.notes && (
                 <div className="pt-2 border-t border-slate-100">
-                  <p className="text-slate-500 font-medium mb-1">Academic Advisor Notes:</p>
+                  <p className="text-slate-500 font-medium mb-1">{t('students.advisorNotes')}:</p>
                   <p className="text-slate-700 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-200/60">
                     {student.notes}
                   </p>
@@ -242,26 +244,26 @@ export const StudentDetailsPage: React.FC = () => {
       {activeTab === 'attendance' && (
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Recorded Session Attendance</CardTitle>
+            <CardTitle>{t('students.recordedAttendance')}</CardTitle>
             <div className="flex items-center gap-2 text-xs">
               <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-semibold">
-                Present: {attendance?.summary.present || 0}
+                {t('common.present')}: {attendance?.summary.present || 0}
               </span>
               <span className="text-amber-800 bg-amber-50 px-2 py-0.5 rounded font-semibold">
-                Late: {attendance?.summary.late || 0}
+                {t('common.late')}: {attendance?.summary.late || 0}
               </span>
               <span className="text-rose-700 bg-rose-50 px-2 py-0.5 rounded font-semibold">
-                Absent: {attendance?.summary.absent || 0}
+                {t('common.absent')}: {attendance?.summary.absent || 0}
               </span>
             </div>
           </CardHeader>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Class Cohort</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Remarks / Note</TableHead>
+                <TableHead>{t('common.date')}</TableHead>
+                <TableHead>{t('schedule.cohort')}</TableHead>
+                <TableHead>{t('common.status')}</TableHead>
+                <TableHead>{t('students.remarksNote')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -272,7 +274,7 @@ export const StudentDetailsPage: React.FC = () => {
                   <TableCell>
                     <StatusBadge status={rec.status} size="sm" />
                   </TableCell>
-                  <TableCell className="text-xs text-slate-500">{rec.remarks || 'Normal attendance'}</TableCell>
+                  <TableCell className="text-xs text-slate-500">{rec.remarks || '-'}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -283,17 +285,17 @@ export const StudentDetailsPage: React.FC = () => {
       {activeTab === 'grades' && (
         <Card>
           <CardHeader>
-            <CardTitle>Transcript & Exam Scores</CardTitle>
+            <CardTitle>{t('students.transcriptScores')}</CardTitle>
           </CardHeader>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Exam / Evaluation</TableHead>
-                <TableHead>Course</TableHead>
-                <TableHead>Score</TableHead>
-                <TableHead>Percentage</TableHead>
-                <TableHead>Letter Grade</TableHead>
-                <TableHead>Feedback</TableHead>
+                <TableHead>{t('grades.examEvaluation')}</TableHead>
+                <TableHead>{t('courses.title')}</TableHead>
+                <TableHead>{t('grades.numericScore')}</TableHead>
+                <TableHead>{t('grades.percentage')}</TableHead>
+                <TableHead>{t('students.letterGrade')}</TableHead>
+                <TableHead>{t('grades.facultyFeedback')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -308,7 +310,7 @@ export const StudentDetailsPage: React.FC = () => {
                       {grd.letterGrade}
                     </span>
                   </TableCell>
-                  <TableCell className="text-xs text-slate-500">{grd.feedback || 'Satisfactory'}</TableCell>
+                  <TableCell className="text-xs text-slate-500">{grd.feedback || '-'}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -326,8 +328,8 @@ export const StudentDetailsPage: React.FC = () => {
               </div>
               <p className="text-xs text-slate-500 mt-1 leading-relaxed">{hw.description}</p>
               <div className="flex items-center justify-between text-[11px] text-slate-400 mt-4 pt-3 border-t border-slate-100">
-                <span>Due Date: {hw.dueDate}</span>
-                <span>Max Points: {hw.maxPoints} pts</span>
+                <span>{t('homework.due')}: {hw.dueDate}</span>
+                <span>{t('homework.maxPoints')}: {hw.maxPoints} {t('homework.points')}</span>
               </div>
             </Card>
           ))}
@@ -337,16 +339,16 @@ export const StudentDetailsPage: React.FC = () => {
       {activeTab === 'payments' && (
         <Card>
           <CardHeader>
-            <CardTitle>Invoices & Payment Records</CardTitle>
+            <CardTitle>{t('students.invoiceRecords')}</CardTitle>
           </CardHeader>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Invoice #</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>{t('payments.invoiceNumber')}</TableHead>
+                <TableHead>{t('common.date')}</TableHead>
+                <TableHead>{t('courses.category')}</TableHead>
+                <TableHead>{t('payments.amount')}</TableHead>
+                <TableHead>{t('common.status')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

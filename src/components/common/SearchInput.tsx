@@ -1,5 +1,6 @@
 import React from 'react';
 import { Search, X } from 'lucide-react';
+import { useTranslation } from '../../i18n';
 import { cn } from '../../utils/cn';
 
 export interface SearchInputProps {
@@ -12,9 +13,12 @@ export interface SearchInputProps {
 export const SearchInput: React.FC<SearchInputProps> = ({
   value,
   onChange,
-  placeholder = 'Search...',
+  placeholder,
   className,
 }) => {
+  const { t } = useTranslation();
+  const pl = placeholder || t('common.search');
+
   return (
     <div className={cn('relative w-full max-w-sm', className)}>
       <div className="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
@@ -24,7 +28,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
+        placeholder={pl}
         className="block w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 pr-8 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
       />
       {value && (

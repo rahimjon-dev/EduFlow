@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from '../../i18n';
 import { Modal } from '../../components/ui/Modal';
 import { Input } from '../../components/ui/Input';
 import { Select } from '../../components/ui/Select';
@@ -22,6 +23,7 @@ export const GroupModal: React.FC<GroupModalProps> = ({
   courses,
   teachers,
 }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     courseId: '',
@@ -70,9 +72,9 @@ export const GroupModal: React.FC<GroupModalProps> = ({
     e.preventDefault();
     const newErrors: Record<string, string> = {};
 
-    if (!formData.name.trim()) newErrors.name = 'Group name is required';
-    if (!formData.room.trim()) newErrors.room = 'Classroom room is required';
-    if (!formData.schedule.trim()) newErrors.schedule = 'Schedule description is required';
+    if (!formData.name.trim()) newErrors.name = t('groups.nameRequired');
+    if (!formData.room.trim()) newErrors.room = t('groups.roomRequired');
+    if (!formData.schedule.trim()) newErrors.schedule = t('groups.scheduleRequired');
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -92,39 +94,39 @@ export const GroupModal: React.FC<GroupModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={initialData ? 'Edit Class Cohort / Group' : 'Create New Group'}
-      description="Configure group cohort, classroom allocation, and assigned teacher."
+      title={initialData ? t('groups.editGroup') : t('groups.newGroup')}
+      description={t('groups.modalDesc')}
       maxWidth="md"
       footer={
         <>
           <Button variant="outline" size="sm" onClick={onClose} disabled={loading}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button variant="primary" size="sm" onClick={handleSubmit} isLoading={loading}>
-            {initialData ? 'Save Changes' : 'Create Group'}
+            {initialData ? t('common.save') : t('groups.createGroup')}
           </Button>
         </>
       }
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
-          label="Group / Cohort Name"
+          label={t('groups.groupName')}
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           error={errors.name}
-          placeholder="e.g. FSW-Cohort-24C"
+          placeholder="FSW-Cohort-24C"
           required
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Select
-            label="Associated Course"
+            label={t('groups.course')}
             value={formData.courseId}
             onChange={(e) => setFormData({ ...formData, courseId: e.target.value })}
             options={courses.map((c) => ({ value: c.id, label: c.title }))}
           />
           <Select
-            label="Assigned Instructor"
+            label={t('groups.teacher')}
             value={formData.teacherId}
             onChange={(e) => setFormData({ ...formData, teacherId: e.target.value })}
             options={teachers.map((t) => ({
@@ -136,24 +138,24 @@ export const GroupModal: React.FC<GroupModalProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
-            label="Meeting Schedule"
+            label={t('groups.schedule')}
             value={formData.schedule}
             onChange={(e) => setFormData({ ...formData, schedule: e.target.value })}
-            placeholder="e.g. Mon, Wed 10:00 - 12:00 PM"
+            placeholder="Mon, Wed 10:00 - 12:00 PM"
             required
           />
           <Input
-            label="Assigned Room / Lab"
+            label={t('groups.room')}
             value={formData.room}
             onChange={(e) => setFormData({ ...formData, room: e.target.value })}
-            placeholder="e.g. Lab Alpha (302)"
+            placeholder="Lab Alpha (302)"
             required
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
-            label="Class Capacity (Seats)"
+            label={t('groups.capacity')}
             type="number"
             min="5"
             max="60"
@@ -161,26 +163,26 @@ export const GroupModal: React.FC<GroupModalProps> = ({
             onChange={(e) => setFormData({ ...formData, capacity: Number(e.target.value) })}
           />
           <Select
-            label="Cohort Status"
+            label={t('common.status')}
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value as GroupStatus })}
             options={[
-              { value: 'ACTIVE', label: 'Active' },
-              { value: 'UPCOMING', label: 'Upcoming' },
-              { value: 'COMPLETED', label: 'Completed' },
+              { value: 'ACTIVE', label: t('common.active') },
+              { value: 'UPCOMING', label: t('common.upcoming') },
+              { value: 'COMPLETED', label: t('common.completed') },
             ]}
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
-            label="Start Date"
+            label={t('groups.startDate')}
             type="date"
             value={formData.startDate}
             onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
           />
           <Input
-            label="End Date"
+            label={t('groups.endDate')}
             type="date"
             value={formData.endDate}
             onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, CalendarCheck } from 'lucide-react';
+import { useTranslation } from '../../i18n';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { Button } from '../../components/ui/Button';
@@ -11,6 +12,7 @@ import type { Student } from '../../types';
 import { getInitials } from '../../utils/formatters';
 
 export const ParentChildrenPage: React.FC = () => {
+  const { t } = useTranslation();
   const [children, setChildren] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -29,13 +31,13 @@ export const ParentChildrenPage: React.FC = () => {
     load();
   }, []);
 
-  if (loading) return <LoadingState message="Loading family members..." />;
+  if (loading) return <LoadingState message={t('portal.loadingChildren')} />;
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Children & Dependents"
-        description="Monitor educational records and academic standings of registered family members."
+        title={t('portal.childrenTitle')}
+        description={t('portal.childrenDesc')}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -66,7 +68,7 @@ export const ParentChildrenPage: React.FC = () => {
               </div>
               <div className="flex items-center gap-1.5">
                 <CalendarCheck className="w-4 h-4 text-emerald-600" />
-                <span>96% Attendance</span>
+                <span>96% {t('portal.attendance')}</span>
               </div>
             </div>
 
@@ -76,14 +78,14 @@ export const ParentChildrenPage: React.FC = () => {
                 size="sm"
                 onClick={() => navigate('/parent/attendance')}
               >
-                Attendance
+                {t('portal.attendance')}
               </Button>
               <Button
                 variant="primary"
                 size="sm"
                 onClick={() => navigate('/parent/grades')}
               >
-                Report Card
+                {t('portal.reportCard')}
               </Button>
             </div>
           </Card>

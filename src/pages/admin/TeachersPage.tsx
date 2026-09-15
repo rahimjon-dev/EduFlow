@@ -14,8 +14,10 @@ import { TeacherModal } from '../../features/teachers/TeacherModal';
 import { teachersService } from '../../services/teachers.service';
 import type { Teacher, TeacherStatus } from '../../types';
 import { getInitials } from '../../utils/formatters';
+import { useTranslation } from '../../i18n';
 
 export const TeachersPage: React.FC = () => {
+  const { t } = useTranslation();
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -70,8 +72,8 @@ export const TeachersPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Faculty & Instructors"
-        description="Manage academic professors, instructors, specializations, and departmental assignments."
+        title={t('teachers.title')}
+        description={t('teachers.desc')}
         actions={
           <Button
             variant="primary"
@@ -81,7 +83,7 @@ export const TeachersPage: React.FC = () => {
               setModalOpen(true);
             }}
           >
-            Add Teacher
+            {t('teachers.addTeacher')}
           </Button>
         }
       />
@@ -91,7 +93,7 @@ export const TeachersPage: React.FC = () => {
         <SearchInput
           value={search}
           onChange={setSearch}
-          placeholder="Search by instructor name, email, or domain..."
+          placeholder={t('teachers.searchPlaceholder')}
           className="w-full sm:w-80"
         />
 
@@ -100,12 +102,12 @@ export const TeachersPage: React.FC = () => {
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
             options={[
-              { value: 'ALL', label: 'All Statuses' },
-              { value: 'ACTIVE', label: 'Active' },
-              { value: 'ON_LEAVE', label: 'On Leave' },
-              { value: 'INACTIVE', label: 'Inactive' },
+              { value: 'ALL', label: t('common.allStatuses') },
+              { value: 'ACTIVE', label: t('common.active') },
+              { value: 'ON_LEAVE', label: t('common.onLeave') },
+              { value: 'INACTIVE', label: t('common.inactive') },
             ]}
-            className="w-36 text-xs py-1.5"
+            className="w-40 text-xs py-1.5"
           />
 
           <div className="flex items-center border border-slate-200 rounded-lg p-1 bg-slate-50">
@@ -130,12 +132,12 @@ export const TeachersPage: React.FC = () => {
       </div>
 
       {loading ? (
-        <LoadingState message="Loading faculty roster..." />
+        <LoadingState message={t('teachers.loadingTeachers')} />
       ) : teachers.length === 0 ? (
         <EmptyState
-          title="No instructors found"
-          description="Try changing your search keywords or filter settings."
-          actionText="Clear Filter"
+          title={t('teachers.noTeachers')}
+          description={t('teachers.noTeachersDesc')}
+          actionText={t('common.clearFilters')}
           onAction={() => {
             setSearch('');
             setStatusFilter('ALL');
@@ -187,11 +189,11 @@ export const TeachersPage: React.FC = () => {
                 <div className="flex items-center gap-4 pt-2 border-t border-slate-100 text-slate-700 font-medium">
                   <div className="flex items-center gap-1.5">
                     <BookOpen className="w-3.5 h-3.5 text-slate-400" />
-                    <span>{teacher.courses.length} Courses</span>
+                    <span>{teacher.courses.length} {t('common.courses')}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Layers className="w-3.5 h-3.5 text-slate-400" />
-                    <span>{teacher.groups.length} Cohorts</span>
+                    <span>{teacher.groups.length} {t('common.groups')}</span>
                   </div>
                 </div>
               </CardContent>
@@ -206,7 +208,7 @@ export const TeachersPage: React.FC = () => {
                     setModalOpen(true);
                   }}
                 >
-                  Edit
+                  {t('common.edit')}
                 </Button>
                 <Button
                   variant="ghost"
@@ -218,7 +220,7 @@ export const TeachersPage: React.FC = () => {
                     setDeleteConfirmOpen(true);
                   }}
                 >
-                  Delete
+                  {t('common.delete')}
                 </Button>
               </div>
             </Card>
@@ -228,12 +230,11 @@ export const TeachersPage: React.FC = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Teacher Name</TableHead>
-              <TableHead>Specialization</TableHead>
-              <TableHead>Email / Phone</TableHead>
-              <TableHead>Experience</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>{t('teachers.teacherName')}</TableHead>
+              <TableHead>{t('teachers.specialization')}</TableHead>
+              <TableHead>{t('teachers.email')} / {t('teachers.phone')}</TableHead>
+              <TableHead>{t('common.status')}</TableHead>
+              <TableHead className="text-right">{t('common.actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -256,7 +257,6 @@ export const TeachersPage: React.FC = () => {
                 </TableCell>
                 <TableCell className="text-xs font-medium text-slate-800">{teacher.specialization}</TableCell>
                 <TableCell className="text-xs text-slate-600">{teacher.email}</TableCell>
-                <TableCell className="text-xs text-slate-600">{teacher.experienceYears || 5} Years</TableCell>
                 <TableCell>
                   <StatusBadge status={teacher.status} size="sm" />
                 </TableCell>
@@ -269,6 +269,7 @@ export const TeachersPage: React.FC = () => {
                         setEditingTeacher(teacher);
                         setModalOpen(true);
                       }}
+                      title={t('common.edit')}
                     >
                       <Edit2 className="w-4 h-4 text-slate-600" />
                     </Button>
@@ -280,6 +281,7 @@ export const TeachersPage: React.FC = () => {
                         setTeacherToDelete(teacher);
                         setDeleteConfirmOpen(true);
                       }}
+                      title={t('common.delete')}
                     >
                       <Trash2 className="w-4 h-4 text-rose-500" />
                     </Button>
@@ -302,9 +304,9 @@ export const TeachersPage: React.FC = () => {
         isOpen={deleteConfirmOpen}
         onClose={() => setDeleteConfirmOpen(false)}
         onConfirm={handleDelete}
-        title="Remove Faculty Member"
-        message={`Are you sure you want to remove ${teacherToDelete?.firstName} ${teacherToDelete?.lastName}?`}
-        confirmText="Delete Teacher"
+        title={t('teachers.deleteConfirmTitle')}
+        message={t('teachers.deleteConfirmDesc')}
+        confirmText={t('common.delete')}
         isLoading={deleteLoading}
       />
     </div>

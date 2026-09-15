@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users, Calendar, MapPin, CalendarCheck } from 'lucide-react';
+import { useTranslation } from '../../i18n';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { Button } from '../../components/ui/Button';
@@ -10,6 +11,7 @@ import { groupsService } from '../../services/groups.service';
 import type { Group } from '../../types';
 
 export const TeacherGroupsPage: React.FC = () => {
+  const { t } = useTranslation();
   const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -27,13 +29,13 @@ export const TeacherGroupsPage: React.FC = () => {
     load();
   }, []);
 
-  if (loading) return <LoadingState message="Loading your teaching cohorts..." />;
+  if (loading) return <LoadingState message={t('common.loading')} />;
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="My Assigned Student Groups"
-        description="Review class rosters, schedules, and start attendance roll-calls for your cohorts."
+        title={t('portal.myGroupsTitle')}
+        description={t('portal.myGroupsDesc')}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -52,11 +54,11 @@ export const TeacherGroupsPage: React.FC = () => {
 
             <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
               <span className="flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-slate-400" /> Room: <strong>{group.room}</strong>
+                <MapPin className="w-3.5 h-3.5 text-slate-400" /> {t('exams.room')}: <strong>{group.room}</strong>
               </span>
               <span className="flex items-center gap-1">
                 <Users className="w-3.5 h-3.5 text-slate-400" />
-                <strong>{group.studentsCount}</strong> students enrolled
+                <strong>{group.studentsCount}</strong> {t('portal.enrolledStudents')}
               </span>
             </div>
 
@@ -67,7 +69,7 @@ export const TeacherGroupsPage: React.FC = () => {
                 leftIcon={<CalendarCheck className="w-3.5 h-3.5" />}
                 onClick={() => navigate('/teacher/attendance')}
               >
-                Roll-Call
+                {t('nav.attendance')}
               </Button>
             </div>
           </Card>

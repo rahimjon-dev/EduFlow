@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CalendarCheck, Award, CreditCard } from 'lucide-react';
+import { useTranslation } from '../../i18n';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatCard } from '../../components/common/StatCard';
 import { StatusBadge } from '../../components/common/StatusBadge';
@@ -15,6 +16,7 @@ import type { Student, Grade, AttendanceSummary, Payment } from '../../types';
 import { formatCurrency, getInitials } from '../../utils/formatters';
 
 export const ParentDashboardPage: React.FC = () => {
+  const { t } = useTranslation();
   const [child, setChild] = useState<Student | null>(null);
   const [grades, setGrades] = useState<Grade[]>([]);
   const [attSummary, setAttSummary] = useState<AttendanceSummary | null>(null);
@@ -46,13 +48,13 @@ export const ParentDashboardPage: React.FC = () => {
     loadParentData();
   }, []);
 
-  if (loading || !child) return <LoadingState message="Loading family portal..." />;
+  if (loading || !child) return <LoadingState message={t('portal.loadingParent')} />;
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Family & Guardian Portal"
-        description="Monitor your children's educational progress, attendance records, and tuition payments."
+        title={t('portal.parentTitle')}
+        description={t('portal.parentDesc')}
       />
 
       {/* Child Profile Banner */}
@@ -70,8 +72,8 @@ export const ParentDashboardPage: React.FC = () => {
               <h2 className="text-lg font-bold text-slate-900">{child.firstName} {child.lastName}</h2>
               <StatusBadge status={child.status} size="sm" />
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">Grade Level: Undergraduate Cohort 24A • ID: {child.id}</p>
-            <p className="text-xs text-indigo-600 font-medium mt-1">Course: Modern Full-Stack Web Development</p>
+            <p className="text-xs text-slate-500 mt-0.5">{t('portal.gradeLevel')}: Undergraduate Cohort 24A • ID: {child.id}</p>
+            <p className="text-xs text-indigo-600 font-medium mt-1">{t('portal.courseLabel')}: Modern Full-Stack Web Development</p>
           </div>
         </div>
 
@@ -81,14 +83,14 @@ export const ParentDashboardPage: React.FC = () => {
             size="sm"
             onClick={() => navigate('/parent/attendance')}
           >
-            Attendance History
+            {t('portal.attendanceHistory')}
           </Button>
           <Button
             variant="primary"
             size="sm"
             onClick={() => navigate('/parent/grades')}
           >
-            View Report Card
+            {t('portal.viewReportCard')}
           </Button>
         </div>
       </div>
@@ -96,23 +98,23 @@ export const ParentDashboardPage: React.FC = () => {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <StatCard
-          title="Attendance Compliance"
+          title={t('portal.attendanceCompliance')}
           value={`${attSummary?.percentage || 96}%`}
-          description="Consistently on-time"
+          description={t('portal.consistentlyOnTime')}
           icon={<CalendarCheck className="w-5 h-5" />}
           iconColor="emerald"
         />
         <StatCard
-          title="Academic Performance"
+          title={t('portal.academicPerformance')}
           value="A+ (96%)"
-          description="Top percentile in class"
+          description={t('portal.topPercentile')}
           icon={<Award className="w-5 h-5" />}
           iconColor="indigo"
         />
         <StatCard
-          title="Tuition Balance"
+          title={t('portal.tuitionBalance')}
           value="$0.00"
-          description="All dues cleared"
+          description={t('portal.allDuesCleared')}
           icon={<CreditCard className="w-5 h-5" />}
           iconColor="sky"
         />
@@ -124,10 +126,10 @@ export const ParentDashboardPage: React.FC = () => {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
               <Award className="w-5 h-5 text-indigo-600" />
-              Latest Exam Grades
+              {t('portal.latestExamGrades')}
             </CardTitle>
             <Button variant="ghost" size="sm" onClick={() => navigate('/parent/grades')}>
-              Full Transcripts
+              {t('portal.fullTranscripts')}
             </Button>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -152,10 +154,10 @@ export const ParentDashboardPage: React.FC = () => {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
               <CreditCard className="w-5 h-5 text-emerald-600" />
-              Tuition Receipts & Billing
+              {t('portal.tuitionReceipts')}
             </CardTitle>
             <Button variant="ghost" size="sm" onClick={() => navigate('/parent/payments')}>
-              Payment History
+              {t('portal.paymentHistory')}
             </Button>
           </CardHeader>
           <CardContent className="space-y-3">

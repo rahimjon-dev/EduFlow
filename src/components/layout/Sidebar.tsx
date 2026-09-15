@@ -249,8 +249,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
           {!collapsed && (
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold text-slate-800 truncate">Role: {role}</p>
-              <p className="text-[11px] text-slate-500 truncate">SaaS Workspace</p>
+              <p className="text-xs font-semibold text-slate-800 truncate">{t('common.role')}: {role}</p>
+              <p className="text-[11px] text-slate-500 truncate">{t('common.workspace')}</p>
             </div>
           )}
         </div>

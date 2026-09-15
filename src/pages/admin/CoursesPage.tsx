@@ -15,8 +15,10 @@ import { coursesService } from '../../services/courses.service';
 import { teachersService } from '../../services/teachers.service';
 import type { Course, CourseStatus, Teacher } from '../../types';
 import { formatCurrency } from '../../utils/formatters';
+import { useTranslation } from '../../i18n';
 
 export const CoursesPage: React.FC = () => {
+  const { t } = useTranslation();
   const [courses, setCourses] = useState<Course[]>([]);
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [loading, setLoading] = useState(true);
@@ -84,15 +86,15 @@ export const CoursesPage: React.FC = () => {
   };
 
   const getTeacherName = (tId: string) => {
-    const t = teachers.find((tch) => tch.id === tId);
-    return t ? `${t.firstName} ${t.lastName}` : 'Faculty Lead';
+    const tMember = teachers.find((tch) => tch.id === tId);
+    return tMember ? `${tMember.firstName} ${tMember.lastName}` : t('courses.instructor');
   };
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Curriculum & Courses"
-        description="Design syllabi, tuition fees, duration, and faculty allocations."
+        title={t('courses.title')}
+        description={t('courses.desc')}
         actions={
           <Button
             variant="primary"
@@ -102,7 +104,7 @@ export const CoursesPage: React.FC = () => {
               setModalOpen(true);
             }}
           >
-            Create Course
+            {t('courses.addCourse')}
           </Button>
         }
       />
@@ -112,7 +114,7 @@ export const CoursesPage: React.FC = () => {
         <SearchInput
           value={search}
           onChange={setSearch}
-          placeholder="Search by course title or syllabus keywords..."
+          placeholder={t('courses.searchPlaceholder')}
           className="w-full md:w-80"
         />
 
@@ -121,19 +123,19 @@ export const CoursesPage: React.FC = () => {
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
             options={[
-              { value: 'ALL', label: 'All Statuses' },
-              { value: 'ACTIVE', label: 'Active' },
-              { value: 'UPCOMING', label: 'Upcoming' },
-              { value: 'ARCHIVED', label: 'Archived' },
+              { value: 'ALL', label: t('common.allStatuses') },
+              { value: 'ACTIVE', label: t('common.active') },
+              { value: 'UPCOMING', label: t('common.upcoming') },
+              { value: 'ARCHIVED', label: t('common.archived') },
             ]}
-            className="w-36 text-xs py-1.5"
+            className="w-40 text-xs py-1.5"
           />
 
           <Select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
             options={[
-              { value: 'ALL', label: 'All Categories' },
+              { value: 'ALL', label: t('courses.allCategories') },
               { value: 'Software Engineering', label: 'Software Engineering' },
               { value: 'Data & AI', label: 'Data & AI' },
               { value: 'Computer Science', label: 'Computer Science' },
@@ -166,12 +168,12 @@ export const CoursesPage: React.FC = () => {
       </div>
 
       {loading ? (
-        <LoadingState message="Loading courses and syllabi..." />
+        <LoadingState message={t('courses.loadingCourses')} />
       ) : courses.length === 0 ? (
         <EmptyState
-          title="No courses found"
-          description="Try broadening your search query or selecting all categories."
-          actionText="Clear Filters"
+          title={t('courses.noCourses')}
+          description={t('courses.noCoursesDesc')}
+          actionText={t('common.clearFilters')}
           onAction={() => {
             setSearch('');
             setStatusFilter('ALL');
@@ -216,7 +218,7 @@ export const CoursesPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-100">
-                  <span>Lead: <strong className="text-slate-700">{getTeacherName(course.teacherId)}</strong></span>
+                  <span>{t('courses.instructor')}: <strong className="text-slate-700">{getTeacherName(course.teacherId)}</strong></span>
                   <span className="flex items-center gap-1">
                     <Users className="w-3.5 h-3.5" /> {course.enrolledStudentsCount || 0} / {course.maxStudents || 30}
                   </span>
@@ -233,7 +235,7 @@ export const CoursesPage: React.FC = () => {
                     setModalOpen(true);
                   }}
                 >
-                  Edit
+                  {t('common.edit')}
                 </Button>
                 <Button
                   variant="ghost"
@@ -245,7 +247,7 @@ export const CoursesPage: React.FC = () => {
                     setDeleteConfirmOpen(true);
                   }}
                 >
-                  Delete
+                  {t('common.delete')}
                 </Button>
               </div>
             </Card>
@@ -255,14 +257,14 @@ export const CoursesPage: React.FC = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Course</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Duration</TableHead>
-              <TableHead>Tuition</TableHead>
-              <TableHead>Instructor</TableHead>
-              <TableHead>Enrollment</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>{t('courses.courseTitle')}</TableHead>
+              <TableHead>{t('courses.category')}</TableHead>
+              <TableHead>{t('courses.duration')}</TableHead>
+              <TableHead>{t('courses.tuition')}</TableHead>
+              <TableHead>{t('courses.instructor')}</TableHead>
+              <TableHead>{t('common.students')}</TableHead>
+              <TableHead>{t('common.status')}</TableHead>
+              <TableHead className="text-right">{t('common.actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -293,17 +295,19 @@ export const CoursesPage: React.FC = () => {
                         setEditingCourse(course);
                         setModalOpen(true);
                       }}
+                      title={t('common.edit')}
                     >
                       <Edit2 className="w-4 h-4 text-slate-600" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="hover:bg-rose-50 text-rose-600"
+                      className="hover:bg-rose-50 hover:text-rose-600"
                       onClick={() => {
                         setCourseToDelete(course);
                         setDeleteConfirmOpen(true);
                       }}
+                      title={t('common.delete')}
                     >
                       <Trash2 className="w-4 h-4 text-rose-500" />
                     </Button>
@@ -327,9 +331,9 @@ export const CoursesPage: React.FC = () => {
         isOpen={deleteConfirmOpen}
         onClose={() => setDeleteConfirmOpen(false)}
         onConfirm={handleDelete}
-        title="Delete Course Syllabus"
-        message={`Are you sure you want to delete "${courseToDelete?.title}"? This cannot be undone.`}
-        confirmText="Delete Course"
+        title={t('courses.deleteConfirmTitle')}
+        message={t('courses.deleteConfirmDesc')}
+        confirmText={t('common.delete')}
         isLoading={deleteLoading}
       />
     </div>

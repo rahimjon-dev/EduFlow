@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, Award, BookMarked, CreditCard, CheckCircle2 } from 'lucide-react';
+import { useTranslation } from '../../i18n';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatCard } from '../../components/common/StatCard';
 import { StatusBadge } from '../../components/common/StatusBadge';
@@ -13,6 +14,7 @@ import { scheduleService } from '../../services/schedule.service';
 import type { Grade, Homework, ClassSession } from '../../types';
 
 export const StudentDashboardPage: React.FC = () => {
+  const { t } = useTranslation();
   const [grades, setGrades] = useState<Grade[]>([]);
   const [homeworks, setHomeworks] = useState<Homework[]>([]);
   const [classes, setClasses] = useState<ClassSession[]>([]);
@@ -24,7 +26,6 @@ export const StudentDashboardPage: React.FC = () => {
     const load = async () => {
       try {
         setLoading(true);
-        // Load for demo student Alexander Wright (stu-1)
         const [gList, hwList, schList] = await Promise.all([
           gradesService.getAll('stu-1'),
           homeworkService.getAll('grp-1'),
@@ -40,20 +41,20 @@ export const StudentDashboardPage: React.FC = () => {
     load();
   }, []);
 
-  if (loading) return <LoadingState message="Loading your learner dashboard..." />;
+  if (loading) return <LoadingState message={t('common.loading')} />;
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Student Portal & Learning Hub"
-        description="Welcome, Alexander Wright. Enrolled in Modern Full-Stack Web Development (Cohort 24A)."
+        title={t('portal.studentTitle')}
+        description={t('portal.studentDesc')}
         actions={
           <Button
             variant="outline"
             size="sm"
             onClick={() => navigate('/student/homework')}
           >
-            Submit Homework
+            {t('portal.submitHomework')}
           </Button>
         }
       />
@@ -61,30 +62,30 @@ export const StudentDashboardPage: React.FC = () => {
       {/* KPI Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
         <StatCard
-          title="Attendance Rate"
+          title={t('portal.attendanceRate')}
           value="96%"
-          description="High compliance badge"
+          description={t('portal.highCompliance')}
           icon={<CheckCircle2 className="w-5 h-5" />}
           iconColor="emerald"
         />
         <StatCard
-          title="Average Grade"
+          title={t('portal.averageGrade')}
           value="A+ (96%)"
-          description="Dean's honors list"
+          description={t('portal.honorsList')}
           icon={<Award className="w-5 h-5" />}
           iconColor="indigo"
         />
         <StatCard
-          title="Due Assignments"
+          title={t('portal.dueAssignments')}
           value={homeworks.length}
-          description="Pending submission"
+          description={t('portal.pendingSubmission')}
           icon={<BookMarked className="w-5 h-5" />}
           iconColor="amber"
         />
         <StatCard
-          title="Tuition Balance"
+          title={t('portal.tuitionBalance')}
           value="$0.00"
-          description="Paid in full"
+          description={t('portal.paidInFull')}
           icon={<CreditCard className="w-5 h-5" />}
           iconColor="sky"
         />
@@ -96,10 +97,10 @@ export const StudentDashboardPage: React.FC = () => {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
               <Calendar className="w-5 h-5 text-indigo-600" />
-              Upcoming Classes
+              {t('portal.upcomingClasses')}
             </CardTitle>
             <Button variant="ghost" size="sm" onClick={() => navigate('/student/schedule')}>
-              Full Timetable
+              {t('portal.fullTimetable')}
             </Button>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -121,10 +122,10 @@ export const StudentDashboardPage: React.FC = () => {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
               <BookMarked className="w-5 h-5 text-amber-600" />
-              Assigned Homework & Coursework
+              {t('portal.assignedHomework')}
             </CardTitle>
             <Button variant="ghost" size="sm" onClick={() => navigate('/student/homework')}>
-              View All
+              {t('common.viewAll')}
             </Button>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -133,7 +134,7 @@ export const StudentDashboardPage: React.FC = () => {
                 <div>
                   <p className="text-xs font-bold text-slate-900">{hw.title}</p>
                   <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-1">{hw.description}</p>
-                  <span className="text-[10px] text-amber-700 font-semibold block mt-1">Due: {hw.dueDate}</span>
+                  <span className="text-[10px] text-amber-700 font-semibold block mt-1">{t('homework.due')}: {hw.dueDate}</span>
                 </div>
                 <StatusBadge status={hw.status} size="sm" />
               </div>
@@ -147,10 +148,10 @@ export const StudentDashboardPage: React.FC = () => {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-base flex items-center gap-2">
             <Award className="w-5 h-5 text-indigo-600" />
-            Recent Grade Transcripts
+            {t('portal.recentTranscripts')}
           </CardTitle>
           <Button variant="ghost" size="sm" onClick={() => navigate('/student/grades')}>
-            Full Report Card
+            {t('portal.fullReportCard')}
           </Button>
         </CardHeader>
         <CardContent>
@@ -159,7 +160,7 @@ export const StudentDashboardPage: React.FC = () => {
               <div key={grd.id} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-xs">
                 <div>
                   <p className="font-bold text-slate-900">{grd.examTitle}</p>
-                  <p className="text-slate-500 text-[11px] mt-0.5">{grd.courseTitle} • Evaluated on {grd.date}</p>
+                  <p className="text-slate-500 text-[11px] mt-0.5">{grd.courseTitle} • {grd.date}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="font-bold text-indigo-600 text-sm">{grd.percentage}%</span>

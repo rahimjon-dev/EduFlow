@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from '../../i18n';
 import { Modal } from '../../components/ui/Modal';
 import { Input } from '../../components/ui/Input';
 import { Select } from '../../components/ui/Select';
@@ -20,6 +21,7 @@ export const ExamModal: React.FC<ExamModalProps> = ({
   courses,
   groups,
 }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     title: '',
     courseId: courses[0]?.id || '',
@@ -39,7 +41,7 @@ export const ExamModal: React.FC<ExamModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.title.trim()) {
-      setError('Exam title is required');
+      setError(t('exams.titleRequired'));
       return;
     }
     const c = courses.find((course) => course.id === formData.courseId);
@@ -62,39 +64,39 @@ export const ExamModal: React.FC<ExamModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Schedule Academic Examination"
-      description="Set date, time slot, duration, and test room details."
+      title={t('exams.scheduleExamModalTitle')}
+      description={t('exams.scheduleExamModalDesc')}
       maxWidth="md"
       footer={
         <>
           <Button variant="outline" size="sm" onClick={onClose} disabled={loading}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button variant="primary" size="sm" onClick={handleSubmit} isLoading={loading}>
-            Schedule Exam
+            {t('exams.scheduleExam')}
           </Button>
         </>
       }
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
-          label="Exam Title"
+          label={t('exams.examTitle')}
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           error={error}
-          placeholder="e.g. Midterm: React Architecture"
+          placeholder={t('exams.placeholderTitle')}
           required
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Select
-            label="Target Course"
+            label={t('exams.targetCourse')}
             value={formData.courseId}
             onChange={(e) => setFormData({ ...formData, courseId: e.target.value })}
             options={courses.map((c) => ({ value: c.id, label: c.title }))}
           />
           <Select
-            label="Target Group"
+            label={t('exams.targetGroup')}
             value={formData.groupId}
             onChange={(e) => setFormData({ ...formData, groupId: e.target.value })}
             options={groups.map((g) => ({ value: g.id, label: g.name }))}
@@ -103,19 +105,19 @@ export const ExamModal: React.FC<ExamModalProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Input
-            label="Date"
+            label={t('common.date')}
             type="date"
             value={formData.date}
             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
           />
           <Input
-            label="Start Time"
+            label={t('exams.startTime')}
             value={formData.time}
             onChange={(e) => setFormData({ ...formData, time: e.target.value })}
             placeholder="10:00 AM"
           />
           <Input
-            label="Duration (Mins)"
+            label={t('exams.durationMins')}
             type="number"
             value={formData.durationMinutes}
             onChange={(e) => setFormData({ ...formData, durationMinutes: Number(e.target.value) })}
@@ -124,22 +126,22 @@ export const ExamModal: React.FC<ExamModalProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Input
-            label="Total Marks"
+            label={t('exams.totalMarks')}
             type="number"
             value={formData.totalMarks}
             onChange={(e) => setFormData({ ...formData, totalMarks: Number(e.target.value) })}
           />
           <Input
-            label="Passing Marks"
+            label={t('exams.passingMarks')}
             type="number"
             value={formData.passingMarks}
             onChange={(e) => setFormData({ ...formData, passingMarks: Number(e.target.value) })}
           />
           <Input
-            label="Room / Hall"
+            label={t('exams.room')}
             value={formData.room}
             onChange={(e) => setFormData({ ...formData, room: e.target.value })}
-            placeholder="Lab Alpha (302)"
+            placeholder={t('exams.placeholderRoom')}
           />
         </div>
       </form>

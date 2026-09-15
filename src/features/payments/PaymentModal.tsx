@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from '../../i18n';
 import { Modal } from '../../components/ui/Modal';
 import { Input } from '../../components/ui/Input';
 import { Select } from '../../components/ui/Select';
@@ -18,6 +19,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   onSubmit,
   students,
 }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     studentId: students[0]?.id || '',
     amount: 600,
@@ -50,23 +52,23 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Record Tuition / Fee Payment"
-      description="Create a manual invoice or log a student transaction."
+      title={t('payments.modalTitle')}
+      description={t('payments.modalDesc')}
       maxWidth="md"
       footer={
         <>
           <Button variant="outline" size="sm" onClick={onClose} disabled={loading}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button variant="primary" size="sm" onClick={handleSubmit} isLoading={loading}>
-            Record Payment
+            {t('payments.recordPaymentBtn')}
           </Button>
         </>
       }
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <Select
-          label="Select Student"
+          label={t('payments.selectStudent')}
           value={formData.studentId}
           onChange={(e) => setFormData({ ...formData, studentId: e.target.value })}
           options={students.map((s) => ({
@@ -77,7 +79,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
-            label="Amount ($)"
+            label={`${t('payments.amount')} ($)`}
             type="number"
             min="1"
             value={formData.amount}
@@ -85,51 +87,51 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             required
           />
           <Select
-            label="Payment Category"
+            label={t('payments.paymentCategory')}
             value={formData.paymentType}
             onChange={(e) => setFormData({ ...formData, paymentType: e.target.value as PaymentType })}
             options={[
-              { value: 'TUITION', label: 'Tuition Fee' },
-              { value: 'REGISTRATION', label: 'Registration' },
-              { value: 'EXAM_FEE', label: 'Exam Fee' },
-              { value: 'MATERIALS', label: 'Books / Materials' },
+              { value: 'TUITION', label: t('payments.tuitionFee') },
+              { value: 'REGISTRATION', label: t('payments.registrationFee') },
+              { value: 'EXAM_FEE', label: t('payments.examFee') },
+              { value: 'MATERIALS', label: t('payments.materialsFee') },
             ]}
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Select
-            label="Payment Method"
+            label={t('payments.paymentMethod')}
             value={formData.method}
             onChange={(e) => setFormData({ ...formData, method: e.target.value as PaymentMethod })}
             options={[
-              { value: 'CREDIT_CARD', label: 'Credit Card / Stripe' },
-              { value: 'BANK_TRANSFER', label: 'Bank Wire / ACH' },
-              { value: 'ONLINE', label: 'Online Portal' },
-              { value: 'CASH', label: 'Cash / On-Site' },
+              { value: 'CREDIT_CARD', label: t('payments.creditCard') },
+              { value: 'BANK_TRANSFER', label: t('payments.bankTransfer') },
+              { value: 'ONLINE', label: t('payments.onlinePortal') },
+              { value: 'CASH', label: t('payments.cash') },
             ]}
           />
           <Select
-            label="Initial Status"
+            label={t('common.status')}
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value as PaymentStatus })}
             options={[
-              { value: 'PAID', label: 'Paid' },
-              { value: 'PENDING', label: 'Pending' },
-              { value: 'OVERDUE', label: 'Overdue' },
+              { value: 'PAID', label: t('common.paid') },
+              { value: 'PENDING', label: t('common.pending') },
+              { value: 'OVERDUE', label: t('common.overdue') },
             ]}
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
-            label="Payment Date"
+            label={t('payments.paymentDate')}
             type="date"
             value={formData.date}
             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
           />
           <Input
-            label="Due Date"
+            label={t('payments.dueDate')}
             type="date"
             value={formData.dueDate}
             onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
@@ -137,10 +139,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
         </div>
 
         <Input
-          label="Notes / Receipt Reference"
+          label={t('payments.notesRef')}
           value={formData.notes}
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-          placeholder="e.g. Receipt #8839 wire confirmation"
+          placeholder="Receipt #8839"
         />
       </form>
     </Modal>

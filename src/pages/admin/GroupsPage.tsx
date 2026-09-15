@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { PlusCircle, Edit2, Trash2, Calendar, MapPin, Users, BookOpen } from 'lucide-react';
+import { PlusCircle, Edit2, Trash2, BookOpen, Users, Calendar, MapPin } from 'lucide-react';
 import { PageHeader } from '../../components/common/PageHeader';
 import { SearchInput } from '../../components/common/SearchInput';
 import { StatusBadge } from '../../components/common/StatusBadge';
@@ -13,8 +13,10 @@ import { groupsService } from '../../services/groups.service';
 import { coursesService } from '../../services/courses.service';
 import { teachersService } from '../../services/teachers.service';
 import type { Group, Course, Teacher } from '../../types';
+import { useTranslation } from '../../i18n';
 
 export const GroupsPage: React.FC = () => {
+  const { t } = useTranslation();
   const [groups, setGroups] = useState<Group[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [teachers, setTeachers] = useState<Teacher[]>([]);
@@ -30,7 +32,9 @@ export const GroupsPage: React.FC = () => {
   const fetchGroups = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await groupsService.getAll({ search: search || undefined });
+      const data = await groupsService.getAll({
+        search: search || undefined,
+      });
       setGroups(data);
     } finally {
       setLoading(false);
@@ -46,8 +50,8 @@ export const GroupsPage: React.FC = () => {
         ]);
         setCourses(cList);
         setTeachers(tList);
-      } catch (err) {
-        console.error(err);
+      } catch (e) {
+        console.error(e);
       }
     };
     loadMetadata();
@@ -80,19 +84,19 @@ export const GroupsPage: React.FC = () => {
   };
 
   const getCourseTitle = (cId: string) => {
-    return courses.find((c) => c.id === cId)?.title || 'General Course';
+    return courses.find((c) => c.id === cId)?.title || t('groups.course');
   };
 
   const getTeacherName = (tId: string) => {
-    const t = teachers.find((tch) => tch.id === tId);
-    return t ? `${t.firstName} ${t.lastName}` : 'Faculty';
+    const tMember = teachers.find((tch) => tch.id === tId);
+    return tMember ? `${tMember.firstName} ${tMember.lastName}` : t('groups.teacher');
   };
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Class Cohorts & Groups"
-        description="Classroom section assignments, timetables, and teacher allocations."
+        title={t('groups.title')}
+        description={t('groups.desc')}
         actions={
           <Button
             variant="primary"
@@ -102,7 +106,7 @@ export const GroupsPage: React.FC = () => {
               setModalOpen(true);
             }}
           >
-            Create Group
+            {t('groups.addGroup')}
           </Button>
         }
       />
@@ -111,21 +115,21 @@ export const GroupsPage: React.FC = () => {
         <SearchInput
           value={search}
           onChange={setSearch}
-          placeholder="Search by cohort name, room, or schedule..."
+          placeholder={t('groups.searchPlaceholder')}
           className="w-full sm:w-80"
         />
         <span className="text-xs text-slate-500 hidden sm:inline">
-          Total: <strong className="text-slate-800">{groups.length}</strong> cohorts
+          {t('common.all')}: <strong className="text-slate-800">{groups.length}</strong> {t('common.groups')}
         </span>
       </div>
 
       {loading ? (
-        <LoadingState message="Loading class cohorts..." />
+        <LoadingState message={t('groups.loadingGroups')} />
       ) : groups.length === 0 ? (
         <EmptyState
-          title="No groups found"
-          description="Try changing your search query or create a new cohort."
-          actionText="Create Cohort"
+          title={t('groups.noGroups')}
+          description={t('groups.noGroupsDesc')}
+          actionText={t('groups.addGroup')}
           onAction={() => setModalOpen(true)}
         />
       ) : (
@@ -153,11 +157,11 @@ export const GroupsPage: React.FC = () => {
 
                 <div className="flex items-center gap-2 text-slate-700">
                   <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
-                  <span>Room: <strong>{group.room}</strong></span>
+                  <span>{t('groups.room')}: <strong>{group.room}</strong></span>
                 </div>
 
                 <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs text-slate-500">
-                  <span>Instructor: <strong className="text-slate-800">{getTeacherName(group.teacherId)}</strong></span>
+                  <span>{t('groups.teacher')}: <strong className="text-slate-800">{getTeacherName(group.teacherId)}</strong></span>
                   <span className="flex items-center gap-1 font-semibold text-slate-700">
                     <Users className="w-3.5 h-3.5 text-slate-400" />
                     {group.studentsCount} / {group.capacity}
@@ -175,7 +179,7 @@ export const GroupsPage: React.FC = () => {
                     setModalOpen(true);
                   }}
                 >
-                  Edit
+                  {t('common.edit')}
                 </Button>
                 <Button
                   variant="ghost"
@@ -187,7 +191,7 @@ export const GroupsPage: React.FC = () => {
                     setDeleteConfirmOpen(true);
                   }}
                 >
-                  Delete
+                  {t('common.delete')}
                 </Button>
               </div>
             </Card>
@@ -208,9 +212,9 @@ export const GroupsPage: React.FC = () => {
         isOpen={deleteConfirmOpen}
         onClose={() => setDeleteConfirmOpen(false)}
         onConfirm={handleDelete}
-        title="Delete Cohort Group"
-        message={`Are you sure you want to delete ${groupToDelete?.name}?`}
-        confirmText="Delete Group"
+        title={t('groups.deleteConfirmTitle')}
+        message={t('groups.deleteConfirmDesc')}
+        confirmText={t('common.delete')}
         isLoading={deleteLoading}
       />
     </div>

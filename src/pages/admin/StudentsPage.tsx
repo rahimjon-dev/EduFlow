@@ -17,8 +17,10 @@ import { coursesService } from '../../services/courses.service';
 import { groupsService } from '../../services/groups.service';
 import type { Student, StudentStatus, Course, Group } from '../../types';
 import { getInitials } from '../../utils/formatters';
+import { useTranslation } from '../../i18n';
 
 export const StudentsPage: React.FC = () => {
+  const { t } = useTranslation();
   const [students, setStudents] = useState<Student[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
@@ -119,8 +121,8 @@ export const StudentsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Student Directory"
-        description="Comprehensive records of all enrolled learners, assignments, and contact data."
+        title={t('students.title')}
+        description={t('students.desc')}
         actions={
           <Button
             variant="primary"
@@ -130,7 +132,7 @@ export const StudentsPage: React.FC = () => {
               setModalOpen(true);
             }}
           >
-            Add Student
+            {t('students.addStudent')}
           </Button>
         }
       />
@@ -143,13 +145,13 @@ export const StudentsPage: React.FC = () => {
             setSearch(val);
             setPage(1);
           }}
-          placeholder="Search by name, email, or phone..."
+          placeholder={t('students.searchPlaceholder')}
           className="w-full md:w-80"
         />
 
         <div className="flex flex-wrap items-center gap-2.5">
           <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 mr-1">
-            <Filter className="w-3.5 h-3.5" /> Filter:
+            <Filter className="w-3.5 h-3.5" /> {t('common.filter')}:
           </div>
 
           <Select
@@ -159,13 +161,13 @@ export const StudentsPage: React.FC = () => {
               setPage(1);
             }}
             options={[
-              { value: 'ALL', label: 'All Statuses' },
-              { value: 'ACTIVE', label: 'Active' },
-              { value: 'INACTIVE', label: 'Inactive' },
-              { value: 'GRADUATED', label: 'Graduated' },
-              { value: 'SUSPENDED', label: 'Suspended' },
+              { value: 'ALL', label: t('common.allStatuses') },
+              { value: 'ACTIVE', label: t('common.active') },
+              { value: 'INACTIVE', label: t('common.inactive') },
+              { value: 'GRADUATED', label: t('common.graduated') },
+              { value: 'SUSPENDED', label: t('common.suspended') },
             ]}
-            className="w-36 text-xs py-1.5"
+            className="w-40 text-xs py-1.5"
           />
 
           <Select
@@ -175,10 +177,10 @@ export const StudentsPage: React.FC = () => {
               setPage(1);
             }}
             options={[
-              { value: 'ALL', label: 'All Cohorts' },
+              { value: 'ALL', label: t('students.allCohorts') },
               ...groups.map((g) => ({ value: g.id, label: g.name })),
             ]}
-            className="w-40 text-xs py-1.5"
+            className="w-44 text-xs py-1.5"
           />
 
           <Select
@@ -188,24 +190,24 @@ export const StudentsPage: React.FC = () => {
               setPage(1);
             }}
             options={[
-              { value: 'ALL', label: 'All Courses' },
+              { value: 'ALL', label: t('students.allCourses') },
               ...courses.map((c) => ({ value: c.id, label: c.title })),
             ]}
-            className="w-44 text-xs py-1.5"
+            className="w-48 text-xs py-1.5"
           />
         </div>
       </div>
 
       {/* Content Rendering */}
       {loading ? (
-        <LoadingState message="Loading student records..." />
+        <LoadingState message={t('students.loadingStudents')} />
       ) : error ? (
         <ErrorState message={error} onRetry={fetchStudents} />
       ) : students.length === 0 ? (
         <EmptyState
-          title="No students found"
-          description="Try adjusting your search query or filter settings to find student profiles."
-          actionText="Clear Filters"
+          title={t('students.noStudents')}
+          description={t('students.noStudentsDesc')}
+          actionText={t('common.clearFilters')}
           onAction={() => {
             setSearch('');
             setStatusFilter('ALL');
@@ -219,12 +221,12 @@ export const StudentsPage: React.FC = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Student Name</TableHead>
-                <TableHead>Course & Cohort</TableHead>
-                <TableHead>Phone / Contact</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Enrollment Date</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>{t('students.studentName')}</TableHead>
+                <TableHead>{t('students.courseAndCohort')}</TableHead>
+                <TableHead>{t('students.contact')}</TableHead>
+                <TableHead>{t('common.status')}</TableHead>
+                <TableHead>{t('students.enrollmentDate')}</TableHead>
+                <TableHead className="text-right">{t('common.actions')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -270,7 +272,7 @@ export const StudentsPage: React.FC = () => {
                         size="sm"
                         className="h-8 w-8 p-0"
                         onClick={() => navigate(`/admin/students/${student.id}`)}
-                        title="View Profile"
+                        title={t('common.view')}
                       >
                         <Eye className="w-4 h-4 text-slate-600" />
                       </Button>
@@ -282,7 +284,7 @@ export const StudentsPage: React.FC = () => {
                           setEditingStudent(student);
                           setModalOpen(true);
                         }}
-                        title="Edit Student"
+                        title={t('common.edit')}
                       >
                         <Edit2 className="w-4 h-4 text-slate-600" />
                       </Button>
@@ -294,7 +296,7 @@ export const StudentsPage: React.FC = () => {
                           setStudentToDelete(student);
                           setDeleteConfirmOpen(true);
                         }}
-                        title="Delete Student"
+                        title={t('common.delete')}
                       >
                         <Trash2 className="w-4 h-4 text-rose-500" />
                       </Button>
@@ -308,8 +310,8 @@ export const StudentsPage: React.FC = () => {
           {/* Pagination bar */}
           <div className="flex items-center justify-between px-2 pt-2 text-xs text-slate-500">
             <p>
-              Showing <span className="font-semibold text-slate-800">{students.length}</span> of{' '}
-              <span className="font-semibold text-slate-800">{totalStudents}</span> students
+              {t('common.showing')} <span className="font-semibold text-slate-800">{students.length}</span> {t('common.of')}{' '}
+              <span className="font-semibold text-slate-800">{totalStudents}</span> {t('common.students')}
             </p>
             <div className="flex items-center gap-2">
               <Button
@@ -319,10 +321,10 @@ export const StudentsPage: React.FC = () => {
                 onClick={() => setPage(page - 1)}
                 leftIcon={<ChevronLeft className="w-3.5 h-3.5" />}
               >
-                Previous
+                {t('common.previous')}
               </Button>
               <span className="text-xs font-semibold px-2">
-                Page {page} of {totalPages}
+                {t('common.page')} {page} {t('common.of')} {totalPages}
               </span>
               <Button
                 variant="outline"
@@ -331,7 +333,7 @@ export const StudentsPage: React.FC = () => {
                 onClick={() => setPage(page + 1)}
                 rightIcon={<ChevronRight className="w-3.5 h-3.5" />}
               >
-                Next
+                {t('common.next')}
               </Button>
             </div>
           </div>
@@ -353,9 +355,9 @@ export const StudentsPage: React.FC = () => {
         isOpen={deleteConfirmOpen}
         onClose={() => setDeleteConfirmOpen(false)}
         onConfirm={handleDelete}
-        title="Delete Student Profile"
-        message={`Are you sure you want to permanently remove ${studentToDelete?.firstName} ${studentToDelete?.lastName}? All assigned enrollment records will be decoupled.`}
-        confirmText="Delete Student"
+        title={t('students.deleteConfirmTitle')}
+        message={t('students.deleteConfirmDesc')}
+        confirmText={t('common.delete')}
         isLoading={deleteLoading}
       />
     </div>

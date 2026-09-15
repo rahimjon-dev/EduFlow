@@ -14,8 +14,10 @@ import { paymentsService } from '../../services/payments.service';
 import { studentsService } from '../../services/students.service';
 import type { Payment, PaymentStatus, PaymentStats, Student } from '../../types';
 import { formatCurrency } from '../../utils/formatters';
+import { useTranslation } from '../../i18n';
 
 export const PaymentsPage: React.FC = () => {
+  const { t } = useTranslation();
   const [payments, setPayments] = useState<Payment[]>([]);
   const [stats, setStats] = useState<PaymentStats | null>(null);
   const [students, setStudents] = useState<Student[]>([]);
@@ -71,15 +73,15 @@ export const PaymentsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Tuition Fees & Financial Transactions"
-        description="Monitor invoice lifecycles, track unpaid tuition balances, and log student payments."
+        title={t('payments.title')}
+        description={t('payments.desc')}
         actions={
           <Button
             variant="primary"
             leftIcon={<PlusCircle className="w-4 h-4" />}
             onClick={() => setModalOpen(true)}
           >
-            Record Payment
+            {t('payments.recordPayment')}
           </Button>
         }
       />
@@ -88,23 +90,23 @@ export const PaymentsPage: React.FC = () => {
       {stats && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <StatCard
-            title="Total Revenue Collected"
+            title={t('payments.totalRevenue')}
             value={formatCurrency(stats.totalRevenue)}
-            description={`${stats.paidCount} cleared transactions`}
+            description={`${stats.paidCount} ${t('payments.clearedTransactions')}`}
             icon={<CheckCircle2 className="w-5 h-5" />}
             iconColor="emerald"
           />
           <StatCard
-            title="Pending Invoices"
+            title={t('payments.pendingInvoices')}
             value={formatCurrency(stats.pendingAmount)}
-            description={`${stats.pendingCount} awaiting transfer`}
+            description={`${stats.pendingCount} ${t('payments.awaitingTransfer')}`}
             icon={<Clock className="w-5 h-5" />}
             iconColor="amber"
           />
           <StatCard
-            title="Overdue Receivables"
+            title={t('payments.overdueReceivables')}
             value={formatCurrency(stats.overdueAmount)}
-            description={`${stats.overdueCount} require reminder`}
+            description={`${stats.overdueCount} ${t('payments.requireReminder')}`}
             icon={<AlertTriangle className="w-5 h-5" />}
             iconColor="rose"
           />
@@ -116,7 +118,7 @@ export const PaymentsPage: React.FC = () => {
         <SearchInput
           value={search}
           onChange={setSearch}
-          placeholder="Search by student name or invoice number..."
+          placeholder={t('payments.searchPlaceholder')}
           className="w-full sm:w-80"
         />
 
@@ -125,38 +127,38 @@ export const PaymentsPage: React.FC = () => {
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
             options={[
-              { value: 'ALL', label: 'All Payment Statuses' },
-              { value: 'PAID', label: 'Paid' },
-              { value: 'PENDING', label: 'Pending' },
-              { value: 'OVERDUE', label: 'Overdue' },
+              { value: 'ALL', label: t('payments.allStatuses') },
+              { value: 'PAID', label: t('common.paid') },
+              { value: 'PENDING', label: t('common.pending') },
+              { value: 'OVERDUE', label: t('common.overdue') },
             ]}
-            className="w-44 text-xs py-1.5"
+            className="w-48 text-xs py-1.5"
           />
         </div>
       </div>
 
       {/* Transactions Table */}
       {loading ? (
-        <LoadingState message="Loading financial transactions..." />
+        <LoadingState message={t('payments.loadingTransactions')} />
       ) : payments.length === 0 ? (
         <EmptyState
-          title="No transactions found"
-          description="Try changing your search parameters or log a new payment."
-          actionText="Record Payment"
+          title={t('payments.noTransactions')}
+          description={t('payments.noTransactionsDesc')}
+          actionText={t('payments.recordPayment')}
           onAction={() => setModalOpen(true)}
         />
       ) : (
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Invoice #</TableHead>
-              <TableHead>Student Name</TableHead>
-              <TableHead>Course / Item</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Payment Method</TableHead>
-              <TableHead>Date / Due</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Action</TableHead>
+              <TableHead>{t('payments.invoiceNumber')}</TableHead>
+              <TableHead>{t('payments.studentName')}</TableHead>
+              <TableHead>{t('payments.courseItem')}</TableHead>
+              <TableHead>{t('payments.amount')}</TableHead>
+              <TableHead>{t('payments.method')}</TableHead>
+              <TableHead>{t('payments.dateDue')}</TableHead>
+              <TableHead>{t('common.status')}</TableHead>
+              <TableHead className="text-right">{t('common.actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -171,7 +173,7 @@ export const PaymentsPage: React.FC = () => {
                 </TableCell>
                 <TableCell className="text-xs text-slate-600">{p.courseTitle || p.paymentType}</TableCell>
                 <TableCell className="text-xs font-bold text-slate-900">{formatCurrency(p.amount)}</TableCell>
-                <TableCell className="text-xs text-slate-600">{p.method || 'Online'}</TableCell>
+                <TableCell className="text-xs text-slate-600">{p.method || t('payments.online')}</TableCell>
                 <TableCell className="text-xs text-slate-500">{p.date}</TableCell>
                 <TableCell>
                   <StatusBadge status={p.status} size="sm" />
@@ -183,10 +185,10 @@ export const PaymentsPage: React.FC = () => {
                       size="sm"
                       onClick={() => handleStatusUpdate(p.id, 'PAID')}
                     >
-                      Mark Paid
+                      {t('payments.markPaid')}
                     </Button>
                   ) : (
-                    <span className="text-xs text-emerald-600 font-medium">Cleared</span>
+                    <span className="text-xs text-emerald-600 font-medium">{t('payments.cleared')}</span>
                   )}
                 </TableCell>
               </TableRow>

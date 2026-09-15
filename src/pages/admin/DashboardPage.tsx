@@ -14,6 +14,7 @@ import {
   Activity,
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useTranslation } from '../../i18n';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatCard } from '../../components/common/StatCard';
 import { StatusBadge } from '../../components/common/StatusBadge';
@@ -28,6 +29,7 @@ import type { DashboardOverview, ActivityItem, MonthlyMetric, Student, ClassSess
 import { formatCurrency, getInitials } from '../../utils/formatters';
 
 export const AdminDashboardPage: React.FC = () => {
+  const { t } = useTranslation();
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
   const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [monthlyMetrics, setMonthlyMetrics] = useState<MonthlyMetric[]>([]);
@@ -65,14 +67,14 @@ export const AdminDashboardPage: React.FC = () => {
   }, []);
 
   if (loading || !overview) {
-    return <LoadingState message="Aggregating academy telemetry and statistics..." />;
+    return <LoadingState message={t('dashboard.loading')} />;
   }
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Institutional Dashboard"
-        description="Comprehensive overview of student enrollment, faculty allocations, and operational metrics."
+        title={t('dashboard.title')}
+        description={t('dashboard.desc')}
         actions={
           <div className="flex items-center gap-2">
             <Button
@@ -81,7 +83,7 @@ export const AdminDashboardPage: React.FC = () => {
               leftIcon={<UserPlus className="w-4 h-4" />}
               onClick={() => navigate('/admin/students')}
             >
-              Add Student
+              {t('dashboard.addStudent')}
             </Button>
             <Button
               variant="primary"
@@ -89,7 +91,7 @@ export const AdminDashboardPage: React.FC = () => {
               leftIcon={<PlusCircle className="w-4 h-4" />}
               onClick={() => navigate('/admin/courses')}
             >
-              New Course
+              {t('dashboard.newCourse')}
             </Button>
           </div>
         }
@@ -98,31 +100,31 @@ export const AdminDashboardPage: React.FC = () => {
       {/* Top Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <StatCard
-          title="Total Students"
+          title={t('dashboard.totalStudents')}
           value={overview.totalStudents}
           change={overview.recentStudentsGrowth}
-          changeLabel="vs last term"
+          changeLabel={t('dashboard.vsLastTerm')}
           icon={<Users className="w-5 h-5" />}
           iconColor="indigo"
         />
         <StatCard
-          title="Active Teachers"
+          title={t('dashboard.activeTeachers')}
           value={overview.totalTeachers}
-          description="100% full department allocation"
+          description={t('dashboard.fullAllocation')}
           icon={<UserCheck className="w-5 h-5" />}
           iconColor="emerald"
         />
         <StatCard
-          title="Active Courses"
+          title={t('dashboard.activeCourses')}
           value={overview.activeCourses}
-          description="8 accredited syllabi"
+          description={t('dashboard.accreditedSyllabi')}
           icon={<BookOpen className="w-5 h-5" />}
           iconColor="amber"
         />
         <StatCard
-          title="Active Cohorts"
+          title={t('dashboard.activeGroups')}
           value={overview.activeGroups}
-          description="12 synchronized groups"
+          description={t('dashboard.activeCohortsSchedule')}
           icon={<Layers className="w-5 h-5" />}
           iconColor="sky"
         />
@@ -134,11 +136,11 @@ export const AdminDashboardPage: React.FC = () => {
         <Card className="lg:col-span-2">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div>
-              <CardTitle>Enrollment Velocity & Retention</CardTitle>
-              <p className="text-xs text-slate-500 mt-1">Monthly student growth trend for the past 6 months</p>
+              <CardTitle>{t('dashboard.enrollmentVelocity')}</CardTitle>
+              <p className="text-xs text-slate-500 mt-1">{t('dashboard.enrollmentSubtitle')}</p>
             </div>
             <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
-              <TrendingUp className="w-3.5 h-3.5" /> +55% Net Growth
+              <TrendingUp className="w-3.5 h-3.5" /> {t('dashboard.netGrowth')}
             </span>
           </CardHeader>
           <CardContent>
@@ -153,23 +155,23 @@ export const AdminDashboardPage: React.FC = () => {
                     cursor={{ fill: '#f1f5f9' }}
                     contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px' }}
                   />
-                  <Bar dataKey="students" name="Students" fill="#4f46e5" radius={[6, 6, 0, 0]} maxBarSize={40} />
+                  <Bar dataKey="students" name={t('common.students')} fill="#4f46e5" radius={[6, 6, 0, 0]} maxBarSize={40} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
 
             <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-3 text-center text-xs">
               <div>
-                <p className="text-slate-500">Monthly Revenue</p>
+                <p className="text-slate-500">{t('dashboard.monthlyRevenue')}</p>
                 <p className="text-sm font-bold text-slate-900 mt-0.5">{formatCurrency(overview.monthlyRevenue)}</p>
               </div>
               <div>
-                <p className="text-slate-500">Average Attendance</p>
+                <p className="text-slate-500">{t('dashboard.avgAttendance')}</p>
                 <p className="text-sm font-bold text-emerald-600 mt-0.5">{overview.avgAttendanceRate}%</p>
               </div>
               <div>
-                <p className="text-slate-500">New Enrollments</p>
-                <p className="text-sm font-bold text-indigo-600 mt-0.5">+19 this mo.</p>
+                <p className="text-slate-500">{t('dashboard.newEnrollments')}</p>
+                <p className="text-sm font-bold text-indigo-600 mt-0.5">+19</p>
               </div>
             </div>
           </CardContent>
@@ -179,7 +181,7 @@ export const AdminDashboardPage: React.FC = () => {
         <div className="space-y-6">
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle>Quick Administrative Actions</CardTitle>
+              <CardTitle>{t('dashboard.quickActions')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2.5">
               <Button
@@ -188,7 +190,7 @@ export const AdminDashboardPage: React.FC = () => {
                 leftIcon={<Users className="w-4 h-4 text-indigo-600" />}
                 onClick={() => navigate('/admin/students')}
               >
-                Manage Student Records
+                {t('dashboard.manageStudents')}
               </Button>
               <Button
                 variant="outline"
@@ -196,7 +198,7 @@ export const AdminDashboardPage: React.FC = () => {
                 leftIcon={<Calendar className="w-4 h-4 text-emerald-600" />}
                 onClick={() => navigate('/admin/attendance')}
               >
-                Launch Roll-Call Attendance
+                {t('dashboard.launchAttendance')}
               </Button>
               <Button
                 variant="outline"
@@ -204,7 +206,7 @@ export const AdminDashboardPage: React.FC = () => {
                 leftIcon={<Clock className="w-4 h-4 text-sky-600" />}
                 onClick={() => navigate('/admin/schedule')}
               >
-                Inspect Timetable Schedule
+                {t('dashboard.inspectSchedule')}
               </Button>
               <Button
                 variant="outline"
@@ -212,7 +214,7 @@ export const AdminDashboardPage: React.FC = () => {
                 leftIcon={<Layers className="w-4 h-4 text-amber-600" />}
                 onClick={() => navigate('/admin/groups')}
               >
-                View Cohort Classes
+                {t('dashboard.viewCohorts')}
               </Button>
             </CardContent>
           </Card>
@@ -220,9 +222,9 @@ export const AdminDashboardPage: React.FC = () => {
           {/* Today's Schedule Mini-widget */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-3">
-              <CardTitle className="text-sm">Upcoming Classes Today</CardTitle>
+              <CardTitle className="text-sm">{t('dashboard.upcomingClasses')}</CardTitle>
               <Button variant="ghost" size="sm" onClick={() => navigate('/admin/schedule')}>
-                View All
+                {t('common.viewAll')}
               </Button>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -249,8 +251,8 @@ export const AdminDashboardPage: React.FC = () => {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle>Recent Student Enrollments</CardTitle>
-                <p className="text-xs text-slate-500 mt-0.5">Latest registrations into academy programs</p>
+                <CardTitle>{t('dashboard.recentEnrollments')}</CardTitle>
+                <p className="text-xs text-slate-500 mt-0.5">{t('students.desc')}</p>
               </div>
               <Button
                 variant="ghost"
@@ -258,18 +260,18 @@ export const AdminDashboardPage: React.FC = () => {
                 rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
                 onClick={() => navigate('/admin/students')}
               >
-                Full Roster
+                {t('dashboard.fullRoster')}
               </Button>
             </CardHeader>
 
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Student</TableHead>
-                  <TableHead>Contact</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Enrolled</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
+                  <TableHead>{t('students.studentName')}</TableHead>
+                  <TableHead>{t('students.contact')}</TableHead>
+                  <TableHead>{t('common.status')}</TableHead>
+                  <TableHead>{t('students.enrollmentDate')}</TableHead>
+                  <TableHead className="text-right">{t('common.actions')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -301,7 +303,7 @@ export const AdminDashboardPage: React.FC = () => {
                         size="sm"
                         onClick={() => navigate(`/admin/students/${student.id}`)}
                       >
-                        View
+                        {t('common.view')}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -317,7 +319,7 @@ export const AdminDashboardPage: React.FC = () => {
             <CardHeader className="pb-3 flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <Activity className="w-4 h-4 text-indigo-600" />
-                Live System Activity
+                {t('dashboard.liveActivity')}
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 space-y-4">

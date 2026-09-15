@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from '../../i18n';
 import { Modal } from '../../components/ui/Modal';
 import { Input } from '../../components/ui/Input';
 import { Select } from '../../components/ui/Select';
@@ -20,6 +21,7 @@ export const CourseModal: React.FC<CourseModalProps> = ({
   initialData,
   teachers,
 }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -71,8 +73,8 @@ export const CourseModal: React.FC<CourseModalProps> = ({
     e.preventDefault();
     const newErrors: Record<string, string> = {};
 
-    if (!formData.title.trim()) newErrors.title = 'Course title is required';
-    if (!formData.description.trim()) newErrors.description = 'Course description is required';
+    if (!formData.title.trim()) newErrors.title = t('courses.titleRequired');
+    if (!formData.description.trim()) newErrors.description = t('courses.descRequired');
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -92,37 +94,37 @@ export const CourseModal: React.FC<CourseModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={initialData ? 'Edit Course Curriculum' : 'Create New Course'}
-      description="Define course specifications, pricing, duration, and assigned instructor."
+      title={initialData ? t('courses.editCourse') : t('courses.newCourse')}
+      description={t('courses.modalDesc')}
       maxWidth="lg"
       footer={
         <>
           <Button variant="outline" size="sm" onClick={onClose} disabled={loading}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button variant="primary" size="sm" onClick={handleSubmit} isLoading={loading}>
-            {initialData ? 'Save Changes' : 'Publish Course'}
+            {initialData ? t('courses.saveChanges') : t('courses.publishCourse')}
           </Button>
         </>
       }
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
-          label="Course Title"
+          label={t('courses.courseTitle')}
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           error={errors.title}
-          placeholder="e.g. Advanced Reactive Systems with TypeScript"
+          placeholder="Advanced Reactive Systems with TypeScript"
           required
         />
 
         <div className="space-y-1.5">
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">Description</label>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">{t('courses.description')}</label>
           <textarea
             rows={3}
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            placeholder="Syllabus overview and targeted learning outcomes..."
+            placeholder={t('courses.descPlaceholder')}
             className="block w-full rounded-lg border border-slate-300 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             required
           />
@@ -131,20 +133,20 @@ export const CourseModal: React.FC<CourseModalProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Input
-            label="Duration"
+            label={t('courses.duration')}
             value={formData.duration}
             onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-            placeholder="e.g. 14 Weeks"
+            placeholder="14 Weeks"
           />
           <Input
-            label="Tuition Price ($)"
+            label={`${t('courses.tuition')} ($)`}
             type="number"
             min="0"
             value={formData.price}
             onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
           />
           <Input
-            label="Max Enrollment"
+            label={t('courses.maxEnrollment')}
             type="number"
             min="5"
             max="100"
@@ -155,7 +157,7 @@ export const CourseModal: React.FC<CourseModalProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Select
-            label="Category"
+            label={t('courses.category')}
             value={formData.category}
             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
             options={[
@@ -170,7 +172,7 @@ export const CourseModal: React.FC<CourseModalProps> = ({
             ]}
           />
           <Select
-            label="Lead Instructor"
+            label={t('courses.instructor')}
             value={formData.teacherId}
             onChange={(e) => setFormData({ ...formData, teacherId: e.target.value })}
             options={teachers.map((t) => ({
@@ -179,13 +181,13 @@ export const CourseModal: React.FC<CourseModalProps> = ({
             }))}
           />
           <Select
-            label="Status"
+            label={t('common.status')}
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value as CourseStatus })}
             options={[
-              { value: 'ACTIVE', label: 'Active' },
-              { value: 'UPCOMING', label: 'Upcoming' },
-              { value: 'ARCHIVED', label: 'ArchIVED' },
+              { value: 'ACTIVE', label: t('common.active') },
+              { value: 'UPCOMING', label: t('common.upcoming') },
+              { value: 'ARCHIVED', label: t('common.archived') },
             ]}
           />
         </div>

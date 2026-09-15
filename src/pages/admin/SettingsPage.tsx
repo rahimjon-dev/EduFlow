@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Save, Shield, Bell, Building, Lock } from 'lucide-react';
+import { useTranslation } from '../../i18n';
 import { PageHeader } from '../../components/common/PageHeader';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
@@ -8,6 +9,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Ca
 import { Tabs } from '../../components/ui/Tabs';
 
 export const SettingsPage: React.FC = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('general');
   const [saved, setSaved] = useState(false);
 
@@ -34,20 +36,20 @@ export const SettingsPage: React.FC = () => {
   };
 
   const tabs = [
-    { id: 'general', label: 'General Institution' },
-    { id: 'notifications', label: 'Notification Alerts' },
-    { id: 'permissions', label: 'Role Permissions & Access' },
-    { id: 'api', label: 'Backend REST API Integration' },
+    { id: 'general', label: t('settings.general') },
+    { id: 'notifications', label: t('settings.notifications') },
+    { id: 'permissions', label: t('settings.permissions') },
+    { id: 'api', label: t('settings.api') },
   ];
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Institution Settings & Configuration"
-        description="Configure organization details, localization, communication channels, and security policies."
+        title={t('settings.title')}
+        description={t('settings.desc')}
         actions={
           <Button variant="primary" size="sm" leftIcon={<Save className="w-4 h-4" />} onClick={handleSave}>
-            {saved ? 'Changes Saved!' : 'Save Settings'}
+            {saved ? t('settings.changesSaved') : t('settings.saveSettings')}
           </Button>
         }
       />
@@ -59,30 +61,30 @@ export const SettingsPage: React.FC = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Building className="w-5 h-5 text-indigo-600" />
-              Organization Identity
+              {t('settings.orgIdentity')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSave} className="space-y-4 max-w-2xl">
               <Input
-                label="Institution Name"
+                label={t('settings.institutionName')}
                 value={generalForm.institutionName}
                 onChange={(e) => setGeneralForm({ ...generalForm, institutionName: e.target.value })}
               />
               <Input
-                label="Motto / Tagline"
+                label={t('settings.tagline')}
                 value={generalForm.tagline}
                 onChange={(e) => setGeneralForm({ ...generalForm, tagline: e.target.value })}
               />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
-                  label="Official Contact Email"
+                  label={t('settings.contactEmail')}
                   value={generalForm.contactEmail}
                   onChange={(e) => setGeneralForm({ ...generalForm, contactEmail: e.target.value })}
                 />
                 <Input
-                  label="Switchboard Phone"
+                  label={t('settings.phone')}
                   value={generalForm.phone}
                   onChange={(e) => setGeneralForm({ ...generalForm, phone: e.target.value })}
                 />
@@ -90,7 +92,7 @@ export const SettingsPage: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Select
-                  label="Campus Primary Timezone"
+                  label={t('settings.timezone')}
                   value={generalForm.timezone}
                   onChange={(e) => setGeneralForm({ ...generalForm, timezone: e.target.value })}
                   options={[
@@ -101,7 +103,7 @@ export const SettingsPage: React.FC = () => {
                   ]}
                 />
                 <Select
-                  label="Tuition Currency"
+                  label={t('settings.currency')}
                   value={generalForm.currency}
                   onChange={(e) => setGeneralForm({ ...generalForm, currency: e.target.value })}
                   options={[
@@ -121,7 +123,7 @@ export const SettingsPage: React.FC = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Bell className="w-5 h-5 text-emerald-600" />
-              Automated Alert Preferences
+              {t('settings.alertPreferences')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 max-w-2xl">
@@ -136,8 +138,8 @@ export const SettingsPage: React.FC = () => {
                   className="mt-1 rounded text-indigo-600"
                 />
                 <div>
-                  <p className="text-xs font-semibold text-slate-900">Guardian Attendance Absence Alerts</p>
-                  <p className="text-xs text-slate-500">Send instant email notice when a student is marked Absent without excuse.</p>
+                  <p className="text-xs font-semibold text-slate-900">{t('settings.absenceAlerts')}</p>
+                  <p className="text-xs text-slate-500">{t('settings.absenceAlertsDesc')}</p>
                 </div>
               </label>
 
@@ -151,8 +153,8 @@ export const SettingsPage: React.FC = () => {
                   className="mt-1 rounded text-indigo-600"
                 />
                 <div>
-                  <p className="text-xs font-semibold text-slate-900">SMS Upcoming Examination Notices</p>
-                  <p className="text-xs text-slate-500">Notify enrolled students 48 hours before scheduled midterm or final test dates.</p>
+                  <p className="text-xs font-semibold text-slate-900">{t('settings.examAlerts')}</p>
+                  <p className="text-xs text-slate-500">{t('settings.examAlertsDesc')}</p>
                 </div>
               </label>
 
@@ -166,8 +168,8 @@ export const SettingsPage: React.FC = () => {
                   className="mt-1 rounded text-indigo-600"
                 />
                 <div>
-                  <p className="text-xs font-semibold text-slate-900">Overdue Tuition Reminders</p>
-                  <p className="text-xs text-slate-500">Automate friendly fee balance notifications for pending invoice installments.</p>
+                  <p className="text-xs font-semibold text-slate-900">{t('settings.tuitionAlerts')}</p>
+                  <p className="text-xs text-slate-500">{t('settings.tuitionAlertsDesc')}</p>
                 </div>
               </label>
             </div>
@@ -180,7 +182,7 @@ export const SettingsPage: React.FC = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Shield className="w-5 h-5 text-indigo-600" />
-              Role Permissions Matrix
+              {t('settings.roleMatrix')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -188,41 +190,41 @@ export const SettingsPage: React.FC = () => {
               <table className="w-full text-left divide-y divide-slate-200">
                 <thead>
                   <tr className="text-slate-500 font-semibold uppercase tracking-wider">
-                    <th className="py-2.5">System Capability</th>
-                    <th className="py-2.5">Admin</th>
-                    <th className="py-2.5">Teacher</th>
-                    <th className="py-2.5">Student</th>
-                    <th className="py-2.5">Parent</th>
+                    <th className="py-2.5">{t('settings.capability')}</th>
+                    <th className="py-2.5">{t('roles.admin')}</th>
+                    <th className="py-2.5">{t('roles.teacher')}</th>
+                    <th className="py-2.5">{t('roles.student')}</th>
+                    <th className="py-2.5">{t('roles.parent')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-slate-700">
                   <tr>
-                    <td className="py-2.5 font-medium">Manage Students, Teachers & Courses</td>
-                    <td className="text-emerald-600 font-bold">Full Access</td>
-                    <td className="text-slate-400">View Only</td>
-                    <td className="text-slate-400">Restricted</td>
-                    <td className="text-slate-400">Restricted</td>
+                    <td className="py-2.5 font-medium">{t('settings.capManage')}</td>
+                    <td className="text-emerald-600 font-bold">{t('settings.fullAccess')}</td>
+                    <td className="text-slate-400">{t('settings.viewOnly')}</td>
+                    <td className="text-slate-400">{t('settings.restricted')}</td>
+                    <td className="text-slate-400">{t('settings.restricted')}</td>
                   </tr>
                   <tr>
-                    <td className="py-2.5 font-medium">Record Attendance Rolls</td>
-                    <td className="text-emerald-600 font-bold">Full Access</td>
-                    <td className="text-emerald-600 font-bold">Assigned Cohorts</td>
-                    <td className="text-slate-400">View Self</td>
-                    <td className="text-slate-400">View Child</td>
+                    <td className="py-2.5 font-medium">{t('settings.capAttendance')}</td>
+                    <td className="text-emerald-600 font-bold">{t('settings.fullAccess')}</td>
+                    <td className="text-emerald-600 font-bold">{t('settings.assignedCohorts')}</td>
+                    <td className="text-slate-400">{t('settings.viewSelf')}</td>
+                    <td className="text-slate-400">{t('settings.viewChild')}</td>
                   </tr>
                   <tr>
-                    <td className="py-2.5 font-medium">Grade Exams & Assign Homework</td>
-                    <td className="text-emerald-600 font-bold">Full Access</td>
-                    <td className="text-emerald-600 font-bold">Assigned Cohorts</td>
-                    <td className="text-slate-400">Submit Work</td>
-                    <td className="text-slate-400">View Reports</td>
+                    <td className="py-2.5 font-medium">{t('settings.capGrading')}</td>
+                    <td className="text-emerald-600 font-bold">{t('settings.fullAccess')}</td>
+                    <td className="text-emerald-600 font-bold">{t('settings.assignedCohorts')}</td>
+                    <td className="text-slate-400">{t('settings.submitWork')}</td>
+                    <td className="text-slate-400">{t('settings.viewReports')}</td>
                   </tr>
                   <tr>
-                    <td className="py-2.5 font-medium">Tuition Invoicing & Financial Reports</td>
-                    <td className="text-emerald-600 font-bold">Full Access</td>
-                    <td className="text-slate-400">Restricted</td>
-                    <td className="text-slate-400">Pay Invoices</td>
-                    <td className="text-slate-400">Pay Invoices</td>
+                    <td className="py-2.5 font-medium">{t('settings.capFinance')}</td>
+                    <td className="text-emerald-600 font-bold">{t('settings.fullAccess')}</td>
+                    <td className="text-slate-400">{t('settings.restricted')}</td>
+                    <td className="text-slate-400">{t('settings.payInvoices')}</td>
+                    <td className="text-slate-400">{t('settings.payInvoices')}</td>
                   </tr>
                 </tbody>
               </table>
@@ -236,21 +238,18 @@ export const SettingsPage: React.FC = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Lock className="w-5 h-5 text-indigo-600" />
-              REST API Connectivity Guide
+              {t('settings.apiGuide')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-xs text-slate-600">
             <p className="leading-relaxed">
-              EduFlow frontend is architected with strict decoupling between UI components and data providers.
-              When connecting your backend REST API, configure your environment variable:
+              {t('settings.apiDesc1')}
             </p>
             <div className="bg-slate-900 text-slate-100 p-4 rounded-xl font-mono text-xs">
               VITE_API_BASE_URL=https://api.yourdomain.com/v1
             </div>
             <p className="leading-relaxed">
-              All services located in <code className="bg-slate-100 px-1 py-0.5 rounded text-indigo-700">src/services/*.service.ts</code>
-              support one-line transition to <code className="bg-slate-100 px-1 py-0.5 rounded text-indigo-700">apiClient.get()</code>,
-              <code className="bg-slate-100 px-1 py-0.5 rounded text-indigo-700">apiClient.post()</code>, etc. without modifying any React page components.
+              {t('settings.apiDesc2')}
             </p>
           </CardContent>
         </Card>

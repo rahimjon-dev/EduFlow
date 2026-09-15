@@ -1,5 +1,6 @@
 import React from 'react';
 import { AlertCircle } from 'lucide-react';
+import { useTranslation } from '../../i18n';
 import { Button } from '../ui/Button';
 import { Modal } from '../ui/Modal';
 
@@ -21,11 +22,15 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   onConfirm,
   title,
   message,
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
+  confirmText,
+  cancelText,
   variant = 'danger',
   isLoading = false,
 }) => {
+  const { t } = useTranslation();
+  const cText = confirmText || t('common.confirm');
+  const cnText = cancelText || t('common.cancel');
+
   return (
     <Modal
       isOpen={isOpen}
@@ -35,7 +40,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       footer={
         <>
           <Button variant="outline" size="sm" onClick={onClose} disabled={isLoading}>
-            {cancelText}
+            {cnText}
           </Button>
           <Button
             variant={variant === 'danger' ? 'danger' : 'primary'}
@@ -43,7 +48,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             onClick={onConfirm}
             isLoading={isLoading}
           >
-            {confirmText}
+            {cText}
           </Button>
         </>
       }

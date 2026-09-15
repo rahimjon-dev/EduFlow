@@ -1,5 +1,6 @@
 import React from 'react';
 import { Badge, type BadgeProps } from '../ui/Badge';
+import { useTranslation } from '../../i18n';
 
 export interface StatusBadgeProps {
   status: string;
@@ -8,6 +9,7 @@ export interface StatusBadgeProps {
 }
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className, size = 'md' }) => {
+  const { t } = useTranslation();
   const normalized = status.toUpperCase();
 
   let variant: BadgeProps['variant'] = 'neutral';
@@ -18,6 +20,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className, siz
     case 'PAID':
     case 'COMPLETED':
     case 'GRADED':
+    case 'CLEARED':
       variant = 'success';
       break;
 
@@ -53,13 +56,45 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className, siz
       break;
   }
 
-  const formatText = (text: string) => {
-    return text.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+  const getTranslatedText = (raw: string) => {
+    const keyMap: Record<string, string> = {
+      ACTIVE: 'common.active',
+      INACTIVE: 'common.inactive',
+      GRADUATED: 'common.graduated',
+      SUSPENDED: 'common.suspended',
+      PRESENT: 'common.present',
+      ABSENT: 'common.absent',
+      LATE: 'common.late',
+      SICK: 'common.sick',
+      PAID: 'common.paid',
+      PENDING: 'common.pending',
+      OVERDUE: 'common.overdue',
+      COMPLETED: 'common.completed',
+      UPCOMING: 'common.upcoming',
+      ARCHIVED: 'common.archived',
+      CLEARED: 'common.cleared',
+      GRADED: 'common.graded',
+      SUBMITTED: 'common.submitted',
+      ON_LEAVE: 'common.onLeave',
+      CANCELLED: 'common.cancelled',
+      FAIL: 'common.fail',
+      ONGOING: 'common.ongoing',
+    };
+
+    const translationKey = keyMap[normalized];
+    if (translationKey) {
+      const translated = t(translationKey);
+      if (translated && !translated.startsWith('common.')) {
+        return translated;
+      }
+    }
+
+    return raw.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
   };
 
   return (
     <Badge variant={variant} size={size} dot className={className}>
-      {formatText(status)}
+      {getTranslatedText(status)}
     </Badge>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from '../../i18n';
 import { PageHeader } from '../../components/common/PageHeader';
 import { SearchInput } from '../../components/common/SearchInput';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/ui/Table';
@@ -8,6 +9,7 @@ import { gradesService } from '../../services/grades.service';
 import type { Grade } from '../../types';
 
 export const GradesPage: React.FC = () => {
+  const { t } = useTranslation();
   const [grades, setGrades] = useState<Grade[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -38,42 +40,42 @@ export const GradesPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Academic Gradebook & Transcripts"
-        description="Recorded scores, letter evaluations, and instructor feedback across all evaluated courses."
+        title={t('grades.title')}
+        description={t('grades.desc')}
       />
 
       <div className="bg-white p-4 rounded-xl border border-slate-200/90 shadow-soft flex items-center justify-between">
         <SearchInput
           value={search}
           onChange={setSearch}
-          placeholder="Filter by student name, course, or exam..."
+          placeholder={t('grades.searchPlaceholder')}
           className="w-full sm:w-80"
         />
         <span className="text-xs text-slate-500 hidden sm:inline">
-          Recorded: <strong className="text-slate-800">{filtered.length}</strong> grades
+          {t('grades.recorded')}: <strong className="text-slate-800">{filtered.length}</strong> {t('grades.gradesCount')}
         </span>
       </div>
 
       {loading ? (
-        <LoadingState message="Compiling gradebook..." />
+        <LoadingState message={t('grades.loadingGrades')} />
       ) : filtered.length === 0 ? (
         <EmptyState
-          title="No grade records found"
-          description="Try changing your search terms."
-          actionText="Clear Search"
+          title={t('grades.noGrades')}
+          description={t('grades.noGradesDesc')}
+          actionText={t('common.clearFilters')}
           onAction={() => setSearch('')}
         />
       ) : (
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Student Name</TableHead>
-              <TableHead>Course & Subject</TableHead>
-              <TableHead>Exam / Evaluation</TableHead>
-              <TableHead>Numeric Score</TableHead>
-              <TableHead>Percentage</TableHead>
-              <TableHead>Grade</TableHead>
-              <TableHead>Faculty Feedback</TableHead>
+              <TableHead>{t('students.studentName')}</TableHead>
+              <TableHead>{t('grades.courseSubject')}</TableHead>
+              <TableHead>{t('grades.examEvaluation')}</TableHead>
+              <TableHead>{t('grades.numericScore')}</TableHead>
+              <TableHead>{t('grades.percentage')}</TableHead>
+              <TableHead>{t('grades.grade')}</TableHead>
+              <TableHead>{t('grades.facultyFeedback')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
