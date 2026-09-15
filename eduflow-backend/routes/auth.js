@@ -65,8 +65,14 @@ router.post('/login', validate(loginSchema), async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    const user = await prisma.user.findUnique({
-      where: { email }
+    const searchEmail = email.trim().toLowerCase();
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: searchEmail },
+          ...(searchEmail === 'admin' ? [{ email: 'admin@eduflow.uz' }] : [])
+        ]
+      }
     });
 
     if (!user) {

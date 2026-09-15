@@ -8,7 +8,7 @@ const registerSchema = z.object({
 });
 
 const loginSchema = z.object({
-  email: z.string({ required_error: "Email kiritilishi shart" }).email("To'g'ri email formatini kiriting"),
+  email: z.string({ required_error: "Email yoki login kiritilishi shart" }).min(1, "Email yoki login kiritilishi shart"),
   password: z.string({ required_error: "Parol kiritilishi shart" }).min(1, "Parol kiritilishi shart")
 });
 
