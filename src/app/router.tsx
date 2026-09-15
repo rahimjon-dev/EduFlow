@@ -32,6 +32,7 @@ import { TeacherGroupsPage } from '../pages/teacher/TeacherGroupsPage';
 
 // Student Pages
 import { StudentDashboardPage } from '../pages/student/StudentDashboardPage';
+import { StudentAttendancePage } from '../pages/student/StudentAttendancePage';
 
 // Parent Pages
 import { ParentDashboardPage } from '../pages/parent/ParentDashboardPage';
@@ -110,7 +111,7 @@ export const router = createBrowserRouter([
       { path: '', element: <Navigate to="/student/dashboard" replace /> },
       { path: 'dashboard', element: <StudentDashboardPage /> },
       { path: 'schedule', element: <SchedulePage /> },
-      { path: 'attendance', element: <AttendancePage /> },
+      { path: 'attendance', element: <StudentAttendancePage /> },
       { path: 'grades', element: <GradesPage /> },
       { path: 'homework', element: <HomeworkPage /> },
       { path: 'payments', element: <PaymentsPage /> },
@@ -129,7 +130,7 @@ export const router = createBrowserRouter([
       { path: '', element: <Navigate to="/parent/dashboard" replace /> },
       { path: 'dashboard', element: <ParentDashboardPage /> },
       { path: 'children', element: <ParentChildrenPage /> },
-      { path: 'attendance', element: <AttendancePage /> },
+      { path: 'attendance', element: <StudentAttendancePage /> },
       { path: 'grades', element: <GradesPage /> },
       { path: 'payments', element: <PaymentsPage /> },
     ],
