@@ -50,10 +50,15 @@ const requireRole = (...roles) => {
       });
     }
 
+    // Faqat ADMIN barcha bo'lim va amallarga to'liq o'ta oladi
+    if (req.user.role === 'ADMIN') {
+      return next();
+    }
+
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({
         success: false,
-        error: "Ushbu amalni bajarish uchun sizda yetarli ruxsat yo'q (Forbidden)"
+        error: "Sizga ruxsat yo'q"
       });
     }
 

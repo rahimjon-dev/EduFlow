@@ -130,7 +130,7 @@ router.get('/:id', authMiddleware, async (req, res, next) => {
       if (!student || student.groupId !== homework.groupId) {
         return res.status(403).json({
           success: false,
-          error: "Faqat o'z guruhingiz vazifasini ko'rishingiz mumkin"
+          error: "Sizga ruxsat yo'q"
         });
       }
     }

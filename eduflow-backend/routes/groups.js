@@ -6,13 +6,23 @@ const { authMiddleware, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
-// GET /api/groups - Authenticated
+// GET /api/groups - Authenticated (STUDENT faqat o'z guruhini ko'radi, ADMIN/TEACHER barchasini)
 router.get('/', authMiddleware, async (req, res, next) => {
   try {
     const { courseId, teacherId } = req.query;
     const where = {};
     if (courseId) where.courseId = courseId;
     if (teacherId) where.teacherId = teacherId;
+
+    if (req.user.role === 'STUDENT') {
+      const student = await prisma.student.findUnique({
+        where: { userId: req.user.userId }
+      });
+      if (!student || !student.groupId) {
+        return res.status(200).json({ success: true, data: [] });
+      }
+      where.id = student.groupId;
+    }
 
     const groups = await prisma.group.findMany({
       where,
@@ -134,6 +144,19 @@ router.get('/:id', authMiddleware, async (req, res, next) => {
         success: false,
         error: "Guruh topilmadi"
       });
+    }
+
+    // Role check: Student faqat o'z guruhini ko'ra oladi
+    if (req.user.role === 'STUDENT') {
+      const student = await prisma.student.findUnique({
+        where: { userId: req.user.userId }
+      });
+      if (!student || student.groupId !== id) {
+        return res.status(403).json({
+          success: false,
+          error: "Sizga ruxsat yo'q"
+        });
+      }
     }
 
     return res.status(200).json({

@@ -9,6 +9,7 @@ import { ProtectedRoute } from './providers';
 import { LandingPage } from '../pages/landing/LandingPage';
 import { LoginPage } from '../pages/auth/LoginPage';
 import { RegisterPage } from '../pages/auth/RegisterPage';
+import { ConnectionStatusPage } from '../pages/status/ConnectionStatusPage';
 
 // Admin Pages
 import { AdminDashboardPage } from '../pages/admin/DashboardPage';
@@ -50,6 +51,14 @@ export const router = createBrowserRouter([
   {
     path: '/register',
     element: <RegisterPage />,
+  },
+  {
+    path: '/status',
+    element: <ConnectionStatusPage />,
+  },
+  {
+    path: '/connection-status',
+    element: <ConnectionStatusPage />,
   },
 
   // Protected Admin Application Routes

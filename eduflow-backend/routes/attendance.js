@@ -86,7 +86,7 @@ router.get('/stats/:studentId', authMiddleware, async (req, res, next) => {
     if (req.user.role === 'STUDENT' && student.userId !== req.user.userId) {
       return res.status(403).json({
         success: false,
-        error: "Faqat o'zingizning davomat statistikangizni ko'rishingiz mumkin"
+        error: "Sizga ruxsat yo'q"
       });
     }
 

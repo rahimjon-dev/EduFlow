@@ -7,8 +7,8 @@ const { authMiddleware, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
-// GET /api/teachers - Authenticated users (Admin, Teacher, Student)
-router.get('/', authMiddleware, async (req, res, next) => {
+// GET /api/teachers - ADMIN & TEACHER
+router.get('/', authMiddleware, requireRole('ADMIN', 'TEACHER'), async (req, res, next) => {
   try {
     const teachers = await prisma.user.findMany({
       where: { role: 'TEACHER' },
@@ -83,8 +83,8 @@ router.post('/', authMiddleware, requireRole('ADMIN'), validate(createTeacherSch
   }
 });
 
-// GET /api/teachers/:id - Authenticated
-router.get('/:id', authMiddleware, async (req, res, next) => {
+// GET /api/teachers/:id - ADMIN & TEACHER
+router.get('/:id', authMiddleware, requireRole('ADMIN', 'TEACHER'), async (req, res, next) => {
   try {
     const { id } = req.params;
 

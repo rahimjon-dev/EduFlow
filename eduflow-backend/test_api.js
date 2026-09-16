@@ -205,7 +205,8 @@ async function runTests() {
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${studentToken}` },
       body: JSON.stringify({ name: 'Hacking 101', price: 1000 })
     });
-    assert(rForbidden.status === 403, 'RBAC check: Student blocked from Admin route (403 Forbidden)');
+    const jForbidden = await rForbidden.json();
+    assert(rForbidden.status === 403 && jForbidden.error === "Sizga ruxsat yo'q", 'RBAC check: Student blocked from Admin route with "Sizga ruxsat yo\'q" (403 Forbidden)');
 
     // 24. Auth 401 check (No token)
     const rUnauth = await fetch(`${BASE_URL}/api/auth/me`);
@@ -219,6 +220,38 @@ async function runTests() {
     });
     const jInvalidGrade = await rInvalidGrade.json();
     assert(rInvalidGrade.status === 400 && jInvalidGrade.success === false, 'Zod check: Invalid score > 100 rejected (400 Bad Request)');
+
+    // 26. Student attempting to switch role to ADMIN
+    const rStudentSwitchAdmin = await fetch(`${BASE_URL}/api/auth/switch-role`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${studentToken}` },
+      body: JSON.stringify({ role: 'ADMIN' })
+    });
+    const jStudentSwitchAdmin = await rStudentSwitchAdmin.json();
+    assert(rStudentSwitchAdmin.status === 403 && jStudentSwitchAdmin.error === "Sizga ruxsat yo'q", 'RBAC check: Student cannot switch to ADMIN ("Sizga ruxsat yo\'q")');
+
+    // 27. Student checking access to ADMIN
+    const rStudentCheckAdmin = await fetch(`${BASE_URL}/api/auth/check-access/ADMIN`, {
+      headers: { 'Authorization': `Bearer ${studentToken}` }
+    });
+    const jStudentCheckAdmin = await rStudentCheckAdmin.json();
+    assert(rStudentCheckAdmin.status === 403 && jStudentCheckAdmin.error === "Sizga ruxsat yo'q", 'RBAC check: Student blocked from check-access/ADMIN ("Sizga ruxsat yo\'q")');
+
+    // 28. Admin can switch role
+    const rAdminSwitch = await fetch(`${BASE_URL}/api/auth/switch-role`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` },
+      body: JSON.stringify({ role: 'STUDENT' })
+    });
+    const jAdminSwitch = await rAdminSwitch.json();
+    assert(rAdminSwitch.status === 200 && jAdminSwitch.success === true && jAdminSwitch.data.role === 'STUDENT', 'RBAC check: Admin can switch roles');
+
+    // 29. Student blocked from viewing teachers list
+    const rStudentTeachers = await fetch(`${BASE_URL}/api/teachers`, {
+      headers: { 'Authorization': `Bearer ${studentToken}` }
+    });
+    const jStudentTeachers = await rStudentTeachers.json();
+    assert(rStudentTeachers.status === 403 && jStudentTeachers.error === "Sizga ruxsat yo'q", 'RBAC check: Student blocked from GET /api/teachers ("Sizga ruxsat yo\'q")');
 
     console.log(`\n--- TEST RESULTS: ${passed} PASSED, ${failed} FAILED ---`);
     process.exit(failed > 0 ? 1 : 0);

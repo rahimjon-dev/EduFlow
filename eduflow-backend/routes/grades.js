@@ -148,7 +148,7 @@ router.get('/:id', authMiddleware, async (req, res, next) => {
     if (req.user.role === 'STUDENT' && grade.student.userId !== req.user.userId) {
       return res.status(403).json({
         success: false,
-        error: "Faqat o'zingizning bahongizni ko'rishingiz mumkin"
+        error: "Sizga ruxsat yo'q"
       });
     }
 

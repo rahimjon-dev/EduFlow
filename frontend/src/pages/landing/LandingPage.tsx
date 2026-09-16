@@ -98,6 +98,14 @@ export const LandingPage: React.FC = () => {
           </Link>
 
           <div className="flex items-center gap-3">
+            <Link
+              to="/status"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 transition-colors shadow-2xs"
+              title="Backend va ma'lumotlar bazasi ulanish holati"
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>API Status</span>
+            </Link>
             <LanguageSwitcher variant="navbar" />
             <Link to="/login">
               <Button variant="ghost" size="sm">

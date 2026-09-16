@@ -154,4 +154,93 @@ router.get('/me', authMiddleware, async (req, res, next) => {
   }
 });
 
+// POST /api/auth/switch-role - Faqat ADMIN boshqa rollarga o'ta oladi
+router.post('/switch-role', authMiddleware, async (req, res, next) => {
+  try {
+    const targetRole = req.body.targetRole || req.body.role;
+    const validRoles = ['ADMIN', 'TEACHER', 'STUDENT', 'PARENT'];
+
+    if (!targetRole || !validRoles.includes(targetRole)) {
+      return res.status(400).json({
+        success: false,
+        error: "Noto'g'ri rol ko'rsatildi. Ruxsat etilgan rollar: " + validRoles.join(', ')
+      });
+    }
+
+    // Faqat ADMIN boshqa rollarga o'ta oladi, qolganlarga (STUDENT, TEACHER, PARENT) ruxsat yo'q
+    const isOriginalAdmin = req.user.role === 'ADMIN' || req.user.originalRole === 'ADMIN';
+
+    if (!isOriginalAdmin) {
+      return res.status(403).json({
+        success: false,
+        error: "Sizga ruxsat yo'q"
+      });
+    }
+
+    // Admin uchun yangi rol bo'yicha token yaratish
+    const payload = {
+      userId: req.user.userId,
+      role: targetRole,
+      originalRole: 'ADMIN'
+    };
+
+    const secret = process.env.JWT_SECRET || 'eduflow_fallback_secret';
+    const token = jwt.sign(payload, secret, { expiresIn: '7d' });
+
+    return res.status(200).json({
+      success: true,
+      message: `Rol muvaffaqiyatli ${targetRole} ga o'zgartirildi`,
+      data: {
+        token,
+        role: targetRole,
+        originalRole: 'ADMIN'
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// GET /api/auth/check-access/:role - Rolga kirish huquqini tekshirish
+router.get('/check-access/:role', authMiddleware, async (req, res, next) => {
+  try {
+    const { role } = req.params;
+    const validRoles = ['ADMIN', 'TEACHER', 'STUDENT', 'PARENT'];
+
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({
+        success: false,
+        error: "Noto'g'ri rol ko'rsatildi"
+      });
+    }
+
+    // Faqat ADMIN barcha bo'limlarga o'ta oladi
+    if (req.user.role === 'ADMIN' || req.user.originalRole === 'ADMIN') {
+      return res.status(200).json({
+        success: true,
+        allowed: true,
+        message: "Admin uchun to'liq ruxsat berilgan"
+      });
+    }
+
+    // O'quvchi yoki boshqalar faqat o'z roliga mos bo'limga kira oladi
+    if (req.user.role === role) {
+      return res.status(200).json({
+        success: true,
+        allowed: true,
+        message: "Ruxsat mavjud"
+      });
+    }
+
+    // Agar o'quvchi adminga yoki boshqa rolga kirmoqchi bo'lsa
+    return res.status(403).json({
+      success: false,
+      allowed: false,
+      error: "Sizga ruxsat yo'q"
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
