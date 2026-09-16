@@ -44,50 +44,78 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
   }, [currentUser]);
 
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
-    const targetRole: UserRole = credentials.role || 'ADMIN';
-    const roleNames: Record<UserRole, string> = {
-      ADMIN: 'Director Eleanor Vance',
-      TEACHER: 'Prof. Marcus Chen',
-      STUDENT: 'Alexander Wright',
-      PARENT: 'Robert Wright (Parent)',
-    };
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+    try {
+      const response = await fetch(`${backendUrl}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: credentials.email,
+          password: credentials.password || 'admin123',
+          role: credentials.role,
+        }),
+      });
 
-    const newUser: User = {
-      id: `usr-${targetRole.toLowerCase()}`,
-      name: roleNames[targetRole],
-      email: credentials.email || `${targetRole.toLowerCase()}@eduflow.edu`,
-      role: targetRole,
-      avatar:
-        targetRole === 'STUDENT'
-          ? 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80'
-          : targetRole === 'TEACHER'
-          ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
-          : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-      createdAt: '2023-01-01',
-    };
+      const resData = await response.json();
 
-    setCurrentUser(newUser);
-    return true;
+      if (!response.ok || !resData.success) {
+        throw new Error(resData.error || resData.message || 'Kirishda xatolik yuz berdi');
+      }
+
+      const userData = resData.data.user;
+      const userRole: UserRole = resData.data.role;
+      const token = resData.data.token;
+
+      if (token) {
+        localStorage.setItem('eduflow_auth_token', token);
+      }
+
+      const user: User = {
+        id: userData.id,
+        name: userData.fullName,
+        email: userData.email,
+        role: userRole,
+        avatar:
+          userRole === 'STUDENT'
+            ? 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80'
+            : userRole === 'TEACHER'
+            ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
+            : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+        createdAt: userData.createdAt || '2026-01-01',
+      };
+
+      setCurrentUser(user);
+      return true;
+    } catch (err: any) {
+      throw err;
+    }
   };
 
   const logout = () => {
     setCurrentUser(null);
     localStorage.removeItem('eduflow_mock_user');
+    localStorage.removeItem('eduflow_auth_token');
   };
 
   const setRole = (role: UserRole) => {
     if (!currentUser) return;
+    // Faqat ADMIN boshqa rollarga o'ta oladi
+    if (currentUser.role !== 'ADMIN') {
+      return;
+    }
     const roleNames: Record<UserRole, string> = {
-      ADMIN: 'Director Eleanor Vance',
-      TEACHER: 'Prof. Marcus Chen',
-      STUDENT: 'Alexander Wright',
-      PARENT: 'Robert Wright (Parent)',
+      ADMIN: 'Bosh Administrator',
+      TEACHER: 'Anvar Narzullayev',
+      STUDENT: 'Ali Valiyev',
+      PARENT: 'Ziyoda Karimova (Ota-ona)',
     };
 
     setCurrentUser({
       ...currentUser,
       role,
-      name: roleNames[role],
+      name: roleNames[role] || currentUser.name,
     });
   };
 

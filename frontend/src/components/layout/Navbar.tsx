@@ -17,6 +17,7 @@ import type { User, UserRole } from '../../types';
 import { getInitials } from '../../utils/formatters';
 import { useTranslation } from '../../i18n';
 import { LanguageSwitcher } from '../common/LanguageSwitcher';
+import toast from 'react-hot-toast';
 
 interface NavbarProps {
   currentUser: User;
@@ -66,6 +67,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   const handleSelectRole = (r: UserRole, path: string) => {
+    if (currentUser.role !== 'ADMIN') {
+      toast.error("Sizga ruxsat yo'q! Faqat Administrator boshqa rollarga o'ta oladi.");
+      setRoleDropdownOpen(false);
+      return;
+    }
     onRoleChange(r);
     setRoleDropdownOpen(false);
     navigate(path);

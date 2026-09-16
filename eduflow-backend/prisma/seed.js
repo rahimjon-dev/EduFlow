@@ -24,6 +24,17 @@ async function main() {
     }
   });
 
+  const adminEdu = await prisma.user.upsert({
+    where: { email: 'admin@admin.edu' },
+    update: {},
+    create: {
+      fullName: 'Bosh Administrator',
+      email: 'admin@admin.edu',
+      password: adminPassword,
+      role: 'ADMIN'
+    }
+  });
+
   // 2. Create Teachers
   const teacher1 = await prisma.user.upsert({
     where: { email: 'teacher1@eduflow.uz' },
@@ -31,6 +42,28 @@ async function main() {
     create: {
       fullName: 'Anvar Narzullayev',
       email: 'teacher1@eduflow.uz',
+      password: teacherPassword,
+      role: 'TEACHER'
+    }
+  });
+
+  const teacherEdu = await prisma.user.upsert({
+    where: { email: 'anvar@oqituvchi.edu' },
+    update: {},
+    create: {
+      fullName: 'Anvar Narzullayev',
+      email: 'anvar@oqituvchi.edu',
+      password: teacherPassword,
+      role: 'TEACHER'
+    }
+  });
+
+  const teacherEdu2 = await prisma.user.upsert({
+    where: { email: 'teacher@teacher.edu' },
+    update: {},
+    create: {
+      fullName: 'Marcus Chen',
+      email: 'teacher@teacher.edu',
       password: teacherPassword,
       role: 'TEACHER'
     }
@@ -54,6 +87,28 @@ async function main() {
     create: {
       fullName: 'Ziyoda Karimova (Ota-ona)',
       email: 'parent@eduflow.uz',
+      password: parentPassword,
+      role: 'PARENT'
+    }
+  });
+
+  const parentEdu = await prisma.user.upsert({
+    where: { email: 'ziyoda@otaona.edu' },
+    update: {},
+    create: {
+      fullName: 'Ziyoda Karimova (Ota-ona)',
+      email: 'ziyoda@otaona.edu',
+      password: parentPassword,
+      role: 'PARENT'
+    }
+  });
+
+  const parentEdu2 = await prisma.user.upsert({
+    where: { email: 'parent@parent.edu' },
+    update: {},
+    create: {
+      fullName: 'Robert Wright (Ota-ona)',
+      email: 'parent@parent.edu',
       password: parentPassword,
       role: 'PARENT'
     }
@@ -113,6 +168,8 @@ async function main() {
 
   // 6. Create Students
   const studentData = [
+    { name: 'Ali Valiyev', email: 'ali@oquvchi.edu', group: group1 },
+    { name: 'Student Demo', email: 'student@student.edu', group: group1 },
     { name: 'Ali Valiyev', email: 'student1@eduflow.uz', group: group1 },
     { name: 'Malika Tosheva', email: 'student2@eduflow.uz', group: group1 },
     { name: 'Jasur Rahimov', email: 'student3@eduflow.uz', group: group2 },

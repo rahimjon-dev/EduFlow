@@ -63,7 +63,7 @@ router.post('/register', validate(registerSchema), async (req, res, next) => {
 // POST /api/auth/login
 router.post('/login', validate(loginSchema), async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     const user = await prisma.user.findUnique({
       where: { email }
@@ -81,6 +81,22 @@ router.post('/login', validate(loginSchema), async (req, res, next) => {
       return res.status(401).json({
         success: false,
         error: "Email yoki parol noto'g'ri"
+      });
+    }
+
+    // Rol tekshiruvi: Agar ma'lum bir rol tanlangan bo'lsa (masalan: O'quvchi)
+    // lekin kiritilgan hisob boshqa rolga tegishli bo'lsa (masalan: Admin)
+    if (role && user.role !== role) {
+      const roleLabels = {
+        ADMIN: 'Administrator',
+        TEACHER: "O'qituvchi",
+        STUDENT: "O'quvchi",
+        PARENT: 'Ota-ona'
+      };
+      const requestedRoleLabel = roleLabels[role] || role;
+      return res.status(403).json({
+        success: false,
+        error: `${requestedRoleLabel} uchun bunday hisob yoki parol mavjud emas!`
       });
     }
 

@@ -11,8 +11,8 @@ import { LanguageSwitcher } from '../../components/common/LanguageSwitcher';
 
 export const LoginPage: React.FC = () => {
   const { t } = useTranslation();
-  const [email, setEmail] = useState('admin@eduflow.edu');
-  const [password, setPassword] = useState('••••••••');
+  const [email, setEmail] = useState('admin@admin.edu');
+  const [password, setPassword] = useState('admin123');
   const [rememberMe, setRememberMe] = useState(true);
   const [selectedRole, setSelectedRole] = useState<UserRole>('ADMIN');
   const [loading, setLoading] = useState(false);
@@ -24,6 +24,13 @@ export const LoginPage: React.FC = () => {
   const handleRoleQuickSelect = (r: UserRole, defaultEmail: string) => {
     setSelectedRole(r);
     setEmail(defaultEmail);
+    const passwords: Record<UserRole, string> = {
+      ADMIN: 'admin123',
+      TEACHER: 'teacher123',
+      STUDENT: 'student123',
+      PARENT: 'parent123',
+    };
+    setPassword(passwords[r] || 'admin123');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -86,7 +93,7 @@ export const LoginPage: React.FC = () => {
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
-                onClick={() => handleRoleQuickSelect('ADMIN', 'admin@eduflow.edu')}
+                onClick={() => handleRoleQuickSelect('ADMIN', 'admin@admin.edu')}
                 className={`p-3 rounded-xl border text-left flex items-start gap-3 transition-all duration-200 ${
                   selectedRole === 'ADMIN'
                     ? 'border-indigo-600 bg-indigo-50/50 shadow-sm ring-1 ring-indigo-600'
@@ -102,7 +109,7 @@ export const LoginPage: React.FC = () => {
 
               <button
                 type="button"
-                onClick={() => handleRoleQuickSelect('TEACHER', 'marcus.chen@eduflow.edu')}
+                onClick={() => handleRoleQuickSelect('TEACHER', 'anvar@oqituvchi.edu')}
                 className={`p-3 rounded-xl border text-left flex items-start gap-3 transition-all duration-200 ${
                   selectedRole === 'TEACHER'
                     ? 'border-emerald-600 bg-emerald-50/50 shadow-sm ring-1 ring-emerald-600'
@@ -118,7 +125,7 @@ export const LoginPage: React.FC = () => {
 
               <button
                 type="button"
-                onClick={() => handleRoleQuickSelect('STUDENT', 'alex.wright@example.com')}
+                onClick={() => handleRoleQuickSelect('STUDENT', 'ali@oquvchi.edu')}
                 className={`p-3 rounded-xl border text-left flex items-start gap-3 transition-all duration-200 ${
                   selectedRole === 'STUDENT'
                     ? 'border-sky-600 bg-sky-50/50 shadow-sm ring-1 ring-sky-600'
@@ -134,7 +141,7 @@ export const LoginPage: React.FC = () => {
 
               <button
                 type="button"
-                onClick={() => handleRoleQuickSelect('PARENT', 'robert.wright@example.com')}
+                onClick={() => handleRoleQuickSelect('PARENT', 'ziyoda@otaona.edu')}
                 className={`p-3 rounded-xl border text-left flex items-start gap-3 transition-all duration-200 ${
                   selectedRole === 'PARENT'
                     ? 'border-purple-600 bg-purple-50/50 shadow-sm ring-1 ring-purple-600'

@@ -18,6 +18,7 @@ export const RegisterPage: React.FC = () => {
   const [role, setRole] = useState<UserRole>('STUDENT');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [generalError, setGeneralError] = useState('');
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -36,9 +37,21 @@ export const RegisterPage: React.FC = () => {
       return;
     }
 
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
     try {
       setLoading(true);
-      await login({ email, role });
+      setGeneralError('');
+      const res = await fetch(`${backendUrl}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullName, email, password, role }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Ro\'yxatdan o\'tishda xatolik yuz berdi');
+      }
+
+      await login({ email, password, role });
       const redirects: Record<UserRole, string> = {
         ADMIN: '/admin/dashboard',
         TEACHER: '/teacher/dashboard',
@@ -46,6 +59,8 @@ export const RegisterPage: React.FC = () => {
         PARENT: '/parent/dashboard',
       };
       navigate(redirects[role]);
+    } catch (err: any) {
+      setGeneralError(err.message);
     } finally {
       setLoading(false);
     }
@@ -74,6 +89,13 @@ export const RegisterPage: React.FC = () => {
             Join the unified educational ecosystem today.
           </p>
 
+          {generalError && (
+            <div className="mb-6 p-3 bg-rose-50/80 border border-rose-200 rounded-xl text-sm font-medium text-rose-800 flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />
+              {generalError}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-4">
               <Input
@@ -92,7 +114,7 @@ export const RegisterPage: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 error={errors.email}
-                placeholder="name@eduflow.edu"
+                placeholder={role === 'ADMIN' ? 'admin@admin.edu' : role === 'TEACHER' ? 'ism@oqituvchi.edu' : role === 'PARENT' ? 'ism@otaona.edu' : 'ism@oquvchi.edu'}
                 required
                 className="bg-slate-50/50 focus:bg-white transition-colors"
               />

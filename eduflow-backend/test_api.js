@@ -45,21 +45,58 @@ async function runTests() {
     const rStudentLogin = await fetch(`${BASE_URL}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: 'student1@eduflow.uz', password: 'student123' })
+      body: JSON.stringify({ email: 'ali@oquvchi.edu', password: 'student123', role: 'STUDENT' })
     });
     const jStudentLogin = await rStudentLogin.json();
-    assert(rStudentLogin.status === 200 && jStudentLogin.data.role === 'STUDENT', 'POST /api/auth/login as Student');
+    assert(rStudentLogin.status === 200 && jStudentLogin.data.role === 'STUDENT', 'POST /api/auth/login as Student with role: STUDENT');
     const studentToken = jStudentLogin.data.token;
 
-    // 5. POST /api/auth/register (New user)
-    const testEmail = `testuser_${Date.now()}@eduflow.uz`;
-    const rReg = await fetch(`${BASE_URL}/api/auth/register`, {
+    // 4.1. POST /api/auth/login (Selecting STUDENT but entering ADMIN credentials -> MUST FAIL)
+    const rMismatchLogin = await fetch(`${BASE_URL}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fullName: 'Yangi Foydalanuvchi', email: testEmail, password: 'password123' })
+      body: JSON.stringify({ email: 'admin@admin.edu', password: 'admin123', role: 'STUDENT' })
     });
-    const jReg = await rReg.json();
-    assert(rReg.status === 201 && jReg.data.email === testEmail && !jReg.data.password, 'POST /api/auth/register (no password returned)');
+    const jMismatchLogin = await rMismatchLogin.json();
+    assert(
+      rMismatchLogin.status === 403 && jMismatchLogin.error.includes("O'quvchi uchun bunday hisob yoki parol mavjud emas"),
+      'POST /api/auth/login: Selecting STUDENT but entering ADMIN credentials rejected with 403'
+    );
+
+    // 5. POST /api/auth/register (Invalid email for TEACHER -> MUST FAIL)
+    const rInvalidTeacherReg = await fetch(`${BASE_URL}/api/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fullName: 'Hacker Teacher',
+        email: 'fake_teacher@gmail.com',
+        password: 'password123',
+        role: 'TEACHER'
+      })
+    });
+    const jInvalidTeacherReg = await rInvalidTeacherReg.json();
+    assert(
+      rInvalidTeacherReg.status === 400 && jInvalidTeacherReg.error.includes('@oqituvchi.edu'),
+      'POST /api/auth/register: Rejecting invalid domain for TEACHER'
+    );
+
+    // 5.1. POST /api/auth/register (Valid email for TEACHER -> MUST SUCCEED)
+    const validTeacherEmail = `teacher_${Date.now()}@oqituvchi.edu`;
+    const rValidTeacherReg = await fetch(`${BASE_URL}/api/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fullName: 'Zokir Teacher',
+        email: validTeacherEmail,
+        password: 'password123',
+        role: 'TEACHER'
+      })
+    });
+    const jValidTeacherReg = await rValidTeacherReg.json();
+    assert(
+      rValidTeacherReg.status === 201 && jValidTeacherReg.data.role === 'TEACHER',
+      'POST /api/auth/register: Accepting valid domain for TEACHER (@oqituvchi.edu)'
+    );
 
     // 6. GET /api/auth/me
     const rMe = await fetch(`${BASE_URL}/api/auth/me`, {

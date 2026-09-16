@@ -10,9 +10,10 @@ const validate = (schema) => {
           field: e.path.join('.'),
           message: e.message
         }));
+        const primaryError = errorDetails[0]?.message || "Validatsiya xatoligi";
         return res.status(400).json({
           success: false,
-          error: "Validatsiya xatoligi",
+          error: primaryError,
           details: errorDetails
         });
       }
