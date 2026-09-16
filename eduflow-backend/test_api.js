@@ -25,7 +25,7 @@ async function runTests() {
     const rAdminLogin = await fetch(`${BASE_URL}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: 'admin@eduflow.uz', password: 'admin123' })
+      body: JSON.stringify({ email: 'admin', password: '0603' })
     });
     const jAdminLogin = await rAdminLogin.json();
     assert(rAdminLogin.status === 200 && jAdminLogin.data.role === 'ADMIN', 'POST /api/auth/login as Admin');

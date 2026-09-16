@@ -1,13 +1,10 @@
 /**
  * EduFlow API Client Foundation
  * 
- * Prepares the application for backend integration.
- * In production/real mode, calls point to VITE_API_BASE_URL.
- * In development/mock mode, service methods encapsulate async resolution
- * while maintaining the identical async interface (Promise<T>).
+ * Standard HTTP Request Wrapper for EduFlow REST API with JWT authorization.
  */
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.eduflow.local/v1';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 export class ApiError extends Error {
   status: number;
@@ -26,14 +23,14 @@ export interface RequestOptions extends RequestInit {
 }
 
 /**
- * Simulates network latency for realistic frontend testing.
+ * Simulates network latency for fallback / offline mode.
  */
-export const simulateLatency = (ms: number = 250): Promise<void> => {
+export const simulateLatency = (ms: number = 200): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 /**
- * Standard HTTP Request Wrapper for future REST API integration.
+ * Standard HTTP Request Wrapper for REST API integration.
  */
 export async function request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
   const { params, ...customConfig } = options;
@@ -42,7 +39,7 @@ export async function request<T>(endpoint: string, options: RequestOptions = {})
   if (params) {
     const searchParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined) {
+      if (value !== undefined && value !== null) {
         searchParams.append(key, String(value));
       }
     });
@@ -52,7 +49,7 @@ export async function request<T>(endpoint: string, options: RequestOptions = {})
     }
   }
 
-  const token = localStorage.getItem('eduflow_auth_token');
+  const token = localStorage.getItem('eduflow_token') || localStorage.getItem('eduflow_auth_token');
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -71,7 +68,12 @@ export async function request<T>(endpoint: string, options: RequestOptions = {})
     const data = await response.json();
 
     if (!response.ok) {
-      throw new ApiError(data.message || 'API request failed', response.status, data);
+      throw new ApiError(data.error || data.message || 'API so‘rovi muvaffaqiyatsiz yakunlandi', response.status, data);
+    }
+
+    // If API returns wrapped response { success: true, data: [...] }
+    if (data && typeof data === 'object' && 'data' in data && data.success !== undefined) {
+      return data.data as T;
     }
 
     return data as T;
@@ -79,7 +81,7 @@ export async function request<T>(endpoint: string, options: RequestOptions = {})
     if (error instanceof ApiError) {
       throw error;
     }
-    throw new ApiError(error.message || 'Network connection failed', 0);
+    throw new ApiError(error.message || 'Tarmoqqa ulanishda xatolik yuz berdi', 0);
   }
 }
 
