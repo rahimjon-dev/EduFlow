@@ -161,20 +161,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside
       className={cn(
-        'relative flex flex-col bg-white border-r border-slate-200 transition-all duration-300 select-none z-30 h-full',
+        'relative flex flex-col bg-slate-900/30 backdrop-blur-xl text-slate-300 border-r border-white/10 transition-all duration-300 select-none z-30 h-full shadow-[4px_0_24px_rgba(0,0,0,0.1)]',
         collapsed ? 'w-20' : 'w-64'
       )}
     >
       {/* Brand Header */}
-      <div className="flex items-center justify-between h-16 px-4 border-b border-slate-100">
+      <div className="flex items-center justify-between h-16 px-4 border-b border-white/10">
         <NavLink to="/" className="flex items-center gap-3 overflow-hidden">
           <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shrink-0 shadow-sm shadow-indigo-200">
             <GraduationCap className="w-6 h-6" />
           </div>
           {!collapsed && (
             <div className="flex flex-col">
-              <span className="text-lg font-bold tracking-tight text-slate-900 leading-none">EduFlow</span>
-              <span className="text-[11px] font-medium text-indigo-600 uppercase tracking-widest mt-1">{t('common.platform')}</span>
+              <span className="text-lg font-bold tracking-tight text-white leading-none">EduFlow</span>
+              <span className="text-[11px] font-medium text-indigo-400 uppercase tracking-widest mt-1">{t('common.platform')}</span>
             </div>
           )}
         </NavLink>
@@ -215,20 +215,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   className={cn(
                     'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group relative',
                     isActive
-                      ? 'bg-indigo-50 text-indigo-700 font-semibold shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                      ? 'bg-indigo-600 text-white font-semibold shadow-md'
+                      : 'text-slate-400 hover:text-white hover:bg-white/5'
                   )}
                   title={collapsed ? item.label : undefined}
                 >
-                  <span className={cn('shrink-0 transition-colors', isActive ? 'text-indigo-600' : 'text-slate-400 group-hover:text-slate-600')}>
+                  <span className={cn('shrink-0 transition-colors', isActive ? 'text-white' : 'text-slate-400 group-hover:text-white')}>
                     {item.icon}
                   </span>
                   {!collapsed && <span className="truncate">{item.label}</span>}
-
-                  {/* Active indicator bar */}
-                  {isActive && (
-                    <span className="absolute left-0 top-2 bottom-2 w-1 bg-indigo-600 rounded-r-full" />
-                  )}
                 </NavLink>
               );
             })}
@@ -237,19 +232,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Sidebar Footer / Current Role indication */}
-      <div className="p-3 border-t border-slate-100">
+      <div className="p-3 border-t border-white/10">
         <div
           className={cn(
-            'flex items-center gap-3 p-2 rounded-xl bg-slate-50 border border-slate-200/60',
+            'flex items-center gap-3 p-2 rounded-xl bg-white/5 border border-white/10',
             collapsed ? 'justify-center' : ''
           )}
         >
-          <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs uppercase shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs uppercase shrink-0">
             {role[0]}
           </div>
           {!collapsed && (
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold text-slate-800 truncate">{t('common.role')}: {role}</p>
+              <p className="text-xs font-semibold text-slate-200 truncate">{t('common.role')}: {role}</p>
               <p className="text-[11px] text-slate-500 truncate">{t('common.workspace')}</p>
             </div>
           )}

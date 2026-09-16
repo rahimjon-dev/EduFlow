@@ -53,104 +53,58 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex font-sans relative">
+    <div 
+      className="min-h-screen flex font-sans relative items-center justify-center p-4 bg-cover bg-center"
+      style={{ backgroundImage: 'url(/images/dashboard-bg.jpg)' }}
+    >
+      <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-[2px] z-0 pointer-events-none"></div>
+
       {/* Top right language switcher */}
       <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20">
         <LanguageSwitcher variant="navbar" />
       </div>
 
-      {/* Left Form Section */}
-      <div className="flex-1 flex flex-col justify-center px-4 sm:px-6 lg:px-20 xl:px-24">
-        <div className="mx-auto w-full max-w-sm lg:max-w-md py-8">
+      <div className="w-full max-w-5xl bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex overflow-hidden min-h-[600px] z-10 relative">
+        {/* Left Form Section */}
+        <div className="flex-1 p-8 sm:p-12 flex flex-col justify-center">
           {/* Header */}
           <Link to="/" className="inline-flex items-center gap-2.5 mb-8 group">
-            <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200 transition-transform group-hover:scale-105">
-              <GraduationCap className="w-6 h-6" />
+            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-sm shadow-indigo-200">
+              <GraduationCap className="w-5 h-5" />
             </div>
-            <span className="text-2xl font-extrabold tracking-tight text-slate-900">EduFlow</span>
+            <span className="text-xl font-extrabold tracking-tight text-white">EduFlow</span>
           </Link>
           
-          <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-2">{t('auth.signInTitle')}</h2>
-          <p className="text-sm text-slate-500 mb-8">
-            {t('auth.signInSubtitle')}
-          </p>
+          <h2 className="text-2xl font-bold tracking-tight text-white mb-2">Tizimga kirish</h2>
+          <p className="text-sm text-slate-400 mb-6">Hisobingiz orqali davom eting</p>
 
-          {/* Quick Demo Role Switcher */}
-          <div className="mb-8">
-            <div className="flex items-center gap-2 mb-3">
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
-                {t('auth.selectPersona')}
-              </label>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => handleRoleQuickSelect('ADMIN', 'admin@eduflow.edu')}
-                className={`p-3 rounded-xl border text-left flex items-start gap-3 transition-all duration-200 ${
-                  selectedRole === 'ADMIN'
-                    ? 'border-indigo-600 bg-indigo-50/50 shadow-sm ring-1 ring-indigo-600'
-                    : 'border-slate-200 hover:border-indigo-300 hover:bg-slate-50 text-slate-700'
-                }`}
-              >
-                <Shield className={`w-5 h-5 shrink-0 mt-0.5 ${selectedRole === 'ADMIN' ? 'text-indigo-600' : 'text-slate-400'}`} />
-                <div>
-                  <p className={`text-sm font-semibold ${selectedRole === 'ADMIN' ? 'text-indigo-900' : 'text-slate-700'}`}>{t('roles.admin')}</p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Director level</p>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleRoleQuickSelect('TEACHER', 'marcus.chen@eduflow.edu')}
-                className={`p-3 rounded-xl border text-left flex items-start gap-3 transition-all duration-200 ${
-                  selectedRole === 'TEACHER'
-                    ? 'border-emerald-600 bg-emerald-50/50 shadow-sm ring-1 ring-emerald-600'
-                    : 'border-slate-200 hover:border-emerald-300 hover:bg-slate-50 text-slate-700'
-                }`}
-              >
-                <BookOpen className={`w-5 h-5 shrink-0 mt-0.5 ${selectedRole === 'TEACHER' ? 'text-emerald-600' : 'text-slate-400'}`} />
-                <div>
-                  <p className={`text-sm font-semibold ${selectedRole === 'TEACHER' ? 'text-emerald-900' : 'text-slate-700'}`}>{t('roles.teacher')}</p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Faculty access</p>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleRoleQuickSelect('STUDENT', 'alex.wright@example.com')}
-                className={`p-3 rounded-xl border text-left flex items-start gap-3 transition-all duration-200 ${
-                  selectedRole === 'STUDENT'
-                    ? 'border-sky-600 bg-sky-50/50 shadow-sm ring-1 ring-sky-600'
-                    : 'border-slate-200 hover:border-sky-300 hover:bg-slate-50 text-slate-700'
-                }`}
-              >
-                <GraduationCap className={`w-5 h-5 shrink-0 mt-0.5 ${selectedRole === 'STUDENT' ? 'text-sky-600' : 'text-slate-400'}`} />
-                <div>
-                  <p className={`text-sm font-semibold ${selectedRole === 'STUDENT' ? 'text-sky-900' : 'text-slate-700'}`}>{t('roles.student')}</p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Learner portal</p>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleRoleQuickSelect('PARENT', 'robert.wright@example.com')}
-                className={`p-3 rounded-xl border text-left flex items-start gap-3 transition-all duration-200 ${
-                  selectedRole === 'PARENT'
-                    ? 'border-purple-600 bg-purple-50/50 shadow-sm ring-1 ring-purple-600'
-                    : 'border-slate-200 hover:border-purple-300 hover:bg-slate-50 text-slate-700'
-                }`}
-              >
-                <HeartHandshake className={`w-5 h-5 shrink-0 mt-0.5 ${selectedRole === 'PARENT' ? 'text-purple-600' : 'text-slate-400'}`} />
-                <div>
-                  <p className={`text-sm font-semibold ${selectedRole === 'PARENT' ? 'text-purple-900' : 'text-slate-700'}`}>{t('roles.parent')}</p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Family portal</p>
-                </div>
-              </button>
-            </div>
+          {/* Role Tabs */}
+          <div className="flex p-1 bg-black/30 rounded-lg mb-6 border border-white/5">
+            {(['ADMIN', 'TEACHER', 'STUDENT', 'PARENT'] as UserRole[]).map((r) => {
+              const labels = {
+                ADMIN: 'Admin',
+                TEACHER: "O'qituvchi",
+                STUDENT: "O'quvchi",
+                PARENT: 'Ota-ona'
+              };
+              return (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => handleRoleQuickSelect(r, r === 'ADMIN' ? 'admin@eduflow.edu' : 'user@eduflow.edu')}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${
+                    selectedRole === r
+                      ? 'bg-indigo-600 text-white shadow-sm'
+                      : 'text-slate-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  {labels[r]}
+                </button>
+              );
+            })}
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
               <div className="p-3 bg-rose-50/80 border border-rose-200 rounded-xl text-sm font-medium text-rose-800 flex items-center gap-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />
@@ -158,100 +112,104 @@ export const LoginPage: React.FC = () => {
               </div>
             )}
 
-            <div className="space-y-4">
-              <Input
-                label={t('auth.email')}
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@eduflow.edu"
-                required
-                className="bg-slate-50/50 focus:bg-white transition-colors"
-              />
-
-              <Input
-                label={t('auth.password')}
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                className="bg-slate-50/50 focus:bg-white transition-colors"
-              />
-            </div>
-
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2.5 text-slate-600 cursor-pointer group">
-                <div className="relative flex items-center justify-center">
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1">Telefon raqami yoki email</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span className="text-slate-400 text-sm">📞</span>
+                  </div>
                   <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-0 transition-shadow cursor-pointer"
+                    type="text"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-black/20 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    placeholder="+998 90 123 45 67"
+                    required
                   />
                 </div>
-                <span className="group-hover:text-slate-900 transition-colors">{t('auth.rememberMe')}</span>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1">Parol</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span className="text-slate-400 text-sm">🔒</span>
+                  </div>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full bg-black/20 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    placeholder="Parolni kiriting..."
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between text-xs mt-4">
+              <label className="flex items-center gap-2 text-slate-400 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-3.5 h-3.5 rounded border-white/20 bg-black/20 text-indigo-500 focus:ring-indigo-500"
+                />
+                <span>Meni eslab qol</span>
               </label>
-              <a href="#forgot" onClick={(e) => { e.preventDefault(); toast('In mock mode: simply click Sign In!', { icon: '👋' }); }} className="text-indigo-600 font-semibold hover:text-indigo-700 transition-colors">
-                {t('auth.forgotPassword')}
+              <a href="#forgot" className="text-indigo-600 font-semibold hover:text-indigo-700">
+                Parolni unutdingizmi?
               </a>
             </div>
 
             <Button
               type="submit"
-              className="w-full h-12 text-base font-semibold shadow-md shadow-indigo-600/20"
-              size="lg"
+              className="w-full h-11 text-sm font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-700 mt-2"
               isLoading={loading}
-              rightIcon={<ArrowRight className="w-5 h-5" />}
             >
-              {t('auth.signInButton')} {selectedRole.charAt(0) + selectedRole.slice(1).toLowerCase()}
+              Kirish
             </Button>
+            
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/10"></div></div>
+              <div className="relative flex justify-center text-xs"><span className="px-2 bg-slate-900/40 text-slate-400 rounded-full">yoki</span></div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <button type="button" className="flex items-center justify-center gap-2 w-full h-10 bg-white/5 border border-white/10 rounded-xl text-xs font-semibold text-white hover:bg-white/10 transition-colors">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-4 h-4" />
+                Google
+              </button>
+              <button type="button" className="flex items-center justify-center gap-2 w-full h-10 bg-white/5 border border-white/10 rounded-xl text-xs font-semibold text-white hover:bg-white/10 transition-colors">
+                <img src="https://www.svgrepo.com/show/475688/telegram-color.svg" alt="Telegram" className="w-4 h-4" />
+                Telegram
+              </button>
+            </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-slate-500">
-            {t('auth.dontHaveAccount')}{' '}
-            <Link to="/register" className="font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
-              {t('auth.registerHere')}
+          <p className="mt-8 text-center text-xs text-slate-400">
+            Hisobingiz yo'qmi?{' '}
+            <Link to="/register" className="font-semibold text-indigo-600 hover:text-indigo-700">
+              Ro'yxatdan o'ting
             </Link>
           </p>
         </div>
-      </div>
 
-      {/* Right Image/Branding Section */}
-      <div className="hidden lg:block lg:flex-1 relative w-full h-full overflow-hidden bg-slate-900">
-        {/* Background Image with Overlay */}
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop" 
-            alt="Students collaborating" 
-            className="w-full h-full object-cover opacity-40 mix-blend-overlay"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-indigo-900/60 to-slate-900/20" />
-        </div>
-        
-        {/* Decorative Elements */}
-        <div className="absolute top-0 right-0 -mr-24 -mt-24 w-96 h-96 rounded-full bg-indigo-500/20 blur-3xl" />
-        <div className="absolute bottom-0 left-0 -ml-24 -mb-24 w-96 h-96 rounded-full bg-sky-500/20 blur-3xl" />
-
-        {/* Content */}
-        <div className="absolute inset-0 z-10 flex flex-col justify-center items-center px-12 lg:px-20 text-center">
-          <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-center mb-8 shadow-2xl">
-            <GraduationCap className="w-10 h-10 text-white" />
+        {/* Right Image/Branding Section */}
+        <div className="hidden lg:flex lg:flex-1 relative w-full h-full bg-indigo-900/20 border-l border-white/10 items-center justify-center p-12 overflow-hidden">
+          <div className="absolute top-10 right-10 text-right">
+             <h3 className="text-2xl font-bold text-indigo-200" style={{fontFamily: "'Caveat', cursive", transform: 'rotate(-5deg)'}}>
+               Orzularingga<br/>birga erishamiz!
+             </h3>
           </div>
-          <h3 className="text-3xl lg:text-4xl font-extrabold text-white tracking-tight mb-6 leading-tight">
-            The Operating System for Modern Education
-          </h3>
-          <p className="text-lg text-indigo-100/90 max-w-lg mx-auto leading-relaxed mb-12">
-            Empower your entire institution with a unified platform designed to streamline administration, enhance teaching, and accelerate student success.
-          </p>
           
-          <div className="flex items-center gap-4 text-sm font-medium text-white/80 bg-white/5 backdrop-blur-sm border border-white/10 px-6 py-3 rounded-full">
-            <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Secure</span>
-            <span className="w-1 h-1 bg-white/30 rounded-full" />
-            <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Fast</span>
-            <span className="w-1 h-1 bg-white/30 rounded-full" />
-            <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Reliable</span>
-          </div>
+          <img 
+            src="/images/auth-student.png" 
+            alt="Student" 
+            className="w-full max-w-sm object-contain relative z-10"
+          />
+          <div className="absolute bottom-0 w-[120%] h-48 bg-indigo-600 rounded-t-[100%] blur-3xl opacity-20"></div>
         </div>
       </div>
     </div>

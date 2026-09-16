@@ -36,13 +36,13 @@
 
 @layer utilities {
   .glass-card {
-    @apply bg-white/85 backdrop-blur-md border border-slate-200/80 shadow-soft;
+    @apply bg-white border border-slate-200/80 shadow-soft rounded-2xl;
   }
   
   .glass-card-dark {
-    @apply bg-slate-900/85 backdrop-blur-md border border-slate-800/80 shadow-soft;
+    @apply bg-slate-900 border border-slate-800/80 shadow-soft rounded-2xl;
   }
-
+  
   .badge-pulse {
     position: relative;
   }
@@ -57,4 +57,50 @@
     border-radius: 9999px;
     background-color: currentColor;
   }
+}
+
+/* Global Dark Glassmorphism Overrides for Dashboard Pages */
+.dashboard-theme .bg-white {
+  background-color: rgba(15, 23, 42, 0.4) !important;
+  backdrop-filter: blur(12px) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12) !important;
+}
+
+.dashboard-theme .text-slate-900,
+.dashboard-theme .text-slate-800 {
+  color: #ffffff !important;
+}
+
+.dashboard-theme .text-slate-700,
+.dashboard-theme .text-slate-600,
+.dashboard-theme .text-slate-500 {
+  color: #cbd5e1 !important;
+}
+
+.dashboard-theme input, 
+.dashboard-theme select {
+  background-color: rgba(15, 23, 42, 0.4) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.dashboard-theme input::placeholder {
+  color: #94a3b8 !important;
+}
+
+.dashboard-theme .bg-slate-100,
+.dashboard-theme .bg-slate-50 {
+  background-color: rgba(30, 41, 59, 0.6) !important;
+}
+
+.dashboard-theme .border-slate-200,
+.dashboard-theme .border-slate-100 {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Fix ghost buttons inside dashboard */
+.dashboard-theme button.text-slate-600:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
 }

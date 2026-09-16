@@ -119,7 +119,7 @@ export const HomeworkPage: React.FC = () => {
                 </div>
               </CardContent>
 
-              <div className="px-5 py-3 bg-slate-50/70 border-t border-slate-100 flex items-center justify-end">
+              <div className="px-5 py-3 bg-white/5 border-t border-white/10 flex items-center justify-end">
                 <Button
                   variant="ghost"
                   size="sm"

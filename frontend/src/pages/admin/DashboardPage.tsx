@@ -13,7 +13,7 @@ import {
   PlusCircle,
   Activity,
 } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTranslation } from '../../i18n';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatCard } from '../../components/common/StatCard';
@@ -137,9 +137,9 @@ export const AdminDashboardPage: React.FC = () => {
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div>
               <CardTitle>{t('dashboard.enrollmentVelocity')}</CardTitle>
-              <p className="text-xs text-slate-500 mt-1">{t('dashboard.enrollmentSubtitle')}</p>
+              <p className="text-xs text-slate-400 mt-1">{t('dashboard.enrollmentSubtitle')}</p>
             </div>
-            <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
+            <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-400 bg-emerald-500/20 px-2.5 py-1 rounded-full">
               <TrendingUp className="w-3.5 h-3.5" /> {t('dashboard.netGrowth')}
             </span>
           </CardHeader>
@@ -147,31 +147,30 @@ export const AdminDashboardPage: React.FC = () => {
             {/* Recharts Bar Representation */}
             <div className="pt-4 pb-2 h-56 w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyMetrics} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                  <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} dy={10} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} />
+                <LineChart data={monthlyMetrics} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ffffff1a" />
+                  <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#cbd5e1' }} dy={10} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#cbd5e1' }} />
                   <Tooltip
-                    cursor={{ fill: '#f1f5f9' }}
-                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px' }}
+                    contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', color: '#fff', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px' }}
                   />
-                  <Bar dataKey="students" name={t('common.students')} fill="#4f46e5" radius={[6, 6, 0, 0]} maxBarSize={40} />
-                </BarChart>
+                  <Line type="monotone" dataKey="students" name={t('common.students')} stroke="#4f46e5" strokeWidth={3} dot={{ r: 4, fill: '#4f46e5', strokeWidth: 2, stroke: '#fff' }} />
+                </LineChart>
               </ResponsiveContainer>
             </div>
 
-            <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-3 text-center text-xs">
+            <div className="mt-4 pt-4 border-t border-white/10 grid grid-cols-3 text-center text-xs">
               <div>
-                <p className="text-slate-500">{t('dashboard.monthlyRevenue')}</p>
-                <p className="text-sm font-bold text-slate-900 mt-0.5">{formatCurrency(overview.monthlyRevenue)}</p>
+                <p className="text-slate-400">{t('dashboard.monthlyRevenue')}</p>
+                <p className="text-sm font-bold text-white mt-0.5">{formatCurrency(overview.monthlyRevenue)}</p>
               </div>
               <div>
-                <p className="text-slate-500">{t('dashboard.avgAttendance')}</p>
-                <p className="text-sm font-bold text-emerald-600 mt-0.5">{overview.avgAttendanceRate}%</p>
+                <p className="text-slate-400">{t('dashboard.avgAttendance')}</p>
+                <p className="text-sm font-bold text-emerald-400 mt-0.5">{overview.avgAttendanceRate}%</p>
               </div>
               <div>
-                <p className="text-slate-500">{t('dashboard.newEnrollments')}</p>
-                <p className="text-sm font-bold text-indigo-600 mt-0.5">+19</p>
+                <p className="text-slate-400">{t('dashboard.newEnrollments')}</p>
+                <p className="text-sm font-bold text-indigo-400 mt-0.5">+19</p>
               </div>
             </div>
           </CardContent>
@@ -181,41 +180,28 @@ export const AdminDashboardPage: React.FC = () => {
         <div className="space-y-6">
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle>{t('dashboard.quickActions')}</CardTitle>
+              <CardTitle>Kurslar bo'yicha taqsimot</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2.5">
-              <Button
-                variant="outline"
-                className="w-full justify-start text-xs font-medium"
-                leftIcon={<Users className="w-4 h-4 text-indigo-600" />}
-                onClick={() => navigate('/admin/students')}
-              >
-                {t('dashboard.manageStudents')}
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full justify-start text-xs font-medium"
-                leftIcon={<Calendar className="w-4 h-4 text-emerald-600" />}
-                onClick={() => navigate('/admin/attendance')}
-              >
-                {t('dashboard.launchAttendance')}
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full justify-start text-xs font-medium"
-                leftIcon={<Clock className="w-4 h-4 text-sky-600" />}
-                onClick={() => navigate('/admin/schedule')}
-              >
-                {t('dashboard.inspectSchedule')}
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full justify-start text-xs font-medium"
-                leftIcon={<Layers className="w-4 h-4 text-amber-600" />}
-                onClick={() => navigate('/admin/groups')}
-              >
-                {t('dashboard.viewCohorts')}
-              </Button>
+            <CardContent className="flex flex-col items-center justify-center">
+              <div className="h-56 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={[{name: 'Ingliz tili', value: 400}, {name: 'Matematika', value: 300}, {name: 'Dasturlash', value: 300}, {name: 'Tarix', value: 200}]} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
+                      <Cell fill="#4f46e5" />
+                      <Cell fill="#10b981" />
+                      <Cell fill="#f59e0b" />
+                      <Cell fill="#ec4899" />
+                    </Pie>
+                    <Tooltip contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', color: '#fff', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px' }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="grid grid-cols-2 gap-2 w-full mt-2 text-[10px] font-medium text-slate-300">
+                <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-indigo-500"></span> Ingliz tili</div>
+                <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500"></span> Matematika</div>
+                <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-500"></span> Dasturlash</div>
+                <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-pink-500"></span> Tarix</div>
+              </div>
             </CardContent>
           </Card>
 
@@ -229,12 +215,12 @@ export const AdminDashboardPage: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-3">
               {upcomingClasses.map((item) => (
-                <div key={item.id} className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 border border-slate-100">
+                <div key={item.id} className="flex items-center justify-between p-2.5 rounded-lg bg-white/5 border border-white/10">
                   <div className="min-w-0 pr-2">
-                    <p className="text-xs font-semibold text-slate-800 truncate">{item.courseTitle}</p>
-                    <p className="text-[11px] text-slate-500">{item.room} • {item.teacherName}</p>
+                    <p className="text-xs font-semibold text-slate-200 truncate">{item.courseTitle}</p>
+                    <p className="text-[11px] text-slate-400">{item.room} • {item.teacherName}</p>
                   </div>
-                  <span className="shrink-0 text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200/50">
+                  <span className="shrink-0 text-[11px] font-semibold text-indigo-400 bg-indigo-500/20 px-2 py-0.5 rounded border border-indigo-500/30">
                     {item.startTime}
                   </span>
                 </div>
@@ -252,7 +238,7 @@ export const AdminDashboardPage: React.FC = () => {
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle>{t('dashboard.recentEnrollments')}</CardTitle>
-                <p className="text-xs text-slate-500 mt-0.5">{t('students.desc')}</p>
+                <p className="text-xs text-slate-400 mt-0.5">{t('students.desc')}</p>
               </div>
               <Button
                 variant="ghost"
@@ -280,23 +266,23 @@ export const AdminDashboardPage: React.FC = () => {
                     <TableCell>
                       <div className="flex items-center gap-3">
                         {student.avatar ? (
-                          <img src={student.avatar} alt="" className="w-8 h-8 rounded-full object-cover ring-1 ring-slate-200" />
+                          <img src={student.avatar} alt="" className="w-8 h-8 rounded-full object-cover ring-1 ring-white/10" />
                         ) : (
-                          <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs">
+                          <div className="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs">
                             {getInitials(`${student.firstName} ${student.lastName}`)}
                           </div>
                         )}
                         <div>
-                          <p className="text-xs font-semibold text-slate-900">{student.firstName} {student.lastName}</p>
-                          <p className="text-[11px] text-slate-500">{student.email}</p>
+                          <p className="text-xs font-semibold text-white">{student.firstName} {student.lastName}</p>
+                          <p className="text-[11px] text-slate-400">{student.email}</p>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="text-xs text-slate-600">{student.phone}</TableCell>
+                    <TableCell className="text-xs text-slate-300">{student.phone}</TableCell>
                     <TableCell>
                       <StatusBadge status={student.status} size="sm" />
                     </TableCell>
-                    <TableCell className="text-xs text-slate-500">{student.enrollmentDate}</TableCell>
+                    <TableCell className="text-xs text-slate-400">{student.enrollmentDate}</TableCell>
                     <TableCell className="text-right">
                       <Button
                         variant="ghost"
@@ -317,19 +303,19 @@ export const AdminDashboardPage: React.FC = () => {
         <div>
           <Card className="h-full flex flex-col">
             <CardHeader className="pb-3 flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <Activity className="w-4 h-4 text-indigo-600" />
+              <CardTitle className="flex items-center gap-2 text-white">
+                <Activity className="w-4 h-4 text-indigo-400" />
                 {t('dashboard.liveActivity')}
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 space-y-4">
               {activities.map((act) => (
-                <div key={act.id} className="relative pl-5 before:absolute before:left-1.5 before:top-2 before:bottom-0 before:w-0.5 before:bg-slate-200 last:before:hidden">
-                  <div className="absolute left-0 top-1.5 w-3 h-3 rounded-full bg-indigo-500 ring-4 ring-white" />
+                <div key={act.id} className="relative pl-5 before:absolute before:left-1.5 before:top-2 before:bottom-0 before:w-0.5 before:bg-white/10 last:before:hidden">
+                  <div className="absolute left-0 top-1.5 w-3 h-3 rounded-full bg-indigo-500/50 border-2 border-slate-900 ring-2 ring-indigo-500/20" />
                   <div>
-                    <p className="text-xs font-semibold text-slate-800">{act.title}</p>
-                    <p className="text-xs text-slate-500 mt-0.5 leading-snug">{act.description}</p>
-                    <span className="text-[10px] text-slate-400 font-medium block mt-1">{act.timestamp}</span>
+                    <p className="text-xs font-semibold text-slate-200">{act.title}</p>
+                    <p className="text-xs text-slate-400 mt-0.5 leading-snug">{act.description}</p>
+                    <span className="text-[10px] text-slate-500 font-medium block mt-1">{act.timestamp}</span>
                   </div>
                 </div>
               ))}

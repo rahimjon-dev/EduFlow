@@ -23,34 +23,46 @@ export const LandingPage: React.FC = () => {
   const { t } = useTranslation();
   const features = [
     {
-      icon: <Users className="w-6 h-6 text-indigo-600" />,
+      icon: <Users className="w-6 h-6 text-indigo-700" />,
       title: 'Student & Teacher Management',
       desc: 'Centralized profiles, cohort assignments, attendance records, and academic progress tracking in one unified directory.',
+      bgClass: 'bg-slate-900/40 backdrop-blur-xl border border-white/10 hover:bg-slate-900/60 hover:border-white/30 shadow-[0_8px_30px_rgb(0,0,0,0.12)]',
+      iconClass: 'bg-white/5 border border-white/10 text-white',
     },
     {
-      icon: <CalendarCheck className="w-6 h-6 text-emerald-600" />,
+      icon: <CalendarCheck className="w-6 h-6 text-emerald-700" />,
       title: 'Real-Time Attendance Tracking',
       desc: 'Single-click attendance logging with statuses for Present, Late, Absent, and Sick plus automatic monthly percentage summaries.',
+      bgClass: 'bg-slate-900/40 backdrop-blur-xl border border-white/10 hover:bg-slate-900/60 hover:border-white/30 shadow-[0_8px_30px_rgb(0,0,0,0.12)]',
+      iconClass: 'bg-white/5 border border-white/10 text-white',
     },
     {
-      icon: <Clock className="w-6 h-6 text-sky-600" />,
+      icon: <Clock className="w-6 h-6 text-sky-700" />,
       title: 'Smart Timetable Scheduling',
       desc: 'Interactive daily and weekly calendar views preventing classroom double-booking and simplifying faculty schedules.',
+      bgClass: 'bg-slate-900/40 backdrop-blur-xl border border-white/10 hover:bg-slate-900/60 hover:border-white/30 shadow-[0_8px_30px_rgb(0,0,0,0.12)]',
+      iconClass: 'bg-white/5 border border-white/10 text-white',
     },
     {
-      icon: <CreditCard className="w-6 h-6 text-amber-600" />,
+      icon: <CreditCard className="w-6 h-6 text-amber-700" />,
       title: 'Tuition & Payment Management',
       desc: 'Automated invoice generation, payment status tracking (Paid, Pending, Overdue), and transparent parent receipts.',
+      bgClass: 'bg-slate-900/40 backdrop-blur-xl border border-white/10 hover:bg-slate-900/60 hover:border-white/30 shadow-[0_8px_30px_rgb(0,0,0,0.12)]',
+      iconClass: 'bg-white/5 border border-white/10 text-white',
     },
     {
-      icon: <Award className="w-6 h-6 text-purple-600" />,
+      icon: <Award className="w-6 h-6 text-purple-700" />,
       title: 'Examinations, Grades & Homework',
       desc: 'Comprehensive gradebooks, automated GPA/letter grades, exam schedules, and online homework submission workflows.',
+      bgClass: 'bg-slate-900/40 backdrop-blur-xl border border-white/10 hover:bg-slate-900/60 hover:border-white/30 shadow-[0_8px_30px_rgb(0,0,0,0.12)]',
+      iconClass: 'bg-white/5 border border-white/10 text-white',
     },
     {
-      icon: <BarChart3 className="w-6 h-6 text-rose-600" />,
+      icon: <BarChart3 className="w-6 h-6 text-rose-700" />,
       title: 'Actionable Reporting & Analytics',
       desc: 'In-depth institution analytics on student enrollment velocity, attendance trends, course popularity, and revenue health.',
+      bgClass: 'bg-slate-900/40 backdrop-blur-xl border border-white/10 hover:bg-slate-900/60 hover:border-white/30 shadow-[0_8px_30px_rgb(0,0,0,0.12)]',
+      iconClass: 'bg-white/5 border border-white/10 text-white',
     },
   ];
 
@@ -58,54 +70,74 @@ export const LandingPage: React.FC = () => {
     {
       role: 'ADMIN',
       title: 'Administrators',
-      icon: <Shield className="w-6 h-6 text-indigo-600" />,
       desc: 'Total oversight of courses, batches, staff allocations, tuition billing, and institutional analytics.',
+      icon: <Shield className="w-6 h-6 text-indigo-600" />,
       highlights: ['Full CRUD data control', 'Revenue & fee analytics', 'Course curriculum design'],
+      bgClass: 'bg-slate-900/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:border-white/30',
+      iconClass: 'bg-white/5 border border-white/10 text-indigo-400',
+      highlightIconClass: 'text-emerald-400',
     },
     {
       role: 'TEACHER',
       title: 'Teachers & Faculty',
-      icon: <BookOpen className="w-6 h-6 text-emerald-600" />,
       desc: 'Streamlined daily workflow for checking attendance, grading tests, publishing homework, and monitoring timetables.',
+      icon: <BookOpen className="w-6 h-6 text-emerald-600" />,
       highlights: ['Interactive roll-call', 'Assignment grader', 'Direct schedule views'],
+      bgClass: 'bg-slate-900/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:border-white/30',
+      iconClass: 'bg-white/5 border border-white/10 text-emerald-400',
+      highlightIconClass: 'text-emerald-400',
     },
     {
       role: 'STUDENT',
       title: 'Students',
-      icon: <GraduationCap className="w-6 h-6 text-sky-600" />,
       desc: 'Personal academic hub with class schedules, assignment deadlines, exam grades, and attendance tracking.',
+      icon: <GraduationCap className="w-6 h-6 text-sky-600" />,
       highlights: ['Timetable at a glance', 'Homework submissions', 'Report cards'],
+      bgClass: 'bg-slate-900/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:border-white/30',
+      iconClass: 'bg-white/5 border border-white/10 text-sky-400',
+      highlightIconClass: 'text-emerald-400',
     },
     {
       role: 'PARENT',
       title: 'Parents & Guardians',
-      icon: <HeartHandshake className="w-6 h-6 text-purple-600" />,
       desc: 'Stay informed with real-time insight into your children’s attendance records, grades, and tuition invoices.',
+      icon: <HeartHandshake className="w-6 h-6 text-purple-600" />,
       highlights: ['Multi-child overview', 'Instant attendance alerts', 'Online fee payments'],
+      bgClass: 'bg-slate-900/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:border-white/30',
+      iconClass: 'bg-white/5 border border-white/10 text-purple-400',
+      highlightIconClass: 'text-emerald-400',
     },
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans">
+    <div className="min-h-screen font-sans text-slate-200 relative">
+      {/* Fixed Background */}
+      <div 
+        className="fixed inset-0 z-[-1] bg-cover bg-center"
+        style={{ backgroundImage: 'url(/images/dashboard-bg.jpg)' }}
+      >
+        <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-[2px]"></div>
+      </div>
+      
       {/* Top Navigation */}
-      <header className="sticky top-0 z-40 bg-white/85 backdrop-blur-md border-b border-slate-200">
+      <header className="sticky top-0 z-40 bg-slate-900/30 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-sm shadow-indigo-200">
+            <div className="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 shadow-sm shadow-indigo-900/20 border border-indigo-500/30">
               <GraduationCap className="w-6 h-6" />
             </div>
-            <span className="text-xl font-bold tracking-tight text-slate-900">EduFlow</span>
+            <span className="text-xl font-bold tracking-tight text-white">EduFlow</span>
           </Link>
 
           <div className="flex items-center gap-3">
             <LanguageSwitcher variant="navbar" />
             <Link to="/login">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="text-slate-300 hover:text-white hover:bg-white/10">
                 {t('auth.signInHere')}
               </Button>
             </Link>
             <Link to="/admin/dashboard">
-              <Button variant="primary" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
+              <Button variant="primary" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />} className="bg-indigo-600 hover:bg-indigo-500 text-white border-none">
                 {t('landing.getStarted')}
               </Button>
             </Link>
@@ -114,90 +146,68 @@ export const LandingPage: React.FC = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative pt-16 pb-20 bg-gradient-to-b from-indigo-50/50 via-white to-slate-50 border-b border-slate-200">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-200/60 text-xs font-semibold text-indigo-700 mb-6 shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5" />
-            Next-Generation Education SaaS Architecture
+      <section className="relative pt-16 pb-20 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+            <div className="flex-1 text-left">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.1] mb-6">
+                Ta'lim —<br/>kelajak sari<br/>eng yaxshi yo'l!
+              </h1>
+              <p className="text-lg text-slate-300 max-w-lg mb-8 leading-relaxed">
+                EduFlow — o'quv markazlari uchun zamonaviy boshqaruv platformasi. O'quv jarayonini soddalashtiring, bolalarning rivojlanishini kuzating.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <Link to="/admin/dashboard">
+                  <Button size="lg" className="w-full sm:w-auto shadow-lg shadow-indigo-500/30 rounded-full" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                    Boshlash
+                  </Button>
+                </Link>
+                <Link to="/">
+                  <Button variant="ghost" size="lg" className="w-full sm:w-auto rounded-full font-semibold text-slate-200 hover:bg-white/10 hover:text-white">
+                    Biz bilan bog'lanish
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            
+            <div className="flex-1 relative">
+              <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[500px] h-[500px] bg-indigo-500/20 rounded-full blur-3xl opacity-50 z-0"></div>
+              <img src="/images/landing-hero.png" alt="Students" className="w-full h-auto max-w-lg mx-auto relative z-10 object-contain drop-shadow-2xl" />
+              
+              {/* Floating badges */}
+              <div className="absolute top-10 right-10 bg-slate-900/60 backdrop-blur-md p-3 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-white/10 transform rotate-6 z-20 animate-bounce" style={{animationDuration: '3s'}}>
+                <span className="text-indigo-400 font-bold text-sm">Bilim — kuch!</span>
+              </div>
+            </div>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15] mb-6">
-            {t('landing.heroTitle')}
-          </h1>
-
-          <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed">
-            {t('landing.heroSubtitle')}
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-            <Link to="/admin/dashboard">
-              <Button size="lg" className="w-full sm:w-auto" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                {t('landing.exploreAdmin')}
-              </Button>
-            </Link>
-            <Link to="/login">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                {t('landing.signInRole')}
-              </Button>
-            </Link>
-          </div>
-
-          {/* Interactive UI Mock Preview */}
-          <div className="relative mx-auto max-w-4xl rounded-2xl border border-slate-200/90 bg-white p-2 shadow-soft-lg">
-            <div className="rounded-xl overflow-hidden border border-slate-100 bg-slate-900/5 p-4 text-left">
-              {/* Fake window top bar */}
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200/70 mb-4">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-rose-400" />
-                  <div className="w-3 h-3 rounded-full bg-amber-400" />
-                  <div className="w-3 h-3 rounded-full bg-emerald-400" />
-                  <span className="ml-2 text-xs font-medium text-slate-500">EduFlow — Administrative Console</span>
-                </div>
-                <div className="text-[11px] font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">
-                  Active Session: Director Eleanor Vance
-                </div>
+          {/* Floating Feature Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 relative z-20">
+            <div className="p-6 flex flex-col gap-3 hover:-translate-y-1 transition-transform bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+              <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 border border-purple-500/30">
+                <Shield className="w-5 h-5" />
               </div>
-
-              {/* Sample Metrics inside mock */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-                <div className="p-3 bg-white rounded-lg border border-slate-200 shadow-2xs">
-                  <p className="text-[11px] font-medium text-slate-500">Total Enrolled</p>
-                  <p className="text-xl font-bold text-slate-900">148 Students</p>
-                  <span className="text-[10px] text-emerald-600 font-semibold">+12.8% this term</span>
-                </div>
-                <div className="p-3 bg-white rounded-lg border border-slate-200 shadow-2xs">
-                  <p className="text-[11px] font-medium text-slate-500">Active Teachers</p>
-                  <p className="text-xl font-bold text-slate-900">14 Faculty</p>
-                  <span className="text-[10px] text-slate-400">10 Active cohorts</span>
-                </div>
-                <div className="p-3 bg-white rounded-lg border border-slate-200 shadow-2xs">
-                  <p className="text-[11px] font-medium text-slate-500">Avg Attendance</p>
-                  <p className="text-xl font-bold text-emerald-600">94.2%</p>
-                  <span className="text-[10px] text-emerald-600 font-semibold">High compliance</span>
-                </div>
-                <div className="p-3 bg-white rounded-lg border border-slate-200 shadow-2xs">
-                  <p className="text-[11px] font-medium text-slate-500">Tuition Collected</p>
-                  <p className="text-xl font-bold text-indigo-600">$28,450</p>
-                  <span className="text-[10px] text-slate-400">8 Invoices pending</span>
-                </div>
+              <div>
+                <h3 className="font-bold text-white">Oson boshqaruv</h3>
+                <p className="text-xs text-slate-400 mt-1">Barcha jarayonlar bir joyda</p>
               </div>
-
-              {/* Sample table preview */}
-              <div className="bg-white rounded-lg border border-slate-200 p-3 shadow-2xs">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-xs font-semibold text-slate-800">Recent Enrolled Students</p>
-                  <span className="text-[11px] text-indigo-600 font-medium">View Directory →</span>
-                </div>
-                <div className="text-xs text-slate-600 space-y-1.5">
-                  <div className="flex items-center justify-between p-1.5 bg-slate-50 rounded">
-                    <span>Sophia Martinez — Full-Stack Web Development</span>
-                    <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-[10px] font-semibold">Active</span>
-                  </div>
-                  <div className="flex items-center justify-between p-1.5 bg-slate-50 rounded">
-                    <span>Ava Anderson — Applied Data Science & AI</span>
-                    <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-[10px] font-semibold">Active</span>
-                  </div>
-                </div>
+            </div>
+            <div className="p-6 flex flex-col gap-3 hover:-translate-y-1 transition-transform bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+              <div className="w-10 h-10 rounded-xl bg-sky-500/20 flex items-center justify-center text-sky-400 border border-sky-500/30">
+                <BookOpen className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-bold text-white">Onlayn darslar</h3>
+                <p className="text-xs text-slate-400 mt-1">Zamonaviy formatda</p>
+              </div>
+            </div>
+            <div className="p-6 flex flex-col gap-3 hover:-translate-y-1 transition-transform bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 border border-emerald-500/30">
+                <BarChart3 className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-bold text-white">Natija kuzatish</h3>
+                <p className="text-xs text-slate-400 mt-1">Rivojlanishni tahlil qiling</p>
               </div>
             </div>
           </div>
@@ -205,14 +215,19 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Features Grid */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 relative overflow-hidden">
+        {/* Decorative Blurred Blobs for Glassmorphism Effect */}
+        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-indigo-500/20 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob"></div>
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-500/20 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-32 left-1/3 w-[500px] h-[500px] bg-sky-500/20 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-4000"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-2">{t('landing.featuresTitle')}</h2>
-            <p className="text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-indigo-400 mb-2">{t('landing.featuresTitle')}</h2>
+            <p className="text-3xl font-extrabold text-white tracking-tight">
               {t('landing.featuresSubtitle')}
             </p>
-            <p className="text-sm text-slate-500 mt-3">
+            <p className="text-sm text-slate-300 mt-3">
               Built with an API-ready modular service layer for straightforward backend synchronization.
             </p>
           </div>
@@ -221,13 +236,13 @@ export const LandingPage: React.FC = () => {
             {features.map((f, i) => (
               <div
                 key={i}
-                className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-slate-300 hover:shadow-soft transition-all"
+                className={`p-6 rounded-3xl hover:-translate-y-1 transition-all duration-300 ${f.bgClass}`}
               >
-                <div className="p-3 bg-white rounded-xl border border-slate-200 shadow-2xs w-fit mb-4">
+                <div className={`p-3 rounded-2xl w-fit mb-5 flex items-center justify-center ${f.iconClass}`}>
                   {f.icon}
                 </div>
-                <h3 className="text-base font-bold text-slate-900 mb-2">{f.title}</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">{f.desc}</p>
+                <h3 className="text-lg font-bold text-white mb-2">{f.title}</h3>
+                <p className="text-sm text-slate-300 leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -235,28 +250,30 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Roles Section */}
-      <section className="py-20 bg-slate-50 border-t border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="pt-24 pb-20 relative overflow-hidden border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-2">{t('landing.rolesTitle')}</h2>
-            <p className="text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-indigo-400 mb-2">{t('landing.rolesTitle')}</h2>
+            <p className="text-3xl font-extrabold text-white tracking-tight">
               {t('landing.rolesSubtitle')}
             </p>
-            <p className="text-sm text-slate-500 mt-3">
+            <p className="text-sm text-slate-300 mt-3">
               Role-specific views provide focused experiences for administrators, faculty, learners, and families.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {roles.map((r, i) => (
-              <div key={i} className="p-6 rounded-2xl bg-white border border-slate-200 shadow-soft flex flex-col">
-                <div className="p-3 rounded-xl bg-slate-100 w-fit mb-4">{r.icon}</div>
-                <h3 className="text-base font-bold text-slate-900 mb-1">{r.title}</h3>
-                <p className="text-xs text-slate-500 mb-4 leading-relaxed">{r.desc}</p>
-                <ul className="space-y-2 mt-auto pt-4 border-t border-slate-100 text-xs text-slate-700">
+              <div key={i} className={`p-6 rounded-[20px] flex flex-col hover:-translate-y-1 transition-all duration-300 ${r.bgClass}`}>
+                <div className={`p-3 rounded-2xl w-fit mb-5 flex items-center justify-center ${r.iconClass}`}>
+                  {r.icon}
+                </div>
+                <h3 className="text-[17px] font-extrabold text-white mb-2">{r.title}</h3>
+                <p className="text-[13px] text-slate-300 mb-6 leading-relaxed flex-1">{r.desc}</p>
+                <ul className="space-y-3 mt-auto pt-5 border-t border-white/10 text-[12px] text-slate-200">
                   {r.highlights.map((h, hIdx) => (
                     <li key={hIdx} className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 ${r.highlightIconClass}`} />
                       <span>{h}</span>
                     </li>
                   ))}
@@ -268,7 +285,7 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Call To Action */}
-      <section className="py-20 bg-indigo-600 text-white relative overflow-hidden">
+      <section className="py-20 bg-slate-900/60 backdrop-blur-xl border-y border-white/10 text-white relative overflow-hidden">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-10">
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
             {t('landing.ctaTitle')}
@@ -278,12 +295,12 @@ export const LandingPage: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/admin/dashboard">
-              <Button size="lg" className="bg-white text-indigo-700 hover:bg-indigo-50 border-white shadow-sm">
+              <Button size="lg" className="bg-indigo-600 text-white hover:bg-indigo-500 border-none shadow-[0_8px_30px_rgb(99,102,241,0.2)]">
                 {t('landing.openAdmin')}
               </Button>
             </Link>
             <Link to="/login">
-              <Button size="lg" variant="outline" className="border-indigo-300 text-white hover:bg-indigo-700">
+              <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 !bg-transparent">
                 {t('landing.signInRole')}
               </Button>
             </Link>
@@ -292,7 +309,7 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Modern Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-12 text-xs border-t border-slate-800">
+      <footer className="bg-slate-950/80 backdrop-blur-xl text-slate-400 py-12 text-xs border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-white font-bold text-sm">
             <GraduationCap className="w-5 h-5 text-indigo-400" />
