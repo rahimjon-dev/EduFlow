@@ -23,12 +23,12 @@ export const StatCard: React.FC<StatCardProps> = ({
   description,
 }) => {
   const colorMap = {
-    indigo: 'bg-indigo-50 text-indigo-600 border-indigo-100',
-    emerald: 'bg-emerald-50 text-emerald-600 border-emerald-100',
-    amber: 'bg-amber-50 text-amber-600 border-amber-100',
-    rose: 'bg-rose-50 text-rose-600 border-rose-100',
-    sky: 'bg-sky-50 text-sky-600 border-sky-100',
-    purple: 'bg-purple-50 text-purple-600 border-purple-100',
+    indigo: 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30',
+    emerald: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+    amber: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+    rose: 'bg-rose-500/20 text-rose-400 border-rose-500/30',
+    sky: 'bg-sky-500/20 text-sky-400 border-sky-500/30',
+    purple: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
   };
 
   const isPositive = change !== undefined && change >= 0;
@@ -36,14 +36,14 @@ export const StatCard: React.FC<StatCardProps> = ({
   return (
     <Card hover className="p-5 sm:p-6 relative">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">{title}</span>
+        <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{title}</span>
         <div className={cn('p-2.5 rounded-xl border flex items-center justify-center', colorMap[iconColor])}>
           {icon}
         </div>
       </div>
 
       <div className="mt-3 flex items-baseline gap-2">
-        <span className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">{value}</span>
+        <span className="text-2xl sm:text-3xl font-bold tracking-tight text-white">{value}</span>
       </div>
 
       {(change !== undefined || description) && (
@@ -52,14 +52,14 @@ export const StatCard: React.FC<StatCardProps> = ({
             <span
               className={cn(
                 'inline-flex items-center gap-0.5 font-semibold px-1.5 py-0.5 rounded-md',
-                isPositive ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
+                isPositive ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
               )}
             >
               {isPositive ? <ArrowUpRight className="h-3.5 w-3.5" /> : <ArrowDownRight className="h-3.5 w-3.5" />}
               {Math.abs(change)}%
             </span>
           )}
-          <span className="text-slate-500">{description || changeLabel}</span>
+          <span className="text-slate-400">{description || changeLabel}</span>
         </div>
       )}
     </Card>

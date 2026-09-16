@@ -21,6 +21,10 @@ export default {
           900: '#312e81',
           950: '#1e1b4b',
         },
+        sidebar: {
+          DEFAULT: '#0B1221',
+          hover: '#1a2333',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],

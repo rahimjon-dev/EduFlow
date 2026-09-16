@@ -52,25 +52,30 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex font-sans relative">
+    <div 
+      className="min-h-screen flex font-sans relative bg-cover bg-center"
+      style={{ backgroundImage: 'url(/images/dashboard-bg.jpg)' }}
+    >
+      <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-[2px] z-0 pointer-events-none"></div>
+
       {/* Top right language switcher */}
       <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20">
         <LanguageSwitcher variant="navbar" />
       </div>
 
       {/* Left Form Section */}
-      <div className="flex-1 flex flex-col justify-center px-4 sm:px-6 lg:px-20 xl:px-24">
-        <div className="mx-auto w-full max-w-sm lg:max-w-md py-12">
+      <div className="flex-1 flex flex-col justify-center px-4 sm:px-6 lg:px-20 xl:px-24 z-10 relative">
+        <div className="mx-auto w-full max-w-sm lg:max-w-md py-12 px-8 bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
           {/* Header */}
           <Link to="/" className="inline-flex items-center gap-2.5 mb-8 group">
             <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200 transition-transform group-hover:scale-105">
               <GraduationCap className="w-6 h-6" />
             </div>
-            <span className="text-2xl font-extrabold tracking-tight text-slate-900">EduFlow</span>
+            <span className="text-2xl font-extrabold tracking-tight text-white">EduFlow</span>
           </Link>
           
-          <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-2">{t('auth.createAccount')}</h2>
-          <p className="text-sm text-slate-500 mb-8">
+          <h2 className="text-3xl font-extrabold tracking-tight text-white mb-2">{t('auth.createAccount')}</h2>
+          <p className="text-sm text-slate-400 mb-8">
             Join the unified educational ecosystem today.
           </p>
 
@@ -83,7 +88,7 @@ export const RegisterPage: React.FC = () => {
                 error={errors.fullName}
                 placeholder="e.g. Eleanor Vance"
                 required
-                className="bg-slate-50/50 focus:bg-white transition-colors"
+                className="bg-black/20 border-white/10 text-white placeholder-slate-500 focus:bg-black/30 transition-colors"
               />
 
               <Input
@@ -94,7 +99,7 @@ export const RegisterPage: React.FC = () => {
                 error={errors.email}
                 placeholder="name@eduflow.edu"
                 required
-                className="bg-slate-50/50 focus:bg-white transition-colors"
+                className="bg-black/20 border-white/10 text-white placeholder-slate-500 focus:bg-black/30 transition-colors"
               />
 
               <Select
@@ -107,7 +112,7 @@ export const RegisterPage: React.FC = () => {
                   { value: 'PARENT', label: `${t('roles.parent')} - Child progress` },
                   { value: 'ADMIN', label: `${t('roles.admin')} - Full system control` },
                 ]}
-                className="bg-slate-50/50 focus:bg-white transition-colors"
+                className="bg-black/20 border-white/10 text-white focus:bg-black/30 transition-colors"
               />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -119,7 +124,7 @@ export const RegisterPage: React.FC = () => {
                   error={errors.password}
                   placeholder="••••••••"
                   required
-                  className="bg-slate-50/50 focus:bg-white transition-colors"
+                  className="bg-black/20 border-white/10 text-white placeholder-slate-500 focus:bg-black/30 transition-colors"
                 />
 
                 <Input
@@ -130,7 +135,7 @@ export const RegisterPage: React.FC = () => {
                   error={errors.confirmPassword}
                   placeholder="••••••••"
                   required
-                  className="bg-slate-50/50 focus:bg-white transition-colors"
+                  className="bg-black/20 border-white/10 text-white placeholder-slate-500 focus:bg-black/30 transition-colors"
                 />
               </div>
             </div>
@@ -148,7 +153,7 @@ export const RegisterPage: React.FC = () => {
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-slate-500">
+          <p className="mt-10 text-center text-sm text-slate-400">
             {t('auth.alreadyHaveAccount')}{' '}
             <Link to="/login" className="font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
               {t('auth.signInHere')}
@@ -158,7 +163,7 @@ export const RegisterPage: React.FC = () => {
       </div>
 
       {/* Right Image/Branding Section */}
-      <div className="hidden lg:block lg:flex-1 relative w-full h-full overflow-hidden bg-slate-900">
+      <div className="hidden lg:block lg:flex-1 relative w-full h-full overflow-hidden bg-slate-900 border-l border-white/10 z-10">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img 

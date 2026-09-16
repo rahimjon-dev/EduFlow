@@ -31,13 +31,13 @@ export const SchedulePage: React.FC = () => {
   }, [fetchSchedule]);
 
   const colorStyles: Record<string, string> = {
-    indigo: 'bg-indigo-50/80 border-indigo-200 text-indigo-900 border-l-4 border-l-indigo-600',
-    emerald: 'bg-emerald-50/80 border-emerald-200 text-emerald-900 border-l-4 border-l-emerald-600',
-    violet: 'bg-violet-50/80 border-violet-200 text-violet-900 border-l-4 border-l-violet-600',
-    amber: 'bg-amber-50/80 border-amber-200 text-amber-900 border-l-4 border-l-amber-600',
-    rose: 'bg-rose-50/80 border-rose-200 text-rose-900 border-l-4 border-l-rose-600',
-    teal: 'bg-teal-50/80 border-teal-200 text-teal-900 border-l-4 border-l-teal-600',
-    sky: 'bg-sky-50/80 border-sky-200 text-sky-900 border-l-4 border-l-sky-600',
+    indigo: 'bg-indigo-900/30 border-indigo-500/30 text-indigo-100 border-l-4 border-l-indigo-500',
+    emerald: 'bg-emerald-900/30 border-emerald-500/30 text-emerald-100 border-l-4 border-l-emerald-500',
+    violet: 'bg-violet-900/30 border-violet-500/30 text-violet-100 border-l-4 border-l-violet-500',
+    amber: 'bg-amber-900/30 border-amber-500/30 text-amber-100 border-l-4 border-l-amber-500',
+    rose: 'bg-rose-900/30 border-rose-500/30 text-rose-100 border-l-4 border-l-rose-500',
+    teal: 'bg-teal-900/30 border-teal-500/30 text-teal-100 border-l-4 border-l-teal-500',
+    sky: 'bg-sky-900/30 border-sky-500/30 text-sky-100 border-l-4 border-l-sky-500',
   };
 
   const renderClassCard = (session: ClassSession) => {
@@ -49,7 +49,7 @@ export const SchedulePage: React.FC = () => {
       >
         <div className="flex items-center justify-between gap-1 mb-1.5">
           <span className="text-xs font-bold truncate">{session.courseTitle}</span>
-          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/80 shrink-0">
+          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-black/20 text-white shrink-0">
             {session.type || 'LECTURE'}
           </span>
         </div>
@@ -115,10 +115,10 @@ export const SchedulePage: React.FC = () => {
             const daySessions = sessions.filter((s) => s.dayOfWeek === day);
             const dayName = t(`schedule.days.${day}`) || day;
             return (
-              <div key={day} className="flex flex-col bg-slate-50/70 rounded-2xl border border-slate-200/80 p-3 min-h-[400px]">
+              <div key={day} className="flex flex-col bg-slate-900/40 rounded-2xl border border-white/10 p-3 min-h-[400px]">
                 <div className="flex items-center justify-between pb-3 border-b border-slate-200/70 mb-3 px-1">
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-800">{dayName}</span>
-                  <span className="text-[11px] font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">
+                  <span className="text-[11px] font-semibold text-white bg-indigo-500/30 px-2 py-0.5 rounded-full">
                     {daySessions.length}
                   </span>
                 </div>
@@ -150,7 +150,7 @@ export const SchedulePage: React.FC = () => {
                   className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ${
                     selectedDay === day
                       ? 'bg-indigo-600 text-white shadow-sm'
-                      : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
+                      : 'bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10'
                   }`}
                 >
                   {dayName}

@@ -169,7 +169,7 @@ export const GroupsPage: React.FC = () => {
                 </div>
               </CardContent>
 
-              <div className="px-5 py-3 bg-slate-50/70 border-t border-slate-100 flex items-center justify-end gap-2">
+              <div className="px-5 py-3 bg-white/5 border-t border-white/10 flex items-center justify-end gap-2">
                 <Button
                   variant="ghost"
                   size="sm"
