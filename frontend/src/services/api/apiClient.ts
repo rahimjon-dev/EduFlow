@@ -19,13 +19,26 @@ export class ApiError extends Error {
 }
 
 export interface RequestOptions extends RequestInit {
-  params?: Record<string, string | number | boolean | undefined>;
+  params?: Record<string, string | number | boolean | undefined | null>;
 }
+
+export const getToken = (): string | null => {
+  return localStorage.getItem('eduflow_token') || localStorage.getItem('eduflow_auth_token');
+};
+
+export const setToken = (token: string): void => {
+  localStorage.setItem('eduflow_token', token);
+};
+
+export const clearToken = (): void => {
+  localStorage.removeItem('eduflow_token');
+  localStorage.removeItem('eduflow_auth_token');
+};
 
 /**
  * Simulates network latency for fallback / offline mode.
  */
-export const simulateLatency = (ms: number = 200): Promise<void> => {
+export const simulateLatency = (ms: number = 150): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
@@ -35,21 +48,21 @@ export const simulateLatency = (ms: number = 200): Promise<void> => {
 export async function request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
   const { params, ...customConfig } = options;
 
-  let url = `${API_BASE_URL}${endpoint}`;
+  let url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
   if (params) {
     const searchParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
+      if (value !== undefined && value !== null && value !== '') {
         searchParams.append(key, String(value));
       }
     });
     const queryString = searchParams.toString();
     if (queryString) {
-      url += `?${queryString}`;
+      url += (url.includes('?') ? '&' : '?') + queryString;
     }
   }
 
-  const token = localStorage.getItem('eduflow_token') || localStorage.getItem('eduflow_auth_token');
+  const token = getToken();
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -65,10 +78,37 @@ export async function request<T>(endpoint: string, options: RequestOptions = {})
 
   try {
     const response = await fetch(url, config);
-    const data = await response.json();
+
+    // Handle 204 No Content
+    if (response.status === 204) {
+      return {} as T;
+    }
+
+    let data: any = null;
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    } else {
+      const text = await response.text();
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = text;
+      }
+    }
 
     if (!response.ok) {
-      throw new ApiError(data.error || data.message || 'API so‘rovi muvaffaqiyatsiz yakunlandi', response.status, data);
+      let errMsg = 'API so‘rovi muvaffaqiyatsiz yakunlandi';
+      if (data && typeof data === 'object') {
+        if (data.error) {
+          errMsg = typeof data.error === 'string' ? data.error : JSON.stringify(data.error);
+        } else if (data.message) {
+          errMsg = data.message;
+        } else if (data.issues && Array.isArray(data.issues)) {
+          errMsg = data.issues.map((i: any) => i.message).join(', ');
+        }
+      }
+      throw new ApiError(errMsg, response.status, data);
     }
 
     // If API returns wrapped response { success: true, data: [...] }
@@ -87,8 +127,8 @@ export async function request<T>(endpoint: string, options: RequestOptions = {})
 
 export const apiClient = {
   get: <T>(endpoint: string, params?: Record<string, any>) => request<T>(endpoint, { method: 'GET', params }),
-  post: <T>(endpoint: string, body?: any) => request<T>(endpoint, { method: 'POST', body: JSON.stringify(body) }),
-  put: <T>(endpoint: string, body?: any) => request<T>(endpoint, { method: 'PUT', body: JSON.stringify(body) }),
-  patch: <T>(endpoint: string, body?: any) => request<T>(endpoint, { method: 'PATCH', body: JSON.stringify(body) }),
+  post: <T>(endpoint: string, body?: any) => request<T>(endpoint, { method: 'POST', body: body !== undefined ? JSON.stringify(body) : undefined }),
+  put: <T>(endpoint: string, body?: any) => request<T>(endpoint, { method: 'PUT', body: body !== undefined ? JSON.stringify(body) : undefined }),
+  patch: <T>(endpoint: string, body?: any) => request<T>(endpoint, { method: 'PATCH', body: body !== undefined ? JSON.stringify(body) : undefined }),
   delete: <T>(endpoint: string) => request<T>(endpoint, { method: 'DELETE' }),
 };

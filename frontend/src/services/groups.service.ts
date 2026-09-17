@@ -116,12 +116,15 @@ class GroupsService {
         teacherId: groupData.teacherId,
       });
       if (created && created.id) {
-        return {
+        const groupObj: Group = {
           ...groupData,
           id: created.id,
           studentsCount: 0,
           studentIds: [],
         };
+        this.groups.unshift(groupObj);
+        this.save();
+        return groupObj;
       }
     } catch {
       // Fallback

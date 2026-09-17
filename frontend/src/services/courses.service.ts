@@ -107,12 +107,15 @@ class CoursesService {
         price: courseData.price,
       });
       if (created && created.id) {
-        return {
+        const courseObj: Course = {
           ...courseData,
           id: created.id,
           createdAt: new Date().toISOString().split('T')[0],
           enrolledStudentsCount: 0,
         };
+        this.courses.unshift(courseObj);
+        this.save();
+        return courseObj;
       }
     } catch {
       // Fallback

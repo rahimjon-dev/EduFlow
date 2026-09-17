@@ -142,6 +142,46 @@ class StudentsService {
    * Create new student
    */
   async create(studentData: Omit<Student, 'id' | 'createdAt'>): Promise<Student> {
+    try {
+      const fullName = `${studentData.firstName} ${studentData.lastName}`.trim();
+      const registeredUser = await apiClient.post<any>('/auth/register', {
+        fullName,
+        email: studentData.email,
+        password: 'student123',
+        role: 'STUDENT',
+      });
+
+      let realStudentId = `stu-${Date.now()}`;
+      if (registeredUser && registeredUser.id) {
+        // Fetch students list to find the student profile record associated with this user
+        try {
+          const allStudents = await apiClient.get<any[]>('/students');
+          const matched = allStudents.find((s) => s.userId === registeredUser.id || s.user?.email === studentData.email);
+          if (matched) {
+            realStudentId = matched.id;
+            if (studentData.groupId && studentData.groupId !== 'grp-1') {
+              await apiClient.patch(`/students/${realStudentId}`, { groupId: studentData.groupId });
+            }
+          }
+        } catch {
+          // If fetching fails, proceed with returned user id
+          realStudentId = registeredUser.id;
+        }
+
+        const newStudent: Student = {
+          ...studentData,
+          id: realStudentId,
+          createdAt: new Date().toISOString().split('T')[0],
+        };
+        this.students.unshift(newStudent);
+        this.save();
+        return newStudent;
+      }
+    } catch (err: any) {
+      // If error is not connection error, propagate or fallback
+      console.warn('Real API student registration fallback:', err?.message);
+    }
+
     await simulateLatency(200);
     const newStudent: Student = {
       ...studentData,

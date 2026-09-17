@@ -112,10 +112,13 @@ class TeachersService {
         password: 'teacher123',
       });
       if (created && created.id) {
-        return {
+        const teacherObj: Teacher = {
           ...teacherData,
           id: created.id,
         };
+        this.teachers.unshift(teacherObj);
+        this.save();
+        return teacherObj;
       }
     } catch {
       // Fallback

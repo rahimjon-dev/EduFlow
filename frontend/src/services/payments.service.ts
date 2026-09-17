@@ -102,11 +102,14 @@ class PaymentsService {
         status: paymentData.status,
       });
       if (created && created.id) {
-        return {
+        const paymentObj: Payment = {
           ...paymentData,
           id: created.id,
           invoiceNumber: `INV-2026-${created.id.slice(0, 4).toUpperCase()}`,
         };
+        this.payments.unshift(paymentObj);
+        this.save();
+        return paymentObj;
       }
     } catch {
       // Fallback

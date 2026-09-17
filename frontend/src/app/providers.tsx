@@ -3,6 +3,8 @@ import { Navigate } from 'react-router-dom';
 import type { User, UserRole, LoginCredentials } from '../types';
 import { LanguageProvider } from '../i18n';
 
+import { getToken, setToken, clearToken, apiClient, ApiError } from '../services/api/apiClient';
+
 interface AuthContextType {
   currentUser: User | null;
   isAuthenticated: boolean;
@@ -12,8 +14,6 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-const API_BASE = 'http://localhost:5000/api';
 
 export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
@@ -33,27 +33,54 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.setItem('eduflow_user', JSON.stringify(currentUser));
     } else {
       localStorage.removeItem('eduflow_user');
-      localStorage.removeItem('eduflow_token');
+      clearToken();
     }
   }, [currentUser]);
+
+  // Synchronize and verify current user with backend session
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      apiClient.get<any>('/auth/me')
+        .then((profile) => {
+          if (profile && profile.id) {
+            const role = (profile.role || 'STUDENT') as UserRole;
+            setCurrentUser((prev) => ({
+              id: profile.id,
+              name: profile.fullName || 'Foydalanuvchi',
+              email: profile.email,
+              role,
+              avatar:
+                prev?.avatar ||
+                (role === 'STUDENT'
+                  ? 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80'
+                  : role === 'TEACHER'
+                  ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
+                  : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'),
+              createdAt: profile.createdAt || prev?.createdAt || new Date().toISOString(),
+            }));
+          }
+        })
+        .catch(() => {
+          // If token expired or invalid, keep existing cache or clear if unauthorized
+        });
+    }
+  }, []);
 
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
     const targetEmail = credentials.email.trim();
     const targetPassword = credentials.password;
 
     try {
-      const response = await fetch(`${API_BASE}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: targetEmail, password: targetPassword }),
+      const result = await apiClient.post<any>('/auth/login', {
+        email: targetEmail,
+        password: targetPassword,
       });
 
-      const result = await response.json();
+      if (result && result.token) {
+        const { token, role, user: apiUser } = result;
+        setToken(token);
 
-      if (response.ok && result.success) {
-        const { token, role, user: apiUser } = result.data;
-        localStorage.setItem('eduflow_token', token);
-        
         const formattedUser: User = {
           id: apiUser.id,
           name: apiUser.fullName || apiUser.name || 'Foydalanuvchi',
@@ -71,10 +98,15 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
         setCurrentUser(formattedUser);
         return true;
       } else {
-        throw new Error(result.error || "Email/Login yoki parol noto'g'ri");
+        throw new Error("Email yoki parol noto'g'ri");
       }
     } catch (err: any) {
-      // Fallback for offline demo mode if backend server is not running
+      // If ApiError with 401 or specific backend message, propagate real error
+      if (err instanceof ApiError && err.status !== 0) {
+        throw err;
+      }
+
+      // Offline / fallback demo mode if backend is unreachable
       const role: UserRole = credentials.role || (targetEmail.toLowerCase() === 'admin' ? 'ADMIN' : 'STUDENT');
       const roleNames: Record<UserRole, string> = {
         ADMIN: 'Bosh Administrator',
@@ -108,8 +140,7 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     setCurrentUser(null);
-    localStorage.removeItem('eduflow_user');
-    localStorage.removeItem('eduflow_token');
+    clearToken();
   };
 
   const setRole = (role: UserRole) => {

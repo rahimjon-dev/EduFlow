@@ -28,13 +28,14 @@ export const ParentDashboardPage: React.FC = () => {
   useEffect(() => {
     const loadParentData = async () => {
       try {
-        setLoading(true);
-        // Load demo child: Alexander Wright (stu-1)
+        const allStudents = await studentsService.getAll({ pageSize: 1 });
+        const targetStudentId = allStudents.data[0]?.id || 'stu-1';
+
         const [stu, grd, att, pay] = await Promise.all([
-          studentsService.getById('stu-1'),
-          gradesService.getAll('stu-1'),
-          attendanceService.getStudentAttendance('stu-1'),
-          paymentsService.getAll({ studentId: 'stu-1' }),
+          studentsService.getById(targetStudentId),
+          gradesService.getAll(targetStudentId),
+          attendanceService.getStudentAttendance(targetStudentId),
+          paymentsService.getAll({ studentId: targetStudentId }),
         ]);
 
         setChild(stu);

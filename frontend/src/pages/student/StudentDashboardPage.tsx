@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, Award, BookMarked, CreditCard, CheckCircle2 } from 'lucide-react';
+import { Calendar, Award, BookMarked, CreditCard, CheckCircle2, BookOpen } from 'lucide-react';
 import { useTranslation } from '../../i18n';
 import { PageHeader } from '../../components/common/PageHeader';
 import { StatCard } from '../../components/common/StatCard';
@@ -13,8 +13,11 @@ import { homeworkService } from '../../services/homework.service';
 import { scheduleService } from '../../services/schedule.service';
 import type { Grade, Homework, ClassSession } from '../../types';
 
+import { useAuth } from '../../app/providers';
+
 export const StudentDashboardPage: React.FC = () => {
   const { t } = useTranslation();
+  const { currentUser } = useAuth();
   const [grades, setGrades] = useState<Grade[]>([]);
   const [homeworks, setHomeworks] = useState<Homework[]>([]);
   const [classes, setClasses] = useState<ClassSession[]>([]);
@@ -27,8 +30,8 @@ export const StudentDashboardPage: React.FC = () => {
       try {
         setLoading(true);
         const [gList, hwList, schList] = await Promise.all([
-          gradesService.getAll('stu-1'),
-          homeworkService.getAll('grp-1'),
+          gradesService.getAll(),
+          homeworkService.getAll(),
           scheduleService.getAll({ dayOfWeek: 'Monday' }),
         ]);
         setGrades(gList);
@@ -43,11 +46,13 @@ export const StudentDashboardPage: React.FC = () => {
 
   if (loading) return <LoadingState message={t('common.loading')} />;
 
+  const displayName = currentUser?.name || 'Talaba';
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Salom, Azizbek! 👋</h1>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Salom, {displayName}! 👋</h1>
           <p className="text-sm text-slate-300 mt-1">Bugungi darslar va harakatlar</p>
         </div>
       </div>
