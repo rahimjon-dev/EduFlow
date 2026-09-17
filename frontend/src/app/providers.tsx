@@ -8,7 +8,7 @@ import { getToken, setToken, clearToken, apiClient, ApiError } from '../services
 interface AuthContextType {
   currentUser: User | null;
   isAuthenticated: boolean;
-  login: (credentials: LoginCredentials) => Promise<boolean>;
+  login: (credentials: LoginCredentials) => Promise<UserRole>;
   logout: () => void;
   setRole: (role: UserRole) => void;
 }
@@ -67,7 +67,7 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = async (credentials: LoginCredentials): Promise<boolean> => {
+  const login = async (credentials: LoginCredentials): Promise<UserRole> => {
     const targetEmail = credentials.email.trim();
     const targetPassword = credentials.password;
 
@@ -81,22 +81,24 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
         const { token, role, user: apiUser } = result;
         setToken(token);
 
+        const resolvedRole = (role || 'STUDENT') as UserRole;
+
         const formattedUser: User = {
           id: apiUser.id,
           name: apiUser.fullName || apiUser.name || 'Foydalanuvchi',
           email: apiUser.email,
-          role: role as UserRole,
+          role: resolvedRole,
           avatar:
-            role === 'STUDENT'
+            resolvedRole === 'STUDENT'
               ? 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80'
-              : role === 'TEACHER'
+              : resolvedRole === 'TEACHER'
               ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
               : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
           createdAt: apiUser.createdAt || new Date().toISOString(),
         };
 
         setCurrentUser(formattedUser);
-        return true;
+        return resolvedRole;
       } else {
         throw new Error("Email yoki parol noto'g'ri");
       }
@@ -107,7 +109,8 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       // Offline / fallback demo mode if backend is unreachable
-      const role: UserRole = credentials.role || (targetEmail.toLowerCase() === 'admin' ? 'ADMIN' : 'STUDENT');
+      const isExplicitAdmin = (targetEmail.toLowerCase() === 'admin' || targetEmail.toLowerCase() === 'admin@eduflow.uz' || targetEmail.toLowerCase() === 'admin@eduflow.edu') && targetPassword === '0603';
+      const role: UserRole = isExplicitAdmin ? 'ADMIN' : (credentials.role || (targetEmail.toLowerCase() === 'admin' ? 'ADMIN' : 'STUDENT'));
       const roleNames: Record<UserRole, string> = {
         ADMIN: 'Bosh Administrator',
         TEACHER: 'Anvar Narzullayev',
@@ -115,7 +118,7 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
         PARENT: 'Ziyoda Karimova (Ota-ona)',
       };
 
-      if (targetEmail.toLowerCase() === 'admin' && targetPassword !== '0603') {
+      if ((targetEmail.toLowerCase() === 'admin' || targetEmail.toLowerCase() === 'admin@eduflow.uz' || targetEmail.toLowerCase() === 'admin@eduflow.edu') && targetPassword !== '0603') {
         throw new Error("Admin paroli noto'g'ri (parol: 0603)");
       }
 
@@ -134,7 +137,7 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
       };
 
       setCurrentUser(mockUser);
-      return true;
+      return role;
     }
   };
 

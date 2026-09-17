@@ -110,7 +110,6 @@ export const RegisterPage: React.FC = () => {
                   { value: 'STUDENT', label: `${t('roles.student')} - Classes & grades` },
                   { value: 'TEACHER', label: `${t('roles.teacher')} - Classes & students` },
                   { value: 'PARENT', label: `${t('roles.parent')} - Child progress` },
-                  { value: 'ADMIN', label: `${t('roles.admin')} - Full system control` },
                 ]}
                 className="bg-black/20 border-white/10 text-white focus:bg-black/30 transition-colors"
               />

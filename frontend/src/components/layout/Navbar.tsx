@@ -8,7 +8,6 @@ import {
   ChevronDown,
   LogOut,
   User as UserIcon,
-  Shield,
   BookOpen,
   GraduationCap,
   HeartHandshake,
@@ -59,7 +58,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   }, []);
 
   const roles: { role: UserRole; label: string; desc: string; icon: React.ReactNode; path: string }[] = [
-    { role: 'ADMIN', label: t('roles.admin'), desc: t('roles.adminDesc'), icon: <Shield className="w-4 h-4 text-indigo-600" />, path: '/admin/dashboard' },
     { role: 'TEACHER', label: t('roles.teacher'), desc: t('roles.teacherDesc'), icon: <BookOpen className="w-4 h-4 text-emerald-600" />, path: '/teacher/dashboard' },
     { role: 'STUDENT', label: t('roles.student'), desc: t('roles.studentDesc'), icon: <GraduationCap className="w-4 h-4 text-sky-600" />, path: '/student/dashboard' },
     { role: 'PARENT', label: t('roles.parent'), desc: t('roles.parentDesc'), icon: <HeartHandshake className="w-4 h-4 text-purple-600" />, path: '/parent/dashboard' },

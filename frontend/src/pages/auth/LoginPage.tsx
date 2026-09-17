@@ -11,32 +11,39 @@ import { LanguageSwitcher } from '../../components/common/LanguageSwitcher';
 
 export const LoginPage: React.FC = () => {
   const { t } = useTranslation();
-  const [email, setEmail] = useState('admin@eduflow.edu');
-  const [password, setPassword] = useState('••••••••');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
-  const [selectedRole, setSelectedRole] = useState<UserRole>('ADMIN');
+  const [selectedRole, setSelectedRole] = useState<UserRole>('STUDENT');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleRoleQuickSelect = (r: UserRole, defaultEmail: string) => {
+  const handleRoleQuickSelect = (r: UserRole) => {
     setSelectedRole(r);
-    setEmail(defaultEmail);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) {
-      setError('Please enter your email address');
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail) {
+      setError('Login, telefon yoki emailni kiriting');
+      return;
+    }
+    if (!password) {
+      setError('Parolni kiriting');
       return;
     }
 
     try {
       setLoading(true);
       setError('');
-      await login({ email, password, rememberMe, role: selectedRole });
+      const isExplicitAdmin = (trimmedEmail.toLowerCase() === 'admin' || trimmedEmail.toLowerCase() === 'admin@eduflow.uz' || trimmedEmail.toLowerCase() === 'admin@eduflow.edu') && password === '0603';
+      const targetRole: UserRole = isExplicitAdmin ? 'ADMIN' : selectedRole;
+
+      const loggedInRole = await login({ email: trimmedEmail, password, rememberMe, role: targetRole });
 
       const redirects: Record<UserRole, string> = {
         ADMIN: '/admin/dashboard',
@@ -44,9 +51,10 @@ export const LoginPage: React.FC = () => {
         STUDENT: '/student/dashboard',
         PARENT: '/parent/dashboard',
       };
-      navigate(redirects[selectedRole]);
+      const finalRole = (loggedInRole || targetRole) as UserRole;
+      navigate(redirects[finalRole] || '/student/dashboard');
     } catch (err: any) {
-      setError(err.message || 'Login failed');
+      setError(err.message || 'Kirishda xatolik yuz berdi');
     } finally {
       setLoading(false);
     }
@@ -78,9 +86,9 @@ export const LoginPage: React.FC = () => {
           <h2 className="text-2xl font-bold tracking-tight text-white mb-2">Tizimga kirish</h2>
           <p className="text-sm text-slate-400 mb-6">Hisobingiz orqali davom eting</p>
 
-          {/* Role Tabs */}
+          {/* Role Tabs: Only TEACHER, STUDENT, PARENT (Admin enters via default login: admin / 0603) */}
           <div className="flex p-1 bg-black/30 rounded-lg mb-6 border border-white/5">
-            {(['ADMIN', 'TEACHER', 'STUDENT', 'PARENT'] as UserRole[]).map((r) => {
+            {(['TEACHER', 'STUDENT', 'PARENT'] as UserRole[]).map((r) => {
               const labels = {
                 ADMIN: 'Admin',
                 TEACHER: "O'qituvchi",
@@ -91,7 +99,7 @@ export const LoginPage: React.FC = () => {
                 <button
                   key={r}
                   type="button"
-                  onClick={() => handleRoleQuickSelect(r, r === 'ADMIN' ? 'admin@eduflow.edu' : 'user@eduflow.edu')}
+                  onClick={() => handleRoleQuickSelect(r)}
                   className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${
                     selectedRole === r
                       ? 'bg-indigo-600 text-white shadow-sm'
@@ -124,7 +132,7 @@ export const LoginPage: React.FC = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full bg-black/20 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
-                    placeholder="+998 90 123 45 67"
+                    placeholder="Login, telefon yoki email"
                     required
                   />
                 </div>

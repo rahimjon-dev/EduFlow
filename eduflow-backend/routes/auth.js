@@ -70,7 +70,7 @@ router.post('/login', validate(loginSchema), async (req, res, next) => {
       where: {
         OR: [
           { email: searchEmail },
-          ...(searchEmail === 'admin' ? [{ email: 'admin@eduflow.uz' }] : [])
+          ...(searchEmail === 'admin' || searchEmail === 'admin@eduflow.edu' || searchEmail === 'admin@eduflow.uz' ? [{ email: 'admin@eduflow.uz' }] : [])
         ]
       }
     });
