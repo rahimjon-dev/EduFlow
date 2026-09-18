@@ -98,6 +98,21 @@ app.use('/api/payments', paymentsRoutes);
 app.use('/api/grades', gradesRoutes);
 app.use('/api/homework', homeworkRoutes);
 
+const path = require('path');
+const fs = require('fs');
+
+// Serve frontend SPA in production if built
+const frontendDist = path.join(__dirname, '../frontend/dist');
+if (fs.existsSync(frontendDist)) {
+  app.use(express.static(frontendDist));
+  app.get('*', (req, res, next) => {
+    if (req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/docs')) {
+      return next();
+    }
+    res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+}
+
 // 404 Route handler
 app.use((req, res) => {
   res.status(404).json({
