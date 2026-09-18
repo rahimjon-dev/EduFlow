@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "EduFlow",
+    "slug": "eduflow-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": false,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.eduflow.mobile"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a69ef402-c732-49e1-a63f-99a388fd06e3"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a69ef402-c732-49e1-a63f-99a388fd06e3"
+      }
+    },
+    "plugins": [
+      "expo-asset",
+      "expo-font"
+    ]
+  }
+}
