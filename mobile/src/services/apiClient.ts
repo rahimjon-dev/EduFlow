@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 
-// Real-time backend server
-const defaultHost = 'http://192.168.1.11:5000/api';
+// Real-time backend server (defaults to live cloud API with local override support)
+const defaultHost = 'https://eduflow-reny.onrender.com/api';
 
 let currentApiUrl = defaultHost;
 let memoryToken: string | null = null;

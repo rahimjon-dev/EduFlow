@@ -142,6 +142,19 @@ npm run dev
 
 ---
 
+### 3.1 Docker Orqali PostgreSQL ni 1 Buyruqda Ishga Tushirish (Ixtiyoriy)
+
+Agar kompyuteringizda PostgreSQL o'rnatilmagan bo'lsa:
+```bash
+# PostgreSQL va Adminer (http://localhost:8080) ni ishga tushirish:
+npm run docker:up
+
+# To'xtatish:
+npm run docker:down
+```
+
+---
+
 ### 4. Mobil Ilovani Ishga Tushirish
 
 ```bash

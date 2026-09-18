@@ -233,11 +233,15 @@ async function main() {
   console.log('Database seeding completed successfully!');
 }
 
-main()
-  .catch((e) => {
-    console.error('Seeding error:', e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+if (require.main === module) {
+  main()
+    .catch((e) => {
+      console.error('Seeding error:', e);
+      process.exit(1);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+}
+
+module.exports = { seedDatabase: main };

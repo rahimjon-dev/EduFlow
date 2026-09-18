@@ -19,6 +19,7 @@ const homeworkRoutes = require('./routes/homework');
 // Import middlewares
 const errorHandler = require('./middleware/errorHandler');
 const { setupSwagger } = require('./swagger');
+const { autoInitDb, getDbStatus } = require('./lib/autoInitDb');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -150,8 +151,10 @@ app.use(errorHandler);
 
 // Start server
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
+  app.listen(PORT, async () => {
     console.log(`EduFlow Backend server ishga tushdi: http://localhost:${PORT}`);
+    // Auto initialize / verify database
+    await autoInitDb();
   });
 
   // Render 24/7 Keep-Alive self-ping (har 10 daqiqada uyquga ketishning oldini oladi)
