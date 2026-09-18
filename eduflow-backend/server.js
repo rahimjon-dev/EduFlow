@@ -63,6 +63,11 @@ app.get('/api', (req, res) => {
   });
 });
 
+// Lightweight 24/7 ping endpoint for UptimeRobot and cron-jobs
+app.get('/api/ping', (req, res) => {
+  res.status(200).send('pong');
+});
+
 // API health endpoint with database check
 app.get('/api/health', async (req, res) => {
   try {
@@ -148,6 +153,19 @@ if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`EduFlow Backend server ishga tushdi: http://localhost:${PORT}`);
   });
+
+  // Render 24/7 Keep-Alive self-ping (har 10 daqiqada uyquga ketishning oldini oladi)
+  const RENDER_EXTERNAL_URL = process.env.RENDER_EXTERNAL_URL || 'https://eduflow-reny.onrender.com';
+  const PING_INTERVAL = 10 * 60 * 1000; // 10 daqiqa
+  setInterval(async () => {
+    try {
+      const pingUrl = `${RENDER_EXTERNAL_URL}/api/ping`;
+      const res = await fetch(pingUrl);
+      console.log(`[Keep-Alive] Self-ping yuborildi: HTTP ${res.status}`);
+    } catch (err) {
+      console.log(`[Keep-Alive] Ping xabari: ${err.message}`);
+    }
+  }, PING_INTERVAL);
 }
 
 module.exports = app;
