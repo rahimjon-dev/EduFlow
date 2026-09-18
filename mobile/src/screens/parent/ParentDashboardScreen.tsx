@@ -5,6 +5,7 @@ import { Header } from '../../components/Header';
 import { Badge } from '../../components/Badge';
 import { useAuth } from '../../context/AuthContext';
 import { apiClient } from '../../services/apiClient';
+import { mockStudents, mockGrades, mockPayments } from '../../data/mockData';
 import { Award, Phone, CheckCircle2, ChevronRight } from 'lucide-react-native';
 
 export const ParentDashboardScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
@@ -23,17 +24,28 @@ export const ParentDashboardScreen: React.FC<{ navigation: any }> = ({ navigatio
         apiClient.get<any[]>('/payments'),
       ]);
 
-      if (stRes.status === 'fulfilled' && Array.isArray(stRes.value)) {
+      if (stRes.status === 'fulfilled' && Array.isArray(stRes.value) && stRes.value.length > 0) {
         setStudents(stRes.value);
+      } else {
+        setStudents(mockStudents);
       }
-      if (grRes.status === 'fulfilled' && Array.isArray(grRes.value)) {
+
+      if (grRes.status === 'fulfilled' && Array.isArray(grRes.value) && grRes.value.length > 0) {
         setGrades(grRes.value);
+      } else {
+        setGrades(mockGrades);
       }
-      if (payRes.status === 'fulfilled' && Array.isArray(payRes.value)) {
+
+      if (payRes.status === 'fulfilled' && Array.isArray(payRes.value) && payRes.value.length > 0) {
         setPayments(payRes.value);
+      } else {
+        setPayments(mockPayments);
       }
     } catch (err: any) {
-      console.warn('Parent dashboard error:', err?.message);
+      console.warn('Parent dashboard error, using demo data:', err?.message);
+      setStudents(mockStudents);
+      setGrades(mockGrades);
+      setPayments(mockPayments);
     } finally {
       setLoading(false);
       setRefreshing(false);

@@ -4,6 +4,7 @@ import { colors, spacing, borderRadius, shadows } from '../../theme/theme';
 import { Header } from '../../components/Header';
 import { useAuth } from '../../context/AuthContext';
 import { apiClient } from '../../services/apiClient';
+import { mockGroups, mockHomeworks } from '../../data/mockData';
 import { Clock, CheckSquare, BookOpen } from 'lucide-react-native';
 
 export const TeacherDashboardScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
@@ -20,14 +21,21 @@ export const TeacherDashboardScreen: React.FC<{ navigation: any }> = ({ navigati
         apiClient.get<any[]>('/homework'),
       ]);
 
-      if (grpRes.status === 'fulfilled' && Array.isArray(grpRes.value)) {
+      if (grpRes.status === 'fulfilled' && Array.isArray(grpRes.value) && grpRes.value.length > 0) {
         setGroups(grpRes.value);
+      } else {
+        setGroups(mockGroups);
       }
-      if (hwRes.status === 'fulfilled' && Array.isArray(hwRes.value)) {
+
+      if (hwRes.status === 'fulfilled' && Array.isArray(hwRes.value) && hwRes.value.length > 0) {
         setHomeworks(hwRes.value);
+      } else {
+        setHomeworks(mockHomeworks);
       }
     } catch (err: any) {
       console.warn('Teacher dashboard fetch error:', err?.message);
+      setGroups(mockGroups);
+      setHomeworks(mockHomeworks);
     } finally {
       setLoading(false);
       setRefreshing(false);

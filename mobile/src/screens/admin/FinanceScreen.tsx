@@ -4,6 +4,7 @@ import { colors, spacing, borderRadius, shadows } from '../../theme/theme';
 import { Header } from '../../components/Header';
 import { Badge } from '../../components/Badge';
 import { apiClient } from '../../services/apiClient';
+import { mockPayments } from '../../data/mockData';
 import { DollarSign, Clock, AlertTriangle, CheckCircle } from 'lucide-react-native';
 
 export const FinanceScreen: React.FC = () => {
@@ -15,13 +16,14 @@ export const FinanceScreen: React.FC = () => {
   const fetchPayments = useCallback(async () => {
     try {
       const res = await apiClient.get<any[]>('/payments');
-      if (Array.isArray(res)) {
+      if (Array.isArray(res) && res.length > 0) {
         setPayments(res);
       } else {
-        setPayments([]);
+        setPayments(mockPayments);
       }
     } catch (err: any) {
-      console.warn('Failed to load payments:', err?.message);
+      console.warn('Failed to load payments, using demo data:', err?.message);
+      setPayments(mockPayments);
     } finally {
       setLoading(false);
       setRefreshing(false);

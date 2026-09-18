@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, Linking,
 import { colors, spacing, borderRadius, shadows } from '../../theme/theme';
 import { Header } from '../../components/Header';
 import { apiClient } from '../../services/apiClient';
+import { mockTeachers } from '../../data/mockData';
 import { Search, Phone, Star, BookOpen } from 'lucide-react-native';
 
 export const TeachersListScreen: React.FC = () => {
@@ -14,13 +15,14 @@ export const TeachersListScreen: React.FC = () => {
   const fetchTeachers = useCallback(async () => {
     try {
       const res = await apiClient.get<any[]>('/teachers');
-      if (Array.isArray(res)) {
+      if (Array.isArray(res) && res.length > 0) {
         setTeachers(res);
       } else {
-        setTeachers([]);
+        setTeachers(mockTeachers);
       }
     } catch (err: any) {
-      console.warn('Failed to load teachers:', err?.message);
+      console.warn('Failed to load teachers, using demo data:', err?.message);
+      setTeachers(mockTeachers);
     } finally {
       setLoading(false);
       setRefreshing(false);

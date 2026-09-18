@@ -4,6 +4,7 @@ import { colors, spacing, borderRadius, shadows } from '../../theme/theme';
 import { Header } from '../../components/Header';
 import { Button } from '../../components/Button';
 import { apiClient } from '../../services/apiClient';
+import { mockStudents } from '../../data/mockData';
 import { AttendanceStatus } from '../../types';
 import { Check, X, Clock, Save } from 'lucide-react-native';
 
@@ -22,7 +23,7 @@ export const AttendanceScreen: React.FC = () => {
   const fetchStudents = useCallback(async () => {
     try {
       const res = await apiClient.get<any[]>('/students');
-      if (Array.isArray(res)) {
+      if (Array.isArray(res) && res.length > 0) {
         setAttendance(
           res.map((s) => ({
             id: s.id,
@@ -30,9 +31,24 @@ export const AttendanceScreen: React.FC = () => {
             status: 'PRESENT' as AttendanceStatus,
           }))
         );
+      } else {
+        setAttendance(
+          mockStudents.map((s) => ({
+            id: s.id,
+            name: s.fullName,
+            status: 'PRESENT' as AttendanceStatus,
+          }))
+        );
       }
     } catch (err: any) {
-      console.warn('Failed to load students for attendance:', err?.message);
+      console.warn('Failed to load students for attendance, using demo data:', err?.message);
+      setAttendance(
+        mockStudents.map((s) => ({
+          id: s.id,
+          name: s.fullName,
+          status: 'PRESENT' as AttendanceStatus,
+        }))
+      );
     } finally {
       setLoading(false);
       setRefreshing(false);

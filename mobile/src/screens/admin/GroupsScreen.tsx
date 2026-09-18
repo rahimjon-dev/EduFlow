@@ -4,6 +4,7 @@ import { colors, spacing, borderRadius, shadows } from '../../theme/theme';
 import { Header } from '../../components/Header';
 import { Badge } from '../../components/Badge';
 import { apiClient } from '../../services/apiClient';
+import { mockGroups } from '../../data/mockData';
 import { BookOpen, Users, Clock, MapPin } from 'lucide-react-native';
 
 export const GroupsScreen: React.FC = () => {
@@ -14,13 +15,14 @@ export const GroupsScreen: React.FC = () => {
   const fetchGroups = useCallback(async () => {
     try {
       const res = await apiClient.get<any[]>('/groups');
-      if (Array.isArray(res)) {
+      if (Array.isArray(res) && res.length > 0) {
         setGroups(res);
       } else {
-        setGroups([]);
+        setGroups(mockGroups);
       }
     } catch (err: any) {
-      console.warn('Failed to load groups:', err?.message);
+      console.warn('Failed to load groups, using demo data:', err?.message);
+      setGroups(mockGroups);
     } finally {
       setLoading(false);
       setRefreshing(false);

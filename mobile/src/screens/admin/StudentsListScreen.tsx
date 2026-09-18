@@ -4,6 +4,7 @@ import { colors, spacing, borderRadius, shadows } from '../../theme/theme';
 import { Header } from '../../components/Header';
 import { Badge } from '../../components/Badge';
 import { apiClient } from '../../services/apiClient';
+import { mockStudents } from '../../data/mockData';
 import { Search, Phone, Mail, Award, CheckCircle } from 'lucide-react-native';
 
 export const StudentsListScreen: React.FC = () => {
@@ -16,13 +17,14 @@ export const StudentsListScreen: React.FC = () => {
   const fetchStudents = useCallback(async () => {
     try {
       const res = await apiClient.get<any[]>('/students');
-      if (Array.isArray(res)) {
+      if (Array.isArray(res) && res.length > 0) {
         setStudents(res);
       } else {
-        setStudents([]);
+        setStudents(mockStudents);
       }
     } catch (err: any) {
-      console.warn('Failed to load students:', err?.message);
+      console.warn('Failed to load students, using demo data:', err?.message);
+      setStudents(mockStudents);
     } finally {
       setLoading(false);
       setRefreshing(false);

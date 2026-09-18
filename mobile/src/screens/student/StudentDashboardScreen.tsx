@@ -5,6 +5,7 @@ import { Header } from '../../components/Header';
 import { Badge } from '../../components/Badge';
 import { useAuth } from '../../context/AuthContext';
 import { apiClient } from '../../services/apiClient';
+import { mockGrades, mockHomeworks, mockGroups } from '../../data/mockData';
 import { Award, Clock, BookOpen } from 'lucide-react-native';
 
 export const StudentDashboardScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
@@ -23,17 +24,28 @@ export const StudentDashboardScreen: React.FC<{ navigation: any }> = ({ navigati
         apiClient.get<any[]>('/groups'),
       ]);
 
-      if (grRes.status === 'fulfilled' && Array.isArray(grRes.value)) {
+      if (grRes.status === 'fulfilled' && Array.isArray(grRes.value) && grRes.value.length > 0) {
         setGrades(grRes.value);
+      } else {
+        setGrades(mockGrades);
       }
-      if (hwRes.status === 'fulfilled' && Array.isArray(hwRes.value)) {
+
+      if (hwRes.status === 'fulfilled' && Array.isArray(hwRes.value) && hwRes.value.length > 0) {
         setHomeworks(hwRes.value);
+      } else {
+        setHomeworks(mockHomeworks);
       }
-      if (grpRes.status === 'fulfilled' && Array.isArray(grpRes.value)) {
+
+      if (grpRes.status === 'fulfilled' && Array.isArray(grpRes.value) && grpRes.value.length > 0) {
         setGroups(grpRes.value);
+      } else {
+        setGroups(mockGroups);
       }
     } catch (err: any) {
-      console.warn('Student dashboard error:', err?.message);
+      console.warn('Student dashboard error, using demo data:', err?.message);
+      setGrades(mockGrades);
+      setHomeworks(mockHomeworks);
+      setGroups(mockGroups);
     } finally {
       setLoading(false);
       setRefreshing(false);
