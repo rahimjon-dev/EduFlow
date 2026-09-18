@@ -16,10 +16,10 @@ async function runTests() {
   }
 
   try {
-    // 1. GET /
-    const rRoot = await fetch(`${BASE_URL}/`);
+    // 1. GET /api
+    const rRoot = await fetch(`${BASE_URL}/api`);
     const jRoot = await rRoot.json();
-    assert(rRoot.status === 200 && jRoot.message === 'EduFlow API ishlayapti', 'GET / Health Check');
+    assert(rRoot.status === 200 && jRoot.message === 'EduFlow API ishlayapti', 'GET /api Health Check');
 
     // 2. POST /api/auth/login (Admin)
     const rAdminLogin = await fetch(`${BASE_URL}/api/auth/login`, {

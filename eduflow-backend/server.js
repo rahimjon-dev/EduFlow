@@ -54,7 +54,7 @@ app.use(express.urlencoded({ extended: true }));
 setupSwagger(app);
 
 // Health check endpoint
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.status(200).json({
     success: true,
     status: "SUCCESS",
@@ -102,14 +102,33 @@ const path = require('path');
 const fs = require('fs');
 
 // Serve frontend SPA in production if built
-const frontendDist = path.join(__dirname, '../frontend/dist');
-if (fs.existsSync(frontendDist)) {
+const candidateDists = [
+  path.join(__dirname, 'public'),
+  path.join(__dirname, '../frontend/dist'),
+  path.join(__dirname, 'dist'),
+  path.join(process.cwd(), 'frontend/dist'),
+  path.join(process.cwd(), 'public')
+];
+const frontendDist = candidateDists.find(p => fs.existsSync(path.join(p, 'index.html')));
+
+if (frontendDist) {
+  console.log(`Frontend statik fayllari yuklandi: ${frontendDist}`);
   app.use(express.static(frontendDist));
   app.get('*', (req, res, next) => {
     if (req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/docs')) {
       return next();
     }
     res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+} else {
+  console.warn('Frontend build topilmadi. Faqat API rejimi faol.');
+  app.get('/', (req, res) => {
+    res.status(200).json({
+      success: true,
+      status: "SUCCESS",
+      message: "EduFlow API ishlayapti",
+      timestamp: new Date().toISOString()
+    });
   });
 }
 
